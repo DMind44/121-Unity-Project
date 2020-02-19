@@ -30,7 +30,5 @@ public class PlayerController : MonoBehaviour
 
         // Rotate player based on mouse
         transform.rotation *= Quaternion.AngleAxis(Input.GetAxis("Mouse X") * rotationSpeed, Vector3.up);
-
     }
-
 }
