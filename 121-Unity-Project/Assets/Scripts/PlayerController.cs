@@ -9,6 +9,7 @@ public class PlayerController : MonoBehaviour
 {
 
     public float movementSpeed;
+    public float rotationSpeed;
     private Rigidbody rb;
 
     // Start is called before the first frame update
@@ -20,12 +21,16 @@ public class PlayerController : MonoBehaviour
     // Perform physics updates at regular time intervals
     void FixedUpdate()
     {
-        // Move player in response to input
+        // Translate player based on direction key input
         float horizontalMovementInput = Input.GetAxis("Horizontal");
         float verticalMovementInput = Input.GetAxis("Vertical");
 
         Vector3 movement = new Vector3(horizontalMovementInput, 0, verticalMovementInput);
         rb.AddRelativeForce(movement * movementSpeed);
+
+        // Rotate player based on mouse
+        transform.rotation *= Quaternion.AngleAxis(Input.GetAxis("Mouse X") * rotationSpeed, Vector3.up);
+
     }
 
 }
