@@ -8,6 +8,9 @@ using UnityEngine;
 public class Interactable : MonoBehaviour
 {
 
+    public float interactableDistance;  // distance player must be within to interact
+    public GameObject player;
+
     private Color originalColor;
     private Color hoverColor = Color.green;
     private MeshRenderer meshRenderer;
@@ -19,10 +22,13 @@ public class Interactable : MonoBehaviour
         originalColor = meshRenderer.material.color;
     }
 
+    // Change color if the player hovers over the Interactable and is within interacting distance
     void OnMouseOver()
     {
-        print("you're hovering over an interactable!");
-        meshRenderer.material.color = hoverColor;
+        if (Vector3.Distance(transform.position, player.transform.position) <= interactableDistance)
+        {
+            meshRenderer.material.color = hoverColor;
+        }
     }
 
     void OnMouseExit()
