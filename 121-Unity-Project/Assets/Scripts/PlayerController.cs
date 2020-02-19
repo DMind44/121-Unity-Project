@@ -1,7 +1,6 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UI;
 
 // Adapted from the Roll-a-Ball tutorial at
 // https://learn.unity.com/project/roll-a-ball-tutorial
