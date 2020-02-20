@@ -764,9 +764,10 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 1400163087}
-  cameraRotationSpeed: 10000
   heightAbovePlayer: 3
   distanceBehindPlayer: 10
+  verticalRotationSpeed: 100
+  maxVerticalRotation: 20
 --- !u!1 &1930897163
 GameObject:
   m_ObjectHideFlags: 0
