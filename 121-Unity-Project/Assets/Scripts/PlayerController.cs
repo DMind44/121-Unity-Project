@@ -34,6 +34,7 @@ public class PlayerController : MonoBehaviour
     }
 
     void Update() {
+        // Check what the camera is pointing at
         ray = Camera.main.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit)) {
             print (hit.collider.name);
