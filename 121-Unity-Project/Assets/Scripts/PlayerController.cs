@@ -12,15 +12,16 @@ public class PlayerController : MonoBehaviour
     public float rotationSpeed;
     private Rigidbody rb;
 
+    private Ray ray;
+    private RaycastHit hit;
+
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
         rb = GetComponent<Rigidbody>();
     }
 
     // Perform physics updates at regular time intervals
-    void FixedUpdate()
-    {
+    void FixedUpdate() {
         // Translate player based on direction key input
         float horizontalMovementInput = Input.GetAxis("Horizontal");
         float verticalMovementInput = Input.GetAxis("Vertical");
@@ -30,5 +31,12 @@ public class PlayerController : MonoBehaviour
 
         // Rotate player based on mouse
         transform.rotation *= Quaternion.AngleAxis(Input.GetAxis("Mouse X") * rotationSpeed, Vector3.up);
+    }
+
+    void Update() {
+        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        if (Physics.Raycast(ray, out hit)) {
+            print (hit.collider.name);
+        }
     }
 }

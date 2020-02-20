@@ -22,6 +22,7 @@ public class Interactable : MonoBehaviour
         originalColor = meshRenderer.material.color;
     }
 
+
     // If the player is too far from a hovered object, return to original color
     void Update()
     {
@@ -34,6 +35,7 @@ public class Interactable : MonoBehaviour
     // Change color if the player hovers over the Interactable and is within interacting distance
     void OnMouseOver()
     {
+        // Find which palu
         if (Vector3.Distance(transform.position, player.transform.position) <= interactableDistance)
         {
             meshRenderer.material.color = hoverColor;
