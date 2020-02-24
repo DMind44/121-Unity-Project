@@ -1,16 +1,20 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using Mirror;
 
 // Adapted from the Roll-a-Ball tutorial at
 // https://learn.unity.com/project/roll-a-ball-tutorial
 
-public class PlayerController : MonoBehaviour
+public class PlayerController : NetworkBehaviour
 {
 
     public float movementSpeed;
     public float rotationSpeed;
     private Rigidbody rb;
+
+    [SerializeField]
+    private Camera cam = null;
 
     private Ray ray;
     private RaycastHit hit;
@@ -31,11 +35,14 @@ public class PlayerController : MonoBehaviour
 
         // Rotate player based on mouse
         transform.rotation *= Quaternion.AngleAxis(Input.GetAxis("Mouse X") * rotationSpeed, Vector3.up);
+
+        // Update camera rotation
+        cam.transform.Rotate(-Input.GetAxis("Mouse Y") * rotationSpeed, 0, 0);
     }
 
     void Update() {
         // Check what the camera is pointing at
-        ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+        ray = cam.ScreenPointToRay(Input.mousePosition);
         if (Physics.Raycast(ray, out hit)) {
             print (hit.collider.name);
         }
