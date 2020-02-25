@@ -66,7 +66,15 @@ public class Interactable : NetworkBehaviour
         GetComponent<Rigidbody>().useGravity = false;
     }
 
-    public void Throw() {
+    [Server] public void Throw() {
+        meshRenderer.material.color = originalColor;
+        lifted = false;
+        GetComponent<Rigidbody>().useGravity = true;
+        rb.velocity = playerT.forward * speed;
+        RpcThrow();
+    }
+
+    [ClientRpc] private void RpcThrow() {
         meshRenderer.material.color = originalColor;
         lifted = false;
         GetComponent<Rigidbody>().useGravity = true;
