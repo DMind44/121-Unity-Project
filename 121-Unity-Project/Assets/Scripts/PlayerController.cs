@@ -54,7 +54,7 @@ public class PlayerController : NetworkBehaviour
             if (hit.distance <= interactableDistance && inter != null) {
                 // On mouse click, grab this object
                 if (Input.GetMouseButtonDown(0)) {
-                    inter.Grab(guide);
+                    inter.Grab(transform);
                 } else {
                     inter.BeginHover();
                 }
