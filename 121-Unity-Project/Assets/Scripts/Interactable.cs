@@ -10,21 +10,19 @@ public class Interactable : NetworkBehaviour
 
     public float interactableDistance;  // distance player must be within to interact
 
-    [SerializeField]
-    private Color hoverColor = Color.green;
-
-    [SerializeField]
-    private Color liftedColor = Color.blue;
+    private Color originalColor;
+    [SerializeField] private Color hoverColor = Color.green;
+    [SerializeField] private Color liftedColor = Color.blue;
     
     // private GameObject player;
 
     private bool lifted = false;
-    private Color originalColor;
+    
     private MeshRenderer meshRenderer;
-    private Rigidbody rb;
+    [SerializeField] private Rigidbody rb;
 
-    [SerializeField]
-    private Transform guide = null;
+    [SerializeField] private Vector3 relativePos = Vector3.zero;
+    [SerializeField] private Transform playerT;
 
     // Start is called before the first frame update
     void Start()
@@ -36,26 +34,52 @@ public class Interactable : NetworkBehaviour
 
     // Called when a mouse is hovering and is close enough
     public void BeginHover() {
+        RpcBeginHover();
+    }
+    [ClientRpc] private void RpcBeginHover() {
         if (!lifted) {
             meshRenderer.material.color = hoverColor;
         }
     }
 
     // Called when the object is picked up
-    public void Grab(Transform newGuide) {
+    [Server] public void Grab(Transform playerTransform) {
+        if (!lifted) {
+            lifted = true;
+            playerT = playerTransform;
+            rb.MovePosition(playerT.position + relativePos);
+            meshRenderer.material.color = liftedColor;
+
+            GetComponent<Rigidbody>().useGravity = false;
+
+            RpcGrab(playerTransform);
+        }
+    }
+
+    [ClientRpc] private void RpcGrab(Transform playerTransform) {
         lifted = true;
-        guide = newGuide;
-        rb.MovePosition(guide.position);
+        playerT = playerTransform;
+        rb.MovePosition(playerT.position + relativePos);
         meshRenderer.material.color = liftedColor;
 
         GetComponent<Rigidbody>().useGravity = false;
     }
 
-    // On FixedUpdate, moves itself if it has been lifted
-    void FixedUpdate() {
+    // [ClientRpc] private void 
+    [Server] private void UpdatePos() {
         if (lifted) {
-            rb.MovePosition(guide.position);
+            rb.MovePosition(playerT.position + relativePos);
+            RpcUpdatePos();
         }
+    }
+
+    [ClientRpc] private void RpcUpdatePos() {
+        rb.MovePosition(playerT.position + relativePos);
+    }
+
+    // On FixedUpdate, moves itself if it has been lifted
+    [Server] void FixedUpdate() {
+        UpdatePos();
     }
 
     // // If the player is too far from a hovered object, return to original color
