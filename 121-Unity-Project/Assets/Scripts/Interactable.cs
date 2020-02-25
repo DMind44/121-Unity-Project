@@ -13,11 +13,12 @@ public class Interactable : NetworkBehaviour
     private Color originalColor;
     [SerializeField] private Color hoverColor = Color.green;
     [SerializeField] private Color liftedColor = Color.blue;
-    
+
     // private GameObject player;
 
     private bool lifted = false;
-    
+    [SerializeField] float speed;
+
     private MeshRenderer meshRenderer;
     [SerializeField] private Rigidbody rb;
 
@@ -69,6 +70,7 @@ public class Interactable : NetworkBehaviour
         meshRenderer.material.color = originalColor;
         lifted = false;
         GetComponent<Rigidbody>().useGravity = true;
+        rb.velocity = playerT.forward * speed;
     }
 
     // [ClientRpc] private void 

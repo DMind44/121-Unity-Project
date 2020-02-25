@@ -419,6 +419,7 @@ MonoBehaviour:
   interactableDistance: 0
   hoverColor: {r: 0, g: 1, b: 0, a: 1}
   liftedColor: {r: 0, g: 0, b: 1, a: 1}
+  speed: 10
   rb: {fileID: 804548652}
   relativePos: {x: 0, y: 2, z: 0}
   playerT: {fileID: 0}
