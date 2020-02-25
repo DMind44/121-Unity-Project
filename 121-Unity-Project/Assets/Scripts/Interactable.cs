@@ -45,16 +45,16 @@ public class Interactable : NetworkBehaviour
     public void Grab(Transform newGuide) {
         lifted = true;
         guide = newGuide;
-        rb.MovePosition(guide.position + new Vector3(1, 0, 1));
+        rb.MovePosition(guide.position);
         meshRenderer.material.color = liftedColor;
 
         GetComponent<Rigidbody>().useGravity = false;
     }
 
-    // On Update, moves itself if it has been lifted
-    void Update() {
+    // On FixedUpdate, moves itself if it has been lifted
+    void FixedUpdate() {
         if (lifted) {
-            rb.MovePosition(guide.position + new Vector3(1, 0, 1));
+            rb.MovePosition(guide.position);
         }
     }
 
