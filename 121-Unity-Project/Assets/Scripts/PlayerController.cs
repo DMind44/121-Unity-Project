@@ -21,8 +21,10 @@ public class PlayerController : NetworkBehaviour
     [SerializeField]
     private float interactableDistance = 0f;
 
+    private bool hasObject = false;
     private Ray ray;
     private RaycastHit hit;
+    private Interactable currentObject = null;
 
     // Start is called before the first frame update
     void Start() {
@@ -48,17 +50,29 @@ public class PlayerController : NetworkBehaviour
     void Update() {
         // Check what the camera is pointing at
         ray = cam.ScreenPointToRay(Input.mousePosition);
+        // if you are currently holding an object, you can't pick up another
+        // this assumes that the raycast checking is unnecessary if we are holding an object
+        if (!hasObject) {
         if (Physics.Raycast(ray, out hit)) {
             Interactable inter = hit.collider.gameObject.GetComponent<Interactable>();
             // If we're close enough to the object and it is interactable
             if (hit.distance <= interactableDistance && inter != null) {
-                // On mouse click, grab this object
-                if (Input.GetMouseButtonDown(0)) {
-                    inter.Grab(transform);
-                } else {
-                    inter.BeginHover();
-                }
+	                // On mouse click, grab this object
+	                if (Input.GetMouseButtonDown(0)) {
+	                    inter.Grab(transform);
+	                    currentObject = inter;
+	                    hasObject = true;
+	                } else {
+	                    inter.BeginHover();
+	                } 
             }
         }
+    // if you are currently holding an object, click to throw it
+    } else {
+		if (Input.GetMouseButtonDown(0)) {
+				currentObject.Throw();
+				hasObject = false;
+			}
+    	}
     }
 }

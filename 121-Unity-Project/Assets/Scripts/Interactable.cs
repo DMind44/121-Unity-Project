@@ -65,6 +65,12 @@ public class Interactable : NetworkBehaviour
         GetComponent<Rigidbody>().useGravity = false;
     }
 
+    public void Throw() {
+        meshRenderer.material.color = originalColor;
+        lifted = false;
+        GetComponent<Rigidbody>().useGravity = true;
+    }
+
     // [ClientRpc] private void 
     [Server] private void UpdatePos() {
         if (lifted) {
@@ -76,6 +82,8 @@ public class Interactable : NetworkBehaviour
     [ClientRpc] private void RpcUpdatePos() {
         rb.MovePosition(playerT.position + relativePos);
     }
+
+
 
     // On FixedUpdate, moves itself if it has been lifted
     [Server] void FixedUpdate() {
