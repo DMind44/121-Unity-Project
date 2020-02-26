@@ -7,8 +7,7 @@ using Mirror;
 // https://learn.unity.com/project/roll-a-ball-tutorial
 
 [RequireComponent(typeof(Rigidbody))]
-public class PlayerController : NetworkBehaviour
-{
+public class PlayerController : NetworkBehaviour {
 
     public float movementSpeed;
     public float rotationSpeed;
@@ -52,27 +51,23 @@ public class PlayerController : NetworkBehaviour
         ray = cam.ScreenPointToRay(Input.mousePosition);
         // if you are currently holding an object, you can't pick up another
         // this assumes that the raycast checking is unnecessary if we are holding an object
-        if (!hasObject) {
-        if (Physics.Raycast(ray, out hit)) {
+        if (!hasObject && Physics.Raycast(ray, out hit)) {
             Interactable inter = hit.collider.gameObject.GetComponent<Interactable>();
             // If we're close enough to the object and it is interactable
             if (hit.distance <= interactableDistance && inter != null) {
-	                // On mouse click, grab this object
-	                if (Input.GetMouseButtonDown(0)) {
-	                    inter.Grab(transform);
-	                    currentObject = inter;
-	                    hasObject = true;
-	                } else {
-	                    inter.BeginHover();
-	                } 
+                // On mouse click, grab this object
+                if (Input.GetMouseButtonDown(0)) {
+                    inter.Grab(transform);
+                    currentObject = inter;
+                    hasObject = true;
+                } else {
+                    inter.BeginHover();
+                }
             }
+        } else if (Input.GetMouseButtonDown(0)) {
+            // if you are currently holding an object, click to throw it
+            currentObject.Throw();
+            hasObject = false;
         }
-    // if you are currently holding an object, click to throw it
-    } else {
-		if (Input.GetMouseButtonDown(0)) {
-				currentObject.Throw();
-				hasObject = false;
-			}
-    	}
     }
 }
