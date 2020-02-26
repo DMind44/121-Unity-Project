@@ -6,6 +6,12 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/Scenes/Offline.unity
+    guid: c1bc7e73e9eec4b95a63f6ee116ce491
+  - enabled: 1
+    path: Assets/Scenes/Room.unity
+    guid: c1f847531caa543fab0d77a265b2b652
+  - enabled: 1
     path: Assets/Scenes/MechanicsDevelopment.unity
     guid: b29bacf1083dd46c1a9e3bea252c7b5e
   m_configObjects: {}
