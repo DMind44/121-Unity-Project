@@ -17,7 +17,7 @@ public class Interactable : NetworkBehaviour
     // private GameObject player;
 
     private bool lifted = false;
-    [SerializeField] float speed;
+    [SerializeField] float speed = 0;
 
     private MeshRenderer meshRenderer;
     [SerializeField] private Rigidbody rb;

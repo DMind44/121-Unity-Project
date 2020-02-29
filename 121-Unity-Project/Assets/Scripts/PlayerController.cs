@@ -64,7 +64,7 @@ public class PlayerController : NetworkBehaviour {
                     inter.BeginHover();
                 }
             }
-        } else if (Input.GetMouseButtonDown(0)) {
+        } else if (currentObject != null && Input.GetMouseButtonDown(0)) {
             // if you are currently holding an object, click to throw it
             currentObject.Throw();
             hasObject = false;

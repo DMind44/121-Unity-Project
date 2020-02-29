@@ -4,14 +4,14 @@ using UnityEngine;
 
 public class CameraController2 : MonoBehaviour
 {
-    [SerializeField] private GameObject player;
+    [SerializeField] private GameObject player = null;
 
     [SerializeField] public float heightAbovePlayer;
     [SerializeField] public float distanceBehindPlayer;
     [SerializeField] public float verticalRotationSpeed;
     [SerializeField] public float maxVerticalRotation;
 
-    private float verticalRotationAmount = 0;
+    // private float verticalRotationAmount = 0;
 
     void LateUpdate()
     {
