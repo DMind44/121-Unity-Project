@@ -247,7 +247,7 @@ MonoBehaviour:
   serverTickRate: 30
   showDebugMessages: 0
   offlineScene: 
-  onlineScene: 
+  onlineScene: PrototypeHouse
   transport: {fileID: 668901690}
   networkAddress: localhost
   maxConnections: 4
