@@ -6,6 +6,7 @@ using Mirror;
 // Adapted from the Roll-a-Ball tutorial at
 // https://learn.unity.com/project/roll-a-ball-tutorial
 
+// This script moves the player and camera, focusing on keyboard and mouse input
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : NetworkBehaviour {
 
@@ -16,14 +17,6 @@ public class PlayerController : NetworkBehaviour {
 
     [SerializeField]
     private Camera cam = null;
-
-    [SerializeField]
-    private float interactableDistance = 0f;
-
-    private bool hasObject = false;
-    private Ray ray;
-    private RaycastHit hit;
-    private Interactable currentObject = null;
 
     // Start is called before the first frame update
     void Start() {
@@ -46,28 +39,8 @@ public class PlayerController : NetworkBehaviour {
         cam.transform.Rotate(-Input.GetAxis("Mouse Y") * rotationSpeed, 0, 0);
     }
 
-    void Update() {
-        // Check what the camera is pointing at
-        ray = cam.ScreenPointToRay(Input.mousePosition);
-        // if you are currently holding an object, you can't pick up another
-        // this assumes that the raycast checking is unnecessary if we are holding an object
-        if (!hasObject && Physics.Raycast(ray, out hit)) {
-            Interactable inter = hit.collider.gameObject.GetComponent<Interactable>();
-            // If we're close enough to the object and it is interactable
-            if (hit.distance <= interactableDistance && inter != null) {
-                // On mouse click, grab this object
-                if (Input.GetMouseButtonDown(0)) {
-                    inter.Grab(transform);
-                    currentObject = inter;
-                    hasObject = true;
-                } else {
-                    inter.BeginHover();
-                }
-            }
-        } else if (currentObject != null && Input.GetMouseButtonDown(0)) {
-            // if you are currently holding an object, click to throw it
-            currentObject.Throw();
-            hasObject = false;
-        }
+    // Return a reference to this player's camera
+    public Camera GetCamera() {
+        return cam;
     }
 }

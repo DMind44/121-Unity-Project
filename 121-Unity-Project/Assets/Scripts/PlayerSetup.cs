@@ -7,7 +7,7 @@ public class PlayerSetup : NetworkBehaviour
     private Behaviour[] componentsToDisable = null;
 
     [SerializeField]
-    Camera sceneCamera;
+    private Camera sceneCamera;
 
     // When the player is initialized, it needs to disable all the components
     //   that don't belong to it

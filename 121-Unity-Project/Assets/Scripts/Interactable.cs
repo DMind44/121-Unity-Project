@@ -1,29 +1,26 @@
 ﻿using UnityEngine;
+using System;
 using Mirror;
 
 // Adapted from Unity docs:
 // https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnMouseOver.html
 
-[RequireComponent(typeof(Rigidbody))]
-public class Interactable : NetworkBehaviour
-{
-
-    public float interactableDistance;  // distance player must be within to interact
-
+[RequireComponent(typeof(Rigidbody)), RequireComponent(typeof(NetworkTransform))]
+public class Interactable : NetworkBehaviour {
     private Color originalColor;
     [SerializeField] private Color hoverColor = Color.green;
     [SerializeField] private Color liftedColor = Color.blue;
 
     // private GameObject player;
 
-    private bool lifted = false;
+    public bool lifted { get; internal set; }
     [SerializeField] float speed = 0;
 
     private MeshRenderer meshRenderer;
     [SerializeField] private Rigidbody rb;
 
     [SerializeField] private Vector3 relativePos = Vector3.zero;
-    [SerializeField] private Transform playerT;
+    public Transform playerT { get; internal set; }
 
     // Start is called before the first frame update
     void Start()
@@ -34,29 +31,21 @@ public class Interactable : NetworkBehaviour
     }
 
     // Called when a mouse is hovering and is close enough
-    public void BeginHover() {
-        RpcBeginHover();
-    }
-    [ClientRpc] private void RpcBeginHover() {
+    //    Only on client so that only client sees hovering
+    [Client] public void BeginHover() {
         if (!lifted) {
             meshRenderer.material.color = hoverColor;
         }
     }
 
-    // Called when the object is picked up
+    // Server-side request to grab this object
     [Server] public void Grab(Transform playerTransform) {
         if (!lifted) {
-            lifted = true;
-            playerT = playerTransform;
-            rb.MovePosition(playerT.position + relativePos);
-            meshRenderer.material.color = liftedColor;
-
-            GetComponent<Rigidbody>().useGravity = false;
-
             RpcGrab(playerTransform);
         }
     }
 
+    // Update all clients on new owner of this Interactable
     [ClientRpc] private void RpcGrab(Transform playerTransform) {
         lifted = true;
         playerT = playerTransform;
@@ -67,10 +56,6 @@ public class Interactable : NetworkBehaviour
     }
 
     [Server] public void Throw() {
-        meshRenderer.material.color = originalColor;
-        lifted = false;
-        GetComponent<Rigidbody>().useGravity = true;
-        rb.velocity = playerT.forward * speed;
         RpcThrow();
     }
 
@@ -81,22 +66,21 @@ public class Interactable : NetworkBehaviour
         rb.velocity = playerT.forward * speed;
     }
 
-    // [ClientRpc] private void 
     [Server] private void UpdatePos() {
         if (lifted) {
             rb.MovePosition(playerT.position + relativePos);
+            rb.MoveRotation(playerT.rotation);
             RpcUpdatePos();
         }
     }
 
     [ClientRpc] private void RpcUpdatePos() {
         rb.MovePosition(playerT.position + relativePos);
+        rb.MoveRotation(playerT.rotation);
     }
 
-
-
     // On FixedUpdate, moves itself if it has been lifted
-    [Server] void FixedUpdate() {
+    [ServerCallback] void FixedUpdate() {
         UpdatePos();
     }
 

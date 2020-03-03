@@ -253,6 +253,7 @@ GameObject:
   - component: {fileID: 9083228238792966106}
   - component: {fileID: 9083228238792966110}
   - component: {fileID: 9083228238792966111}
+  - component: {fileID: 8702530265534106799}
   - component: {fileID: 4996259567043142533}
   - component: {fileID: 2984939937822871235}
   - component: {fileID: 4148099056963145397}
@@ -328,7 +329,19 @@ MonoBehaviour:
   rotationSpeed: 10
   guide: {fileID: 2808572320656880564}
   cam: {fileID: 3832422875992407947}
-  interactableDistance: 10
+--- !u!114 &8702530265534106799
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 9083228238792966085}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5ca7365ff278af640821d72c30f11e23, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  interactableDistance: 20
 --- !u!114 &4996259567043142533
 MonoBehaviour:
   m_ObjectHideFlags: 0
