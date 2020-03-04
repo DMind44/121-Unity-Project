@@ -8,39 +8,38 @@ using Mirror.Discovery;
 public class MainMenuUIHandler : MonoBehaviour {
 
     public NetworkManager networkManager;  // object that we manipulate to join/leave rooms
-    // public NetworkDiscovery networkDiscovery;  // object that we manipulate to find/advertise servers
+    public NewNetworkDiscovery networkDiscovery;  // object that we manipulate to find/advertise servers
 
-    // readonly Dictionary<long, ServerResponse> discoveredServers = new Dictionary<long, ServerResponse>();
-
+    readonly Dictionary<long, ServerResponse> discoveredServers = new Dictionary<long, ServerResponse>();
 
     // create a room (as server)
     public void ServeRoom() {
         networkManager.StartServer();
-        print("hosting!");
-        // networkDiscovery.AdvertiseServer();
-        // print("advertising!");
+        networkDiscovery.AdvertiseServer();
     }
 
     // host a game (serve and play)
     public void HostRoom() {
         networkManager.StartHost();
-        print("hosting!");
-        // networkDiscovery.AdvertiseServer();
-        // print("advertising!");
+        networkDiscovery.AdvertiseServer();
     }
 
     // join an existing room (as client)
     public void JoinRoom() {
-        // networkManager.StartClient();
-        // networkManager.networkAddress = "localhost";
-
-        // discoveredServers.Clear();
-        // networkDiscovery.StartDiscovery();
-        networkManager.StartClient();
-        print("client!");
+        networkDiscovery.StartDiscovery();
     }
 
-
-    void DiscoverRooms() {
+    // This function is referenced in the NetworkDiscovery component and is
+    // called when a server is discovered.
+    // If not connected to a server already, connect to the one we just
+    // discovered.
+    // TODO make this more robust? Stopping discovery altogether with
+    // StopDiscovery() crashes the program. Is this because it shuts down the
+    // NetworkManager, since NetworkManager and NetworkDiscovery are done by
+    // the same object?
+    public void OnDiscoveredServer(DiscoveryResponse info) {
+        if (!networkManager.isNetworkActive) {
+            networkManager.StartClient(info.uri);
+        }
     }
 }
