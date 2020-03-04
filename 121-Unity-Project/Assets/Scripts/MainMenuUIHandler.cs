@@ -8,26 +8,36 @@ using Mirror.Discovery;
 public class MainMenuUIHandler : MonoBehaviour {
 
     public NetworkManager networkManager;  // object that we manipulate to join/leave rooms
-    public NetworkDiscovery networkDiscovery;  // object that we manipulate to find/advertise servers
+    // public NetworkDiscovery networkDiscovery;  // object that we manipulate to find/advertise servers
 
-    readonly Dictionary<long, ServerResponse> discoveredServers = new Dictionary<long, ServerResponse>();
+    // readonly Dictionary<long, ServerResponse> discoveredServers = new Dictionary<long, ServerResponse>();
 
 
-    // When the user clicks the host button, create a room
-    public void HostRoom() {
+    // create a room (as server)
+    public void ServeRoom() {
         networkManager.StartServer();
         print("hosting!");
-        networkDiscovery.AdvertiseServer();
-        print("advertising!");
+        // networkDiscovery.AdvertiseServer();
+        // print("advertising!");
     }
 
-    // When the user clicks the join button, join an existing room
+    // host a game (serve and play)
+    public void HostRoom() {
+        networkManager.StartHost();
+        print("hosting!");
+        // networkDiscovery.AdvertiseServer();
+        // print("advertising!");
+    }
+
+    // join an existing room (as client)
     public void JoinRoom() {
         // networkManager.StartClient();
         // networkManager.networkAddress = "localhost";
 
-        discoveredServers.Clear();
-        networkDiscovery.StartDiscovery();
+        // discoveredServers.Clear();
+        // networkDiscovery.StartDiscovery();
+        networkManager.StartClient();
+        print("client!");
     }
 
 
