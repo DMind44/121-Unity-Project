@@ -106,7 +106,6 @@ namespace Mirror.Discovery
 
             OnServerFound.Invoke(response);
         }
-
         #endregion
     }
 }

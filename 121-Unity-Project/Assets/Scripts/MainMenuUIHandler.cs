@@ -8,29 +8,40 @@ using Mirror.Discovery;
 public class MainMenuUIHandler : MonoBehaviour {
 
     public NetworkManager networkManager;  // object that we manipulate to join/leave rooms
-    public NetworkDiscovery networkDiscovery;  // object that we manipulate to find/advertise servers
+    public NewNetworkDiscovery networkDiscovery;  // object that we manipulate to find/advertise servers
 
     readonly Dictionary<long, ServerResponse> discoveredServers = new Dictionary<long, ServerResponse>();
 
-
-    // When the user clicks the host button, create a room
-    public void HostRoom() {
+    // create a room (as server)
+    public void ServeRoom() {
         networkManager.StartServer();
-        print("hosting!");
         networkDiscovery.AdvertiseServer();
-        print("advertising!");
     }
 
-    // When the user clicks the join button, join an existing room
-    public void JoinRoom() {
-        // networkManager.StartClient();
-        // networkManager.networkAddress = "localhost";
+    // host a game (serve and play)
+    public void HostRoom() {
+        networkManager.StartHost();
+        networkDiscovery.AdvertiseServer();
+    }
 
-        discoveredServers.Clear();
+    // join an existing room (as client)
+    public void JoinRoom() {
         networkDiscovery.StartDiscovery();
     }
 
-
-    void DiscoverRooms() {
+    // This function is referenced in the NetworkDiscovery component and is
+    // called when a server is discovered.
+    // If not connected to a server already, connect to the one we just
+    // discovered.
+    // TODO make this more robust? Stopping discovery altogether with
+    // StopDiscovery() crashes the program. Is this because it shuts down the
+    // NetworkManager, since NetworkManager and NetworkDiscovery are done by
+    // the same object?
+    public void OnDiscoveredServer(DiscoveryResponse info) {
+        // print(networkDiscovery);
+        networkDiscovery.enabled = false;
+        if (!networkManager.isNetworkActive) {
+            networkManager.StartClient(info.uri);
+        }
     }
 }

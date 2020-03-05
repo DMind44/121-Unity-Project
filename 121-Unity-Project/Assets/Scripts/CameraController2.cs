@@ -13,6 +13,11 @@ public class CameraController2 : MonoBehaviour
 
     // private float verticalRotationAmount = 0;
 
+    void Start() {
+        // lock cursor
+        Cursor.lockState = CursorLockMode.Locked;
+    }
+    
     void LateUpdate()
     {
         Transform updatedTransform = transform;
