@@ -13,7 +13,6 @@ public class PlayerController : NetworkBehaviour {
     public float movementSpeed;
     public float rotationSpeed;
     private Rigidbody rb;
-    public Transform guide;
 
     [SerializeField]
     private Camera cam = null;
