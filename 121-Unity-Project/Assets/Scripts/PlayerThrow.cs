@@ -23,16 +23,16 @@ public class PlayerThrow : NetworkBehaviour
         cam = playerCont.GetCamera();
     }
 
+    // Every frame, update what thing the player is grabbing/throwing
     void Update() {
         // Check what the camera is pointing at
         ray = cam.ScreenPointToRay(Input.mousePosition);
-        // if you are currently holding an object, you can't pick up another
-        // this assumes that the raycast checking is unnecessary if we are holding an object
+        // If you are not holding an object and the Raycast hit something...
         if (!currentObject && Physics.Raycast(ray, out hit)) {
+            // If we're close enough to the object and it is interactable...
             Interactable inter = hit.collider.gameObject.GetComponent<Interactable>();
-            // If we're close enough to the object and it is interactable
             if (hit.distance <= interactableDistance && inter != null) {
-                // On mouse click, grab this object
+                // On mouse click, grab this object. Otherwise, start hovering
                 if (Input.GetMouseButtonDown(0) && !inter.lifted) {
                     CmdGrab(hit.collider.gameObject);
                     currentObject = hit.collider.gameObject;
