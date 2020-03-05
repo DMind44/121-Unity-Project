@@ -38,6 +38,8 @@ public class MainMenuUIHandler : MonoBehaviour {
     // NetworkManager, since NetworkManager and NetworkDiscovery are done by
     // the same object?
     public void OnDiscoveredServer(DiscoveryResponse info) {
+        // print(networkDiscovery);
+        networkDiscovery.enabled = false;
         if (!networkManager.isNetworkActive) {
             networkManager.StartClient(info.uri);
         }
