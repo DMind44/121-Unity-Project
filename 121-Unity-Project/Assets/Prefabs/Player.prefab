@@ -207,10 +207,12 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 9083228238792966085}
-  heightAbovePlayer: 2
-  distanceBehindPlayer: 5
-  verticalRotationSpeed: 20
+  defaultHeightAbovePlayer: 2
+  defaultDistanceBehindPlayer: 4
+  normalizedCameraPosition: 0
+  vertMouseSensitivity: 0
   maxVerticalRotation: 0
+  minVerticalRotation: 0
 --- !u!1 &9083228238792966085
 GameObject:
   m_ObjectHideFlags: 0

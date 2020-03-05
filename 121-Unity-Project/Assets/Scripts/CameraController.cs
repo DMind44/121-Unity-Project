@@ -6,12 +6,20 @@ public class CameraController : MonoBehaviour
 {
     [SerializeField] private GameObject player = null;
 
-    [SerializeField] public float heightAbovePlayer;
-    [SerializeField] public float distanceBehindPlayer;
-    [SerializeField] public float verticalRotationSpeed;
-    [SerializeField] public float maxVerticalRotation;
+    // The default (or starting) height for the camera above the player
+    [SerializeField] public float defaultHeightAbovePlayer;
+    // The default (or starting) distance for the camera behind the player
+    [SerializeField] public float defaultDistanceBehindPlayer;
+    // [SerializeField] private float radius;
 
-    // private float verticalRotationAmount = 0;
+    // A zero to one value of where the camera is along its track
+    [SerializeField] private float normalizedCameraPosition;
+
+    [SerializeField] public float vertMouseSensitivity;
+    [SerializeField] public float maxVerticalRotation;  // Angle on top of player
+    [SerializeField] public float minVerticalRotation;  // Angle underneath player
+
+    
 
     void Start() {
         // lock cursor
@@ -22,7 +30,9 @@ public class CameraController : MonoBehaviour
     {
         Transform updatedTransform = transform;
 
-        updatedTransform.position = player.transform.position - (distanceBehindPlayer * player.transform.forward) + (heightAbovePlayer * Vector3.up);
+        updatedTransform.position = player.transform.position - (defaultDistanceBehindPlayer * player.transform.forward) + (defaultHeightAbovePlayer * Vector3.up);
+        updatedTransform.RotateAround(player.transform.position, player.transform.right, Input.GetAxis("Mouse Y") * vertMouseSensitivity);
+
         // updatedTransform.rotation = player.transform.rotation;
 
         // verticalRotationAmount = Mathf.Clamp(verticalRotationAmount - Input.GetAxis("Mouse Y") * verticalRotationSpeed * Time.deltaTime, -maxVerticalRotation, maxVerticalRotation);

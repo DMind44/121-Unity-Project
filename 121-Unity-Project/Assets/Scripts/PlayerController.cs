@@ -35,7 +35,7 @@ public class PlayerController : NetworkBehaviour {
         transform.rotation *= Quaternion.AngleAxis(Input.GetAxis("Mouse X") * rotationSpeed, Vector3.up);
 
         // Update camera rotation
-        cam.transform.Rotate(-Input.GetAxis("Mouse Y") * rotationSpeed, 0, 0);
+        // cam.transform.Rotate(-Input.GetAxis("Mouse Y") * rotationSpeed, 0, 0);
     }
 
     // Return a reference to this player's camera
