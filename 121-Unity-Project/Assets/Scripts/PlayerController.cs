@@ -52,7 +52,7 @@ public class PlayerController : NetworkBehaviour {
             if (inter.flying) {  // Take damage!
                 // @TODO: Check if need to disable right away
                 // CmdHitMe(other.gameObject);
-                inter.CmdHitSomething(gameObject);
+                inter.HitSomething(gameObject);
             }
         }
     }
