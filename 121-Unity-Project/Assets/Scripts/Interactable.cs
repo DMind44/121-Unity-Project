@@ -14,7 +14,8 @@ public class Interactable : NetworkBehaviour {
     // private GameObject player;
 
     public bool lifted { get; internal set; }
-    [SerializeField] float speed = 0;
+    public bool flying { get; internal set; }  // true after thrown, false after collision
+    [SerializeField] private float speed = 0;
 
     private MeshRenderer meshRenderer;
     [SerializeField] private Rigidbody rb;
@@ -22,12 +23,33 @@ public class Interactable : NetworkBehaviour {
     [SerializeField] private Vector3 relativePos = Vector3.zero;
     public Transform playerT { get; internal set; }
 
+    
+    [SerializeField] private float cutoff_momentum = 0;
+
     // Start is called before the first frame update
     void Start()
     {
         meshRenderer = GetComponent<MeshRenderer>();
         rb = GetComponent<Rigidbody>();
         originalColor = meshRenderer.material.color;
+    }
+
+    // Returns the amount of damage caused by this object
+    public float Damage() {
+        float momentum = rb.velocity.magnitude * rb.mass;
+        if (momentum < cutoff_momentum) {
+            return 0;
+        }
+        return (float)Math.Sqrt(momentum);
+    }
+
+    // Called via a Client command to stop this thing once it hits something
+    [Server] public void StopFlying() {
+        RpcStopFlying();
+    }
+
+    [ClientRpc] void RpcStopFlying() {
+        flying = false;
     }
 
     // Called when a mouse is hovering and is close enough
@@ -62,6 +84,7 @@ public class Interactable : NetworkBehaviour {
     [ClientRpc] private void RpcThrow() {
         meshRenderer.material.color = originalColor;
         lifted = false;
+        flying = true;
         GetComponent<Rigidbody>().useGravity = true;
         rb.velocity = playerT.forward * speed;
     }
@@ -75,6 +98,7 @@ public class Interactable : NetworkBehaviour {
     }
 
     [ClientRpc] private void RpcUpdatePos() {
+        // @TODO (Aely): Change this!
         rb.MovePosition(playerT.position + relativePos);
         rb.MoveRotation(playerT.rotation);
     }
@@ -83,26 +107,6 @@ public class Interactable : NetworkBehaviour {
     [ServerCallback] void FixedUpdate() {
         UpdatePos();
     }
-
-    // // If the player is too far from a hovered object, return to original color
-    // void Update()
-    // {
-    //     if (Vector3.Distance(transform.position, player.transform.position) > interactableDistance)
-    //     {
-    //         meshRenderer.material.color = originalColor;
-    //     }
-    // }
-
-    // // Change color if the player hovers over the Interactable and is within interacting distance
-    // void OnMouseOver()
-    // {
-    //     // 
-    //     if (Vector3.Distance(transform.position, player.transform.position) <= interactableDistance
-    //     && !lifted)
-    //     {
-    //         meshRenderer.material.color = hoverColor;
-    //     }
-    // }
 
     // Return to original color when mouse leaves
     void OnMouseExit()

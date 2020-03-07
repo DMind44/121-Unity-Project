@@ -592,7 +592,7 @@ MonoBehaviour:
   syncInterval: 0.1
   hoverColor: {r: 0, g: 1, b: 0, a: 1}
   liftedColor: {r: 0, g: 0, b: 1, a: 1}
-  speed: 5.18
+  speed: 21.43
   rb: {fileID: 0}
   relativePos: {x: 0, y: 1.5, z: 0}
 --- !u!114 &785035859

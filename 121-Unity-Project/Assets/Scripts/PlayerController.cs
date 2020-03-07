@@ -17,9 +17,16 @@ public class PlayerController : NetworkBehaviour {
     [SerializeField]
     private Camera cam = null;
 
+    // @TODO: Unserialize this field once testing on it is done
+    [SyncVar, SerializeField]
+    private float hp = 0;
+    [SyncVar, SerializeField]
+    private float max_hp = 0;
+
     // Start is called before the first frame update
     void Start() {
         rb = GetComponent<Rigidbody>();
+        hp = max_hp;
     }
 
     // Perform physics updates at regular time intervals
@@ -36,6 +43,26 @@ public class PlayerController : NetworkBehaviour {
 
         // Update camera rotation
         // cam.transform.Rotate(-Input.GetAxis("Mouse Y") * rotationSpeed, 0, 0);
+    }
+
+    // Runs everytime something bumps into this player
+    private void OnCollisionEnter(Collision other) {
+        Interactable inter = other.gameObject.GetComponent<Interactable>();
+        if (inter != null) {
+            if (inter.flying) {  // Take damage!
+                hp -= inter.Damage();
+                // @TODO: Check if need to disable right away
+                CmdStopFlying(other.gameObject);
+            }
+        }
+    }
+
+    // Command the server to stop flying this Interactable
+    [Command] void CmdStopFlying(GameObject other) {
+        Interactable inter = other.GetComponent<Interactable>();
+        if (inter != null) {
+            inter.StopFlying();
+        }
     }
 
     // Return a reference to this player's camera
