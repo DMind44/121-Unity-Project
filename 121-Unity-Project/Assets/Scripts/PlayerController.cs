@@ -50,19 +50,22 @@ public class PlayerController : NetworkBehaviour {
         Interactable inter = other.gameObject.GetComponent<Interactable>();
         if (inter != null) {
             if (inter.flying) {  // Take damage!
-                hp -= inter.Damage();
                 // @TODO: Check if need to disable right away
-                CmdStopFlying(other.gameObject);
+                CmdHitMe(other.gameObject);
             }
         }
     }
 
-    // Command the server to stop flying this Interactable
-    [Command] void CmdStopFlying(GameObject other) {
+    // Command the server to stop flying this Interactable and deal damage
+    [Command] void CmdHitMe(GameObject other) {
         Interactable inter = other.GetComponent<Interactable>();
         if (inter != null) {
-            inter.StopFlying();
+            inter.HitSomething(gameObject);
         }
+    }
+
+    [Client] public void DamageMe(float amount) {
+        hp -= amount;
     }
 
     // Return a reference to this player's camera

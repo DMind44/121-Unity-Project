@@ -24,7 +24,7 @@ public class Interactable : NetworkBehaviour {
     public Transform playerT { get; internal set; }
 
     
-    [SerializeField] private float cutoff_momentum = 0;
+    [SerializeField] private float cutoff_momentum = 10;
 
     // Start is called before the first frame update
     void Start()
@@ -35,7 +35,7 @@ public class Interactable : NetworkBehaviour {
     }
 
     // Returns the amount of damage caused by this object
-    public float Damage() {
+    [Server] public float Damage() {
         float momentum = rb.velocity.magnitude * rb.mass;
         if (momentum < cutoff_momentum) {
             return 0;
@@ -44,12 +44,13 @@ public class Interactable : NetworkBehaviour {
     }
 
     // Called via a Client command to stop this thing once it hits something
-    [Server] public void StopFlying() {
-        RpcStopFlying();
+    [Server] public void HitSomething(GameObject target) {
+        RpcHitSomething(target, Damage());
     }
 
-    [ClientRpc] void RpcStopFlying() {
+    [ClientRpc] void RpcHitSomething(GameObject target, float dmg) {
         flying = false;
+        target.GetComponent<PlayerController>().DamageMe(dmg);
     }
 
     // Called when a mouse is hovering and is close enough
