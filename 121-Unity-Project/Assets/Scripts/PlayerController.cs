@@ -47,6 +47,8 @@ public class PlayerController : NetworkBehaviour {
 
     // Runs everytime something bumps into this player
     private void OnCollisionEnter(Collision other) {
+        if (!isLocalPlayer)
+            return;
         Interactable inter = other.gameObject.GetComponent<Interactable>();
         if (inter != null) {
             if (inter.flying) {  // Take damage!
