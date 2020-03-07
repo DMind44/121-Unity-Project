@@ -30,9 +30,9 @@ public class CameraController : MonoBehaviour
     {
         Transform updatedTransform = transform;
 
+        // updatedTransform.position = player.transform.position - (defaultDistanceBehindPlayer * player.transform.forward) + (defaultHeightAbovePlayer * Vector3.up);
+        // updatedTransform.RotateAround(player.transform.position, player.transform.right, Input.GetAxis("Mouse Y") * vertMouseSensitivity);
         updatedTransform.position = player.transform.position - (defaultDistanceBehindPlayer * player.transform.forward) + (defaultHeightAbovePlayer * Vector3.up);
-        updatedTransform.RotateAround(player.transform.position, player.transform.right, Input.GetAxis("Mouse Y") * vertMouseSensitivity);
-
         // updatedTransform.rotation = player.transform.rotation;
 
         // verticalRotationAmount = Mathf.Clamp(verticalRotationAmount - Input.GetAxis("Mouse Y") * verticalRotationSpeed * Time.deltaTime, -maxVerticalRotation, maxVerticalRotation);
