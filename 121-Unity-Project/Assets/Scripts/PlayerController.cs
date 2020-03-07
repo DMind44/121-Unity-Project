@@ -51,7 +51,8 @@ public class PlayerController : NetworkBehaviour {
         if (inter != null) {
             if (inter.flying) {  // Take damage!
                 // @TODO: Check if need to disable right away
-                CmdHitMe(other.gameObject);
+                // CmdHitMe(other.gameObject);
+                inter.CmdHitSomething(gameObject);
             }
         }
     }
@@ -60,7 +61,7 @@ public class PlayerController : NetworkBehaviour {
     [Command] void CmdHitMe(GameObject other) {
         Interactable inter = other.GetComponent<Interactable>();
         if (inter != null) {
-            inter.HitSomething(gameObject);
+            
         }
     }
 

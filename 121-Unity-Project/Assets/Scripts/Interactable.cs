@@ -44,7 +44,7 @@ public class Interactable : NetworkBehaviour {
     }
 
     // Called via a Client command to stop this thing once it hits something
-    [Server] public void HitSomething(GameObject target) {
+    [Command] public void CmdHitSomething(GameObject target) {
         RpcHitSomething(target, Damage());
     }
 
