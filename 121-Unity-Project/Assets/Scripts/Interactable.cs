@@ -117,10 +117,9 @@ public class Interactable : NetworkBehaviour {
     // }
     [Server] private void UpdatePos() {
         if (lifted) {
-            // rb.MovePosition(playerT.position + relativePos);
-            // rb.MoveRotation(playerT.rotation);
-            // RpcUpdatePos(rb.position, rb.rotation);
-            rb.velocity = - rb.position + (playerT.position + relativePos);
+            rb.MovePosition(playerT.position + relativePos);
+            rb.MoveRotation(playerT.rotation);
+            RpcUpdatePos(rb.position, rb.rotation);
         }
     }
 
@@ -130,8 +129,12 @@ public class Interactable : NetworkBehaviour {
     }
 
     // On FixedUpdate, moves itself if it has been lifted
-    [ServerCallback] void FixedUpdate() {
-        UpdatePos();
+    void FixedUpdate() {
+        // UpdatePos();
+        if (lifted) {
+            rb.MovePosition(playerT.position + relativePos);
+            rb.MoveRotation(playerT.rotation);
+        }
     }
 
     // Return to original color when mouse leaves
