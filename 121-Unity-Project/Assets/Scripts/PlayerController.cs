@@ -18,9 +18,9 @@ public class PlayerController : NetworkBehaviour {
     private Camera cam = null;
 
     // @TODO: Unserialize this field once testing on it is done
-    [SyncVar, SerializeField]
+    [SerializeField]
     private float hp = 0;
-    [SyncVar, SerializeField]
+    [SerializeField]
     private float max_hp = 0;
 
     // Start is called before the first frame update
@@ -45,27 +45,27 @@ public class PlayerController : NetworkBehaviour {
         cam.transform.Rotate(-Input.GetAxis("Mouse Y") * rotationSpeed, 0, 0);
     }
 
-    // Runs everytime something bumps into this player
-    private void OnCollisionEnter(Collision other) {
-        if (!isLocalPlayer)
-            return;
-        Interactable inter = other.gameObject.GetComponent<Interactable>();
-        if (inter != null) {
-            if (inter.flying) {  // Take damage!
-                // @TODO: Check if need to disable right away
-                CmdHitMe(gameObject, other.gameObject);
-                // inter.HitSomething(gameObject);
-            }
-        }
-    }
+    // // Runs everytime something bumps into this player
+    // private void OnCollisionEnter(Collision other) {
+    //     if (!isLocalPlayer)
+    //         return;
+    //     Interactable inter = other.gameObject.GetComponent<Interactable>();
+    //     if (inter != null) {
+    //         if (inter.flying) {  // Take damage!
+    //             // @TODO: Check if need to disable right away
+    //             CmdHitMe(gameObject, other.gameObject);
+    //             // inter.HitSomething(gameObject);
+    //         }
+    //     }
+    // }
 
-    // Command the server to stop flying this Interactable and deal damage
-    [Command] void CmdHitMe(GameObject me, GameObject other) {
-        Interactable inter = other.GetComponent<Interactable>();
-        if (inter != null) {
-            inter.HitSomething(me);
-        }
-    }
+    // // Command the server to stop flying this Interactable and deal damage
+    // [Command] void CmdHitMe(GameObject me, GameObject other) {
+    //     Interactable inter = other.GetComponent<Interactable>();
+    //     if (inter != null) {
+    //         inter.HitSomething(me);
+    //     }
+    // }
 
     [Client] public void DamageMe(float amount) {
         hp -= amount;

@@ -26,6 +26,8 @@ public class Interactable : NetworkBehaviour {
     
     [SerializeField] private float cutoff_momentum = 10;
 
+    private float dmgAmount = 0;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -34,29 +36,31 @@ public class Interactable : NetworkBehaviour {
         originalColor = meshRenderer.material.color;
     }
 
+    // Called every time another object is hit
+    [ServerCallback] private void OnCollisionEnter(Collision other) {
+        // Deal damage if a flying interactable collides with a Player
+        if(flying && other.gameObject.CompareTag("Player")) {
+            RecalculateDamage();
+            RpcHitSomething();
+            RpcDamageSomething(other.gameObject, dmgAmount);
+        }
+    }
+
+    [ClientRpc] private void RpcDamageSomething(GameObject target, float amount) {
+        target.GetComponent<PlayerController>().DamageMe(amount);
+    }
+
     // Returns the amount of damage caused by this object
-    [Server] public float Damage() {
+    [Server] public void RecalculateDamage() {
         float momentum = rb.velocity.magnitude * rb.mass;
         if (momentum < cutoff_momentum) {
-            return 0f;
+            dmgAmount = 0f;
         }
-        // return (float)Math.Sqrt(momentum);
-        return 1f;
+        dmgAmount = (float)Math.Sqrt(momentum);
     }
 
-    [Server] public void HitSomething(GameObject target) {
-        float dmg = Damage();
-        RpcHitSomething(target, dmg);
-    }
-    // Called via a Client command to stop this thing once it hits something
-    [Command] public void CmdHitSomething(GameObject target) {
-        float dmg = Damage();
-        RpcHitSomething(target, dmg);
-    }
-
-    [ClientRpc] void RpcHitSomething(GameObject target, float dmg) {
+    [ClientRpc] private void RpcHitSomething() {
         flying = false;
-        target.GetComponent<PlayerController>().DamageMe(dmg);
     }
 
     // Called when a mouse is hovering and is close enough

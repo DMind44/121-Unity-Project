@@ -229,7 +229,6 @@ GameObject:
   - component: {fileID: 4996259567043142533}
   - component: {fileID: 2984939937822871235}
   - component: {fileID: 4148099056963145397}
-  - component: {fileID: 2957252181581522161}
   m_Layer: 0
   m_Name: Player
   m_TagString: Player
@@ -299,6 +298,8 @@ MonoBehaviour:
   movementSpeed: 20
   rotationSpeed: 10
   cam: {fileID: 3832422875992407947}
+  hp: 0
+  max_hp: 0
 --- !u!114 &8702530265534106799
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -367,23 +368,3 @@ MonoBehaviour:
   - {fileID: 3832422875992407947}
   - {fileID: 1681883173861751047}
   sceneCamera: {fileID: 0}
---- !u!114 &2957252181581522161
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 9083228238792966085}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 734b48bea0b204338958ee3d885e11f0, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  syncMode: 0
-  syncInterval: 0.1
-  clientAuthority: 0
-  localPositionSensitivity: 0.01
-  localRotationSensitivity: 0.01
-  localScaleSensitivity: 0.01
-  compressRotation: 1
-  target: {fileID: 7638303366456024059}
