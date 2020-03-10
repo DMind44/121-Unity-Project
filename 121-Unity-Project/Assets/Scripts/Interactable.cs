@@ -11,8 +11,6 @@ public class Interactable : NetworkBehaviour {
     [SerializeField] private Color hoverColor = Color.green;
     [SerializeField] private Color liftedColor = Color.blue;
 
-    // private GameObject player;
-
     public bool lifted { get; internal set; }
     public bool flying { get; internal set; }  // true after thrown, false after collision
     [SerializeField] private float speed = 0;
@@ -104,12 +102,11 @@ public class Interactable : NetworkBehaviour {
         if (lifted) {
             rb.MovePosition(playerT.position + relativePos);
             rb.MoveRotation(playerT.rotation);
-            RpcUpdatePos(rb.position, rb.rotation);
+            // RpcUpdatePos(rb.position, rb.rotation);
         }
     }
 
     [ClientRpc] private void RpcUpdatePos(Vector3 pos, Quaternion rot) {
-        // @TODO (Aely): Check this!
         rb.position = pos;
         rb.rotation = rot;
     }
@@ -120,8 +117,7 @@ public class Interactable : NetworkBehaviour {
     }
 
     // Return to original color when mouse leaves
-    void OnMouseExit()
-    {
+    void OnMouseExit() {
         if (!lifted) {
             meshRenderer.material.color = originalColor;
         }
