@@ -5,7 +5,7 @@ using Mirror;
 // Adapted from Unity docs:
 // https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnMouseOver.html
 
-[RequireComponent(typeof(Rigidbody)), RequireComponent(typeof(NetworkTransform))]
+[RequireComponent(typeof(Rigidbody))]
 public class Interactable : NetworkBehaviour {
     private Color originalColor;
     [SerializeField] private Color hoverColor = Color.green;
@@ -102,8 +102,8 @@ public class Interactable : NetworkBehaviour {
         if (lifted) {
             rb.MovePosition(playerT.position + relativePos);
             rb.MoveRotation(playerT.rotation);
-            // RpcUpdatePos(rb.position, rb.rotation);
         }
+        RpcUpdatePos(rb.position, rb.rotation);
     }
 
     [ClientRpc] private void RpcUpdatePos(Vector3 pos, Quaternion rot) {
