@@ -5,7 +5,7 @@ using Mirror;
 // Adapted from Unity docs:
 // https://docs.unity3d.com/ScriptReference/MonoBehaviour.OnMouseOver.html
 
-[RequireComponent(typeof(Rigidbody))]
+[RequireComponent(typeof(Rigidbody)), RequireComponent(typeof(NetworkTransform))]
 public class Interactable : NetworkBehaviour {
     private Color originalColor;
     [SerializeField] private Color hoverColor = Color.green;
@@ -98,19 +98,35 @@ public class Interactable : NetworkBehaviour {
         rb.velocity = playerT.forward * speed;
     }
 
+    // private void UpdatePos() {
+    //     if (lifted) {
+    //         rb.MovePosition(playerT.position + relativePos);
+    //         rb.MoveRotation(playerT.rotation);
+    //         // RpcUpdatePos(rb.position, rb.rotation);
+    //     }
+    // }
+
+    // [ClientRpc] private void RpcUpdatePos(Vector3 pos, Quaternion rot) {
+    //     rb.position = pos;
+    //     rb.rotation = rot;
+    // }
+
+    // // On FixedUpdate, moves itself if it has been lifted
+    // void FixedUpdate() {
+    //     UpdatePos();
+    // }
     [Server] private void UpdatePos() {
         if (lifted) {
-            rb.MovePosition(playerT.position + relativePos);
-            rb.MoveRotation(playerT.rotation);
+            // rb.MovePosition(playerT.position + relativePos);
+            // rb.MoveRotation(playerT.rotation);
+            // RpcUpdatePos(rb.position, rb.rotation);
+            rb.velocity = - rb.position + (playerT.position + relativePos);
         }
-        RpcUpdatePos(rb.position, rb.rotation);
     }
 
     [ClientRpc] private void RpcUpdatePos(Vector3 pos, Quaternion rot) {
-        if (GetComponent<NetworkIdentity>().isClient) {
-            rb.position = pos;
-            rb.rotation = rot;
-        }
+        rb.position = pos;
+        rb.rotation = rot;
     }
 
     // On FixedUpdate, moves itself if it has been lifted
