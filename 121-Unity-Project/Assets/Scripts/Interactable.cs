@@ -38,17 +38,20 @@ public class Interactable : NetworkBehaviour {
     [Server] public float Damage() {
         float momentum = rb.velocity.magnitude * rb.mass;
         if (momentum < cutoff_momentum) {
-            return 0;
+            return 0f;
         }
-        return (float)Math.Sqrt(momentum);
+        // return (float)Math.Sqrt(momentum);
+        return 1f;
     }
 
-    public void HitSomething(GameObject target) {
-        RpcHitSomething(target, Damage());
+    [Server] public void HitSomething(GameObject target) {
+        float dmg = Damage();
+        RpcHitSomething(target, dmg);
     }
     // Called via a Client command to stop this thing once it hits something
     [Command] public void CmdHitSomething(GameObject target) {
-        RpcHitSomething(target, Damage());
+        float dmg = Damage();
+        RpcHitSomething(target, dmg);
     }
 
     [ClientRpc] void RpcHitSomething(GameObject target, float dmg) {
@@ -97,14 +100,14 @@ public class Interactable : NetworkBehaviour {
         if (lifted) {
             rb.MovePosition(playerT.position + relativePos);
             rb.MoveRotation(playerT.rotation);
-            RpcUpdatePos();
+            RpcUpdatePos(rb.position, rb.rotation);
         }
     }
 
-    [ClientRpc] private void RpcUpdatePos() {
-        // @TODO (Aely): Change this!
-        rb.MovePosition(playerT.position + relativePos);
-        rb.MoveRotation(playerT.rotation);
+    [ClientRpc] private void RpcUpdatePos(Vector3 pos, Quaternion rot) {
+        // @TODO (Aely): Check this!
+        rb.position = pos;
+        rb.rotation = rot;
     }
 
     // On FixedUpdate, moves itself if it has been lifted

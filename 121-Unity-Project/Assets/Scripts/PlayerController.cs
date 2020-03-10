@@ -53,17 +53,17 @@ public class PlayerController : NetworkBehaviour {
         if (inter != null) {
             if (inter.flying) {  // Take damage!
                 // @TODO: Check if need to disable right away
-                // CmdHitMe(other.gameObject);
-                inter.HitSomething(gameObject);
+                CmdHitMe(gameObject, other.gameObject);
+                // inter.HitSomething(gameObject);
             }
         }
     }
 
     // Command the server to stop flying this Interactable and deal damage
-    [Command] void CmdHitMe(GameObject other) {
+    [Command] void CmdHitMe(GameObject me, GameObject other) {
         Interactable inter = other.GetComponent<Interactable>();
         if (inter != null) {
-            
+            inter.HitSomething(me);
         }
     }
 
