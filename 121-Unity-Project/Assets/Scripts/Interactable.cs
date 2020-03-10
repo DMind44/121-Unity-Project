@@ -107,8 +107,10 @@ public class Interactable : NetworkBehaviour {
     }
 
     [ClientRpc] private void RpcUpdatePos(Vector3 pos, Quaternion rot) {
-        rb.position = pos;
-        rb.rotation = rot;
+        if (GetComponent<NetworkIdentity>().isClient) {
+            rb.position = pos;
+            rb.rotation = rot;
+        }
     }
 
     // On FixedUpdate, moves itself if it has been lifted
