@@ -31,7 +31,8 @@ public class Interactable : NetworkBehaviour {
     {
         meshRenderer = GetComponent<MeshRenderer>();
         rb = GetComponent<Rigidbody>();
-        originalColor = meshRenderer.material.color;
+        if(meshRenderer != null) 
+            originalColor = meshRenderer.material.color;
     }
 
     // Called every time another object is hit
@@ -65,7 +66,8 @@ public class Interactable : NetworkBehaviour {
     //    Only on client so that only client sees hovering
     [Client] public void BeginHover() {
         if (!lifted) {
-            meshRenderer.material.color = hoverColor;
+            if(meshRenderer != null)
+                meshRenderer.material.color = hoverColor;
         }
     }
 
@@ -81,7 +83,8 @@ public class Interactable : NetworkBehaviour {
         lifted = true;
         playerT = playerTransform;
         rb.MovePosition(playerT.position + relativePos);
-        meshRenderer.material.color = liftedColor;
+        if(meshRenderer != null)
+            meshRenderer.material.color = liftedColor;
 
         GetComponent<Rigidbody>().useGravity = false;
     }
@@ -91,7 +94,8 @@ public class Interactable : NetworkBehaviour {
     }
 
     [ClientRpc] private void RpcThrow() {
-        meshRenderer.material.color = originalColor;
+        if(meshRenderer != null)
+            meshRenderer.material.color = originalColor;
         lifted = false;
         flying = true;
         GetComponent<Rigidbody>().useGravity = true;
@@ -140,7 +144,8 @@ public class Interactable : NetworkBehaviour {
     // Return to original color when mouse leaves
     void OnMouseExit() {
         if (!lifted) {
-            meshRenderer.material.color = originalColor;
+            if(meshRenderer != null)
+                meshRenderer.material.color = originalColor;
         }
     }
 }
