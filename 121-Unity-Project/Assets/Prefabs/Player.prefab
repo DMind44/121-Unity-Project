@@ -211,6 +211,7 @@ MonoBehaviour:
   positionUpdateRatio: 4
   vertMouseSensitivity: 2
   scrollMouseSensitivity: 0.25
+  verticalScrollSlowdownRatio: 0.25
   maxVerticalRotation: 85
   minVerticalRotation: -85
   maxDistanceToPlayer: 15
