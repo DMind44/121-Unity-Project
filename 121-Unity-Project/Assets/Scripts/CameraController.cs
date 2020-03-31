@@ -13,6 +13,7 @@ public class CameraController : MonoBehaviour
 
     [SerializeField] private float vertMouseSensitivity;
     [SerializeField] private float scrollMouseSensitivity;
+    [SerializeField] private float verticalScrollSlowdownRatio;
 
     [SerializeField] private float maxVerticalRotation;
     [SerializeField] private float minVerticalRotation;
@@ -32,7 +33,7 @@ public class CameraController : MonoBehaviour
         Vector3 nextTargetPos = targetPos;
 
         // Respond to mouse scrolling
-        nextTargetPos.y += -scrollMouseSensitivity * Input.mouseScrollDelta.y;
+        nextTargetPos.y += -scrollMouseSensitivity * Input.mouseScrollDelta.y * verticalScrollSlowdownRatio;
         nextTargetPos.z += scrollMouseSensitivity * Input.mouseScrollDelta.y;
         // Ensure scrolling doesn't get too far or close
         if (nextTargetPos.magnitude < minDistanceToPlayer || nextTargetPos.magnitude > maxDistanceToPlayer) {
