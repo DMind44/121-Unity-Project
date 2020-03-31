@@ -112,8 +112,10 @@ public class Interactable : NetworkBehaviour {
     }
 
     [ClientRpc] private void RpcThrow() {
-        if(meshRenderer != null)
-            meshRenderer.material.color = originalColor;
+        for (int i = 0; i < rends.Length; i++) {
+                if(originalColors[i] != null)
+                    rends[i].material.color = originalColors[i];
+            }
         lifted = false;
         flying = true;
         GetComponent<Rigidbody>().useGravity = true;
