@@ -214,7 +214,7 @@ MonoBehaviour:
   maxVerticalRotation: 85
   minVerticalRotation: -85
   maxDistanceToPlayer: 15
-  minDistanceToPlayer: 1
+  minDistanceToPlayer: 2
 --- !u!1 &9083228238792966085
 GameObject:
   m_ObjectHideFlags: 0
