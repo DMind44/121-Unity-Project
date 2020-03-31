@@ -9,22 +9,37 @@ public class CameraController : MonoBehaviour
     // Target position RELATIVE TO THE PLAYER
     [SerializeField] private Vector3 targetPos;
 
+    // Changes the speed at which the camera moves to a new position
+    //   You can think of it as taking 1/posUpdateRatio seconds to reach
+    //   the new target position (i.e. with this = 4 it takes 0.25 seconds)
     [SerializeField] private float positionUpdateRatio;
 
+    // Camera sensitivity to up and down motion
     [SerializeField] private float vertMouseSensitivity;
+    // Camera sensitivity to mouse scroll
     [SerializeField] private float scrollMouseSensitivity;
+    // Slows down vertical motion - keeps camera lower to the ground during zoomout
     [SerializeField] private float verticalScrollSlowdownRatio;
 
+    // Maximum angle upwards camera can pan relative to horizontal
     [SerializeField] private float maxVerticalRotation;
+    // Maximum angle downpwards camera can pan relative to horizontal
     [SerializeField] private float minVerticalRotation;
 
+    // The maximum distance away from player camera can zoom out
     [SerializeField] private float maxDistanceToPlayer;
+    // The minimum distance into the player camera can zoom in
     [SerializeField] private float minDistanceToPlayer;
+    // The minimum y value allowed when your back is against the wall
+    //    Aely: "This should be set to around the height of the player"
+    [SerializeField] private float minRelativeHeight;
 
     void Start() {
         // lock cursor
         Cursor.lockState = CursorLockMode.Locked;
-        transform.position = transform.position + targetPos;
+
+        // Begin at default position relative to the player
+        transform.localPosition = transform.localPosition + targetPos;
     }
 
     // Every frame as the last thing to do update the camera's position
@@ -52,6 +67,27 @@ public class CameraController : MonoBehaviour
         transform.localPosition = Vector3.MoveTowards(transform.localPosition, targetPos,
         (transform.localPosition - targetPos).magnitude * positionUpdateRatio * Time.deltaTime);
 
+        // Now, do a Raycast to ensure the camera can see the player
+        // From the player, Raycast towards the camera by no farther than the 
+        //   distance to the camera. If there is a hit, then something is in
+        //   the way of the camera and it has to get moved closer
+        RaycastHit hit;
+        float distanceToPlayer = (player.transform.position - transform.position).magnitude;
+        if (Physics.Raycast(player.transform.position,
+              transform.position - player.transform.position,
+              out hit, distanceToPlayer)) {
+            Debug.Log("Hitting something!");
+            Debug.Log(hit.collider);
+            Debug.Log(hit.distance);
+            Vector3 nextLocalPos = transform.localPosition;
+            nextLocalPos.y *= hit.distance / distanceToPlayer;
+            if (nextLocalPos.y < minRelativeHeight) {
+                nextLocalPos.y = minRelativeHeight;
+            }
+            nextLocalPos.z *= hit.distance / distanceToPlayer;
+            transform.localPosition = nextLocalPos;
+        }
+
         // Rotate the camera based on mouse movement up or down
         // Reset rotation if it's gone too far
         Quaternion oldRot = transform.rotation;
@@ -61,20 +97,4 @@ public class CameraController : MonoBehaviour
             transform.rotation = oldRot;
         }
     }
-    
-    // void LateUpdate()
-    // {
-    //     Transform updatedTransform = transform;
-
-    //     // updatedTransform.position = player.transform.position - (defaultDistanceBehindPlayer * player.transform.forward) + (defaultHeightAbovePlayer * Vector3.up);
-    //     // updatedTransform.RotateAround(player.transform.position, player.transform.right, Input.GetAxis("Mouse Y") * vertMouseSensitivity);
-    //     updatedTransform.position = player.transform.position - (defaultDistanceBehindPlayer * player.transform.forward) + (defaultHeightAbovePlayer * Vector3.up);
-    //     // updatedTransform.rotation = player.transform.rotation;
-
-    //     // verticalRotationAmount = Mathf.Clamp(verticalRotationAmount - Input.GetAxis("Mouse Y") * verticalRotationSpeed * Time.deltaTime, -maxVerticalRotation, maxVerticalRotation);
-    //     // updatedTransform.Rotate(0f, verticalRotationAmount, 0f);
-
-    //     transform.position = updatedTransform.position;
-    //     // transform.rotation = updatedTransform.rotation;
-    // }
 }

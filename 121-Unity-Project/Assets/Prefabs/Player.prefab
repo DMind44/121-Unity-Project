@@ -166,7 +166,7 @@ Camera:
     y: 0
     width: 1
     height: 1
-  near clip plane: 0.3
+  near clip plane: 0.1
   far clip plane: 1000
   field of view: 60
   orthographic: 0
@@ -216,6 +216,7 @@ MonoBehaviour:
   minVerticalRotation: -85
   maxDistanceToPlayer: 15
   minDistanceToPlayer: 1.7
+  minRelativeHeight: 0.75
 --- !u!1 &9083228238792966085
 GameObject:
   m_ObjectHideFlags: 0
