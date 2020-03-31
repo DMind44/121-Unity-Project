@@ -40,9 +40,6 @@ public class PlayerController : NetworkBehaviour {
 
         // Rotate player based on mouse
         transform.rotation *= Quaternion.AngleAxis(Input.GetAxis("Mouse X") * rotationSpeed, Vector3.up);
-
-        // Update camera rotation
-        cam.transform.Rotate(-Input.GetAxis("Mouse Y") * rotationSpeed, 0, 0);
     }
 
     [Client] public void DamageMe(float amount) {

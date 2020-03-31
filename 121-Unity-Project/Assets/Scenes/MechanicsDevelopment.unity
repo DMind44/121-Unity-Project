@@ -421,6 +421,7 @@ MonoBehaviour:
   speed: 10
   rb: {fileID: 804548652}
   relativePos: {x: 0, y: 2, z: 0}
+  cutoff_momentum: 10
 --- !u!54 &804548652
 Rigidbody:
   m_ObjectHideFlags: 0
@@ -793,7 +794,6 @@ GameObject:
   - component: {fileID: 1475197679}
   - component: {fileID: 1475197678}
   - component: {fileID: 1475197677}
-  - component: {fileID: 1475197680}
   m_Layer: 0
   m_Name: SceneCamera
   m_TagString: MainCamera
@@ -866,23 +866,6 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 10, y: 0, z: 0}
---- !u!114 &1475197680
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1475197676}
-  m_Enabled: 0
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 3b9cf0c69f04941d7b9e1e3e4dae1bc9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  player: {fileID: 0}
-  heightAbovePlayer: 3
-  distanceBehindPlayer: 10
-  verticalRotationSpeed: 100
-  maxVerticalRotation: 20
 --- !u!1 &1930897163
 GameObject:
   m_ObjectHideFlags: 0

@@ -207,12 +207,14 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 9083228238792966085}
-  defaultHeightAbovePlayer: 2
-  defaultDistanceBehindPlayer: 4
-  normalizedCameraPosition: 0
-  vertMouseSensitivity: 0
-  maxVerticalRotation: 0
-  minVerticalRotation: 0
+  targetPos: {x: 1, y: 1, z: -1}
+  positionUpdateRatio: 4
+  vertMouseSensitivity: 2
+  scrollMouseSensitivity: 0.25
+  maxVerticalRotation: 85
+  minVerticalRotation: -85
+  maxDistanceToPlayer: 15
+  minDistanceToPlayer: 1
 --- !u!1 &9083228238792966085
 GameObject:
   m_ObjectHideFlags: 0
