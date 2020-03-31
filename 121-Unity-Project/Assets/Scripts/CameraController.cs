@@ -12,27 +12,27 @@ public class CameraController : MonoBehaviour
     // Changes the speed at which the camera moves to a new position
     //   You can think of it as taking 1/posUpdateRatio seconds to reach
     //   the new target position (i.e. with this = 4 it takes 0.25 seconds)
-    [SerializeField] private float positionUpdateRatio;
+    [SerializeField] private float positionUpdateRatio = 0f;
 
     // Camera sensitivity to up and down motion
-    [SerializeField] private float vertMouseSensitivity;
+    [SerializeField] private float vertMouseSensitivity = 0f;
     // Camera sensitivity to mouse scroll
-    [SerializeField] private float scrollMouseSensitivity;
+    [SerializeField] private float scrollMouseSensitivity = 0f;
     // Slows down vertical motion - keeps camera lower to the ground during zoomout
-    [SerializeField] private float verticalScrollSlowdownRatio;
+    [SerializeField] private float verticalScrollSlowdownRatio = 0f;
 
     // Maximum angle upwards camera can pan relative to horizontal
-    [SerializeField] private float maxVerticalRotation;
+    [SerializeField] private float maxVerticalRotation = 0f;
     // Maximum angle downpwards camera can pan relative to horizontal
-    [SerializeField] private float minVerticalRotation;
+    [SerializeField] private float minVerticalRotation = 0f;
 
     // The maximum distance away from player camera can zoom out
-    [SerializeField] private float maxDistanceToPlayer;
+    [SerializeField] private float maxDistanceToPlayer = 0f;
     // The minimum distance into the player camera can zoom in
-    [SerializeField] private float minDistanceToPlayer;
+    [SerializeField] private float minDistanceToPlayer = 0f;
     // The minimum y value allowed when your back is against the wall
     //    Aely: "This should be set to around the height of the player"
-    [SerializeField] private float minRelativeHeight;
+    [SerializeField] private float minRelativeHeight = 0f;
 
     void Start() {
         // lock cursor
@@ -70,15 +70,12 @@ public class CameraController : MonoBehaviour
         // Now, do a Raycast to ensure the camera can see the player
         // From the player, Raycast towards the camera by no farther than the 
         //   distance to the camera. If there is a hit, then something is in
-        //   the way of the camera and it has to get moved closer
+        //   the way of the camera and camera has to get moved closer
         RaycastHit hit;
         float distanceToPlayer = (player.transform.position - transform.position).magnitude;
         if (Physics.Raycast(player.transform.position,
               transform.position - player.transform.position,
               out hit, distanceToPlayer)) {
-            Debug.Log("Hitting something!");
-            Debug.Log(hit.collider);
-            Debug.Log(hit.distance);
             Vector3 nextLocalPos = transform.localPosition;
             nextLocalPos.y *= hit.distance / distanceToPlayer;
             if (nextLocalPos.y < minRelativeHeight) {
