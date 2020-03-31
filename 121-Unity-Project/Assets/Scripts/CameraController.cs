@@ -13,6 +13,7 @@ public class CameraController : MonoBehaviour
 
     [SerializeField] private float vertMouseSensitivity;
     [SerializeField] private float scrollMouseSensitivity;
+    [SerializeField] private float verticalScrollSlowdownRatio;
 
     [SerializeField] private float maxVerticalRotation;
     [SerializeField] private float minVerticalRotation;
@@ -28,23 +29,28 @@ public class CameraController : MonoBehaviour
 
     // Every frame as the last thing to do update the camera's position
     private void LateUpdate() {
-        // Respond to mouse scrolling
+        // First, react to inputs that change the camera's target position
         Vector3 nextTargetPos = targetPos;
-        nextTargetPos.y += -scrollMouseSensitivity * Input.mouseScrollDelta.y;
+
+        // Respond to mouse scrolling
+        nextTargetPos.y += -scrollMouseSensitivity * Input.mouseScrollDelta.y * verticalScrollSlowdownRatio;
         nextTargetPos.z += scrollMouseSensitivity * Input.mouseScrollDelta.y;
-        if (Input.mouseScrollDelta.y != 0) {
+        // Ensure scrolling doesn't get too far or close
+        if (nextTargetPos.magnitude < minDistanceToPlayer || nextTargetPos.magnitude > maxDistanceToPlayer) {
+            nextTargetPos = targetPos;
+        }
+        
+        // Respond to "change shoulder"
+        if (Input.GetButtonDown("SwitchShoulder")) {
+            nextTargetPos.x = - nextTargetPos.x;
         }
         targetPos = nextTargetPos;
 
-        // // Update position by moving towards targetPos
-        // Vector3 hereToTarget = transform.position - targetPos;
-        // Debug.Log(targetPos);
-        // // Debug.Log(hereToTarget);
-        // hereToTarget.Normalize();
-        // Vector3 newPosition = transform.position + positionUpdateRatio * hereToTarget;
-        // Debug.Log(transform.position);
-        transform.localPosition = Vector3.MoveTowards(transform.localPosition,
-        targetPos, (transform.localPosition - targetPos).magnitude * positionUpdateRatio * Time.deltaTime);
+        // Update position by moving towards targetPos.
+        //   Third paramater below makes it so that the movement is a percentage
+        //   of the total distance it needs to cover -> smooth camera movements
+        transform.localPosition = Vector3.MoveTowards(transform.localPosition, targetPos,
+        (transform.localPosition - targetPos).magnitude * positionUpdateRatio * Time.deltaTime);
 
         // Rotate the camera based on mouse movement up or down
         // Reset rotation if it's gone too far

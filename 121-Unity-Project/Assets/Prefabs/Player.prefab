@@ -207,14 +207,15 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   player: {fileID: 9083228238792966085}
-  targetPos: {x: 1, y: 1, z: -1}
+  targetPos: {x: 1, y: 1, z: -1.5}
   positionUpdateRatio: 4
   vertMouseSensitivity: 2
   scrollMouseSensitivity: 0.25
+  verticalScrollSlowdownRatio: 0.25
   maxVerticalRotation: 85
   minVerticalRotation: -85
   maxDistanceToPlayer: 15
-  minDistanceToPlayer: 1
+  minDistanceToPlayer: 1.7
 --- !u!1 &9083228238792966085
 GameObject:
   m_ObjectHideFlags: 0
