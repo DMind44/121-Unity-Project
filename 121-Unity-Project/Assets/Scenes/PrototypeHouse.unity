@@ -635,6 +635,8 @@ MonoBehaviour:
   syncInterval: 0.1
   hoverColor: {r: 0, g: 1, b: 0, a: 1}
   liftedColor: {r: 0, g: 0, b: 1, a: 1}
+  hoverMat: {fileID: 0}
+  liftedMat: {fileID: 0}
   speed: 21.43
   rb: {fileID: 0}
   relativePos: {x: 0, y: 1.5, z: 0}
@@ -948,6 +950,8 @@ MonoBehaviour:
   syncInterval: 0.1
   hoverColor: {r: 0, g: 1, b: 0, a: 1}
   liftedColor: {r: 0, g: 0, b: 1, a: 1}
+  hoverMat: {fileID: 0}
+  liftedMat: {fileID: 0}
   speed: 25
   rb: {fileID: 978298077}
   relativePos: {x: 0, y: 1, z: 0}
@@ -1110,6 +1114,8 @@ MonoBehaviour:
   syncInterval: 0.1
   hoverColor: {r: 0, g: 1, b: 0, a: 1}
   liftedColor: {r: 0, g: 0, b: 1, a: 1}
+  hoverMat: {fileID: 0}
+  liftedMat: {fileID: 0}
   speed: 50
   rb: {fileID: 0}
   relativePos: {x: 0, y: 1.5, z: 0}
@@ -1174,7 +1180,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 0}
+  - {fileID: 2100000, guid: 3ec90781e3720544da7fc86055e6cbe6, type: 2}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -1251,7 +1257,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 3942771a39e29d24c9d6ed16822a0104, type: 3}
       propertyPath: m_LocalPosition.x
-      value: 7.5716095
+      value: 14.24
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 3942771a39e29d24c9d6ed16822a0104, type: 3}
       propertyPath: m_LocalPosition.y
