@@ -22,11 +22,13 @@ public class PlayerController : NetworkBehaviour {
     private float hp = 0;
     [SerializeField]
     private float max_hp = 0;
+    public HealthBar healthBar;
 
     // Start is called before the first frame update
     void Start() {
         rb = GetComponent<Rigidbody>();
         hp = max_hp;
+        healthBar.setMaxHealth(max_hp);
     }
 
     // Perform physics updates at regular time intervals
@@ -40,10 +42,16 @@ public class PlayerController : NetworkBehaviour {
 
         // Rotate player based on mouse
         transform.rotation *= Quaternion.AngleAxis(Input.GetAxis("Mouse X") * rotationSpeed, Vector3.up);
+
+        if (Input.GetKeyDown(KeyCode.Space)) {
+            DamageMe(1);
+        }
     }
 
     [Client] public void DamageMe(float amount) {
         hp -= amount;
+        healthBar.setHealth(hp);
+        Debug.Log("health:" + hp);
     }
 
     // Return a reference to this player's camera

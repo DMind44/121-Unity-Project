@@ -16,6 +16,8 @@ public class Interactable : NetworkBehaviour {
     [SerializeField] private Material hoverMat;
     [SerializeField] private Material liftedMat;
 
+    [SerializeField] private int weight;
+
     public bool lifted { get; internal set; }
     public bool flying { get; internal set; }  // true after thrown, false after collision
     [SerializeField] private float speed = 0;

@@ -302,8 +302,10 @@ MonoBehaviour:
   movementSpeed: 20
   rotationSpeed: 10
   cam: {fileID: 3832422875992407947}
-  hp: 0
-  max_hp: 0
+  hp: 25
+  max_hp: 25
+  healthBar: {fileID: 6223695223810626030, guid: d2ab20c25f1d7884da250f59fb3d2a65,
+    type: 3}
 --- !u!114 &8702530265534106799
 MonoBehaviour:
   m_ObjectHideFlags: 0
