@@ -8,14 +8,20 @@ using Mirror;
 [RequireComponent(typeof(Rigidbody)), RequireComponent(typeof(NetworkTransform))]
 public class Interactable : NetworkBehaviour {
     private Color originalColor;
+    private Color[] originalColors;
     [SerializeField] private Color hoverColor = Color.green;
     [SerializeField] private Color liftedColor = Color.blue;
+
+    private Material originalMat;
+    [SerializeField] private Material hoverMat;
+    [SerializeField] private Material liftedMat;
 
     public bool lifted { get; internal set; }
     public bool flying { get; internal set; }  // true after thrown, false after collision
     [SerializeField] private float speed = 0;
 
     private MeshRenderer meshRenderer;
+    private MeshRenderer[] rends;
     [SerializeField] private Rigidbody rb;
 
     [SerializeField] private Vector3 relativePos = Vector3.zero;
@@ -30,9 +36,15 @@ public class Interactable : NetworkBehaviour {
     void Start()
     {
         meshRenderer = GetComponent<MeshRenderer>();
+        rends = GetComponentsInChildren<MeshRenderer>();
         rb = GetComponent<Rigidbody>();
-        if(meshRenderer != null) 
-            originalColor = meshRenderer.material.color;
+        
+        // initializes the array of originalColors of the child objects
+        originalColors = new Color[rends.Length];
+        for (int i = 0; i < rends.Length; i++) {
+            if((rends[i] != null) && (rends[i].material != null))
+                originalColors[i] = rends[i].material.color;
+            }
     }
 
     // Called every time another object is hit
@@ -66,8 +78,12 @@ public class Interactable : NetworkBehaviour {
     //    Only on client so that only client sees hovering
     [Client] public void BeginHover() {
         if (!lifted) {
-            if(meshRenderer != null)
-                meshRenderer.material.color = hoverColor;
+        //    if(meshRenderer != null)
+        //        meshRenderer.material.color = hoverColor;
+        for (int i = 0; i < rends.Length; i++) {
+            if(rends[i] != null)
+                rends[i].material.color = hoverColor;
+            }
         }
     }
 
@@ -83,9 +99,11 @@ public class Interactable : NetworkBehaviour {
         lifted = true;
         playerT = playerTransform;
         rb.MovePosition(playerT.position + relativePos);
-        if(meshRenderer != null)
-            meshRenderer.material.color = liftedColor;
-
+        // iterates through all the children meshRenderers
+        for (int i = 0; i < rends.Length; i++) {
+            if(rends[i] != null)
+                rends[i].material.color = liftedColor;
+            }
         GetComponent<Rigidbody>().useGravity = false;
     }
 
@@ -113,8 +131,10 @@ public class Interactable : NetworkBehaviour {
     // Return to original color when mouse leaves
     void OnMouseExit() {
         if (!lifted) {
-            if(meshRenderer != null)
-                meshRenderer.material.color = originalColor;
+            for (int i = 0; i < rends.Length; i++) {
+                if(originalColors[i] != null)
+                    rends[i].material.color = originalColors[i];
+            }
         }
     }
 }
