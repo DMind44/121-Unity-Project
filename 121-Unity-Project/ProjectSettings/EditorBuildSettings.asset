@@ -17,4 +17,7 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/PrototypeHouse.unity
     guid: 7b33a100f5c5c4f75ab873958fe079d1
+  - enabled: 1
+    path: Assets/Scenes/RealHouse.unity
+    guid: bfe057163e2221b4e91fec85818afa97
   m_configObjects: {}

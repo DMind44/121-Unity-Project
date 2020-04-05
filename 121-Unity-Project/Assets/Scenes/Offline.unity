@@ -177,7 +177,7 @@ MonoBehaviour:
   roomPlayerPrefab: {fileID: -8331316725610063241, guid: 63a21ee56ee9e4c13afd1390a4a27bbe,
     type: 3}
   RoomScene: Room
-  GameplayScene: PrototypeHouse
+  GameplayScene: RealHouse
   roomSlots: []
   allPlayersReady: 0
 --- !u!114 &311152881
