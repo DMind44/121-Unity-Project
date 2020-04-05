@@ -76,7 +76,7 @@ public class PlayerController : NetworkBehaviour {
         rb.AddForce(velocityChange, ForceMode.VelocityChange);
 
         // Jump
-        if (isGrounded && Input.GetButtonDown("Jump")) {
+        if (isGrounded && Input.GetButton("Jump")) {
             rb.velocity = new Vector3(rb.velocity.x, jumpSpeed, rb.velocity.z);
         }
 
@@ -92,6 +92,7 @@ public class PlayerController : NetworkBehaviour {
 
     void OnCollisionStay(Collision collisionInfo) {
         isGrounded = true;
+        // Debug.Log("Grounded");
     }
 
     [Client] public void DamageMe(float amount) {
