@@ -43,16 +43,19 @@ public class Interactable : NetworkBehaviour {
         
         // initializes the array of originalColors of the child objects
         originalColors = new Color[rends.Length];
-        for (int i = 0; i < rends.Length; i++) {
-            if((rends[i] != null) && (rends[i].material != null))
+        for (int i = 0; i < rends.Length; i++) 
+        {
+            if ((rends[i] != null) && (rends[i].material != null))
+            {
                 originalColors[i] = rends[i].material.color;
             }
+        }
     }
 
     // Called every time another object is hit
     [ServerCallback] private void OnCollisionEnter(Collision other) {
         // Deal damage if a flying interactable collides with a Player
-        if(flying && other.gameObject.CompareTag("Player")) {
+        if (flying && other.gameObject.CompareTag("Player")) {
             RecalculateDamage();
             RpcHitSomething();
             RpcDamageSomething(other.gameObject, dmgAmount);
