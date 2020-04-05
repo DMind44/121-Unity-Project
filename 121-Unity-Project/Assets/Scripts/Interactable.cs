@@ -16,11 +16,9 @@ public class Interactable : NetworkBehaviour {
     [SerializeField] private Material hoverMat;
     [SerializeField] private Material liftedMat;
 
-    [SerializeField] private int weight;
-
     public bool lifted { get; internal set; }
     public bool flying { get; internal set; }  // true after thrown, false after collision
-    [SerializeField] private float speed = 0;
+    [SerializeField] private float throwSpeed = 0;
 
     private MeshRenderer meshRenderer;
     private MeshRenderer[] rends;
@@ -124,7 +122,57 @@ public class Interactable : NetworkBehaviour {
         lifted = false;
         flying = true;
         GetComponent<Rigidbody>().useGravity = true;
-        rb.velocity = playerT.gameObject.GetComponent<PlayerController>().GetCamera().transform.forward * speed;
+
+        // Determine velocity based on what you're looking at
+        Ray ray;
+        RaycastHit hit;
+        float throwAngle;
+        Camera cam = playerT.gameObject.GetComponent<PlayerController>().GetCamera();
+        ray = cam.ScreenPointToRay(Input.mousePosition);
+
+        // Before raycasting, disable the collider for this object. That way,
+        //   it will be ignored by the raycast
+        GetComponent<Collider>().enabled = false;
+
+        if (Physics.Raycast(ray, out hit) && 
+                CalculateThrowAngle(transform.position, hit.transform.position,
+                throwSpeed, out throwAngle)) {
+            Vector3 throwDirection = transform.position - hit.transform.position;
+            throwDirection.y = 0;
+            throwDirection = Vector3.RotateTowards(throwDirection, Vector3.up, throwAngle, throwAngle).normalized;
+            rb.velocity = throwDirection * throwSpeed;
+        }
+        else {
+            rb.velocity = cam.transform.forward * throwSpeed;
+        }
+
+        GetComponent<Collider>().enabled = true;
+    }
+
+    // Calculates the necessary throw angle to hit a target
+    //  Source: https://answers.unity.com/questions/49195/trajectory-of-a-projectile-formula-does-anyone-kno.html?_ga=2.240046149.757207726.1586110776-1944583397.1580664386
+    bool CalculateThrowAngle(Vector3 from, Vector3 to, float speed, out float angle) {
+        Debug.Log(from);
+        Debug.Log(to);
+        Debug.Log(speed);
+        float xx = to.x - from.x;
+        float xz = to.z - from.z;
+        float x = Mathf.Sqrt(xx * xx + xz * xz);
+        float y = from.y - to.y;
+        
+        float v = speed;
+        float g = Physics.gravity.y;
+        
+        float sqrt = (v*v*v*v) - (g * (g * (x*x) + 2 * y * (v*v)));
+        
+        // Not enough range
+        if (sqrt < 0) {
+            angle = 0.0f;
+            return false;
+        }
+        
+        angle = Mathf.Atan(((v*v) - Mathf.Sqrt(sqrt)) / (g*x));
+        return true;
     }
 
     // On FixedUpdate, moves itself if it has been lifted

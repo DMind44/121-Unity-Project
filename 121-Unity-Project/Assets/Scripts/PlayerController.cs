@@ -18,6 +18,9 @@ public class PlayerController : NetworkBehaviour {
     private float jumpSpeed = 0f;
     public float gravity = 0f;
 
+    [SerializeField]
+    private float maxVelocityChange = 0f;
+
     private bool isGrounded = false;
 
     private Rigidbody rb;
@@ -36,6 +39,7 @@ public class PlayerController : NetworkBehaviour {
     // Start is called before the first frame update
     void Start() {
         rb = GetComponent<Rigidbody>();
+        rb.useGravity = false;  // We'll control gravity ourselves
         hp = max_hp;
         healthBar.setMaxHealth(max_hp);
     }
@@ -70,9 +74,11 @@ public class PlayerController : NetworkBehaviour {
 
         // Apply a force that attempts to reach our target velocity
         Vector3 velocity = rb.velocity;
-        Vector3 velocityChange = (targetVelocity - velocity);
+        Vector3 velocityChange = targetVelocity - velocity;
+        velocityChange.x = Mathf.Clamp(velocityChange.x, -maxVelocityChange, maxVelocityChange);
+        velocityChange.z = Mathf.Clamp(velocityChange.z, -maxVelocityChange, maxVelocityChange);
         velocityChange.y = 0;
-        Debug.Log(velocityChange);
+        // Debug.Log(velocityChange);
         rb.AddForce(velocityChange, ForceMode.VelocityChange);
 
         // Jump
