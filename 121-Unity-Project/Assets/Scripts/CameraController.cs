@@ -76,13 +76,15 @@ public class CameraController : MonoBehaviour
         if (Physics.Raycast(player.transform.position,
               transform.position - player.transform.position,
               out hit, distanceToPlayer)) {
-            Vector3 nextLocalPos = transform.localPosition;
-            nextLocalPos.y *= hit.distance / distanceToPlayer;
-            if (nextLocalPos.y < minRelativeHeight) {
-                nextLocalPos.y = minRelativeHeight;
+            if (!hit.collider.gameObject.CompareTag("Player")) {
+                Vector3 nextLocalPos = transform.localPosition;
+                nextLocalPos.y *= hit.distance / distanceToPlayer;
+                if (nextLocalPos.y < minRelativeHeight) {
+                    nextLocalPos.y = minRelativeHeight;
+                }
+                nextLocalPos.z *= hit.distance / distanceToPlayer;
+                transform.localPosition = nextLocalPos;
             }
-            nextLocalPos.z *= hit.distance / distanceToPlayer;
-            transform.localPosition = nextLocalPos;
         }
 
         // Rotate the camera based on mouse movement up or down

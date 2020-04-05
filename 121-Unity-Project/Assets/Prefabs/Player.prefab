@@ -301,6 +301,9 @@ MonoBehaviour:
   syncInterval: 0.1
   movementSpeed: 20
   rotationSpeed: 10
+  jumpSpeed: 45
+  maxVelocityChange: 20
+  gravity: 30
   cam: {fileID: 3832422875992407947}
   hp: 25
   max_hp: 25
