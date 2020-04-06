@@ -6,7 +6,7 @@ using Mirror;
 [RequireComponent(typeof(PlayerController))]
 public class PlayerThrow : NetworkBehaviour
 {
-    private GameObject currentObject = null;
+    public GameObject currentObject = null;
 
     [SerializeField]
     private float interactableDistance = 0f;
