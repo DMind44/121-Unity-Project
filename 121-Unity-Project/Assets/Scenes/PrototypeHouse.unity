@@ -1873,7 +1873,7 @@ MonoBehaviour:
   liftedColor: {r: 0, g: 0, b: 1, a: 1}
   hoverMat: {fileID: 0}
   liftedMat: {fileID: 0}
-  throwSpeed: 0
+  throwSpeed: 35
   rb: {fileID: 978298077}
   relativePos: {x: 0, y: 1, z: 0}
   cutoff_momentum: 10
@@ -2037,7 +2037,7 @@ MonoBehaviour:
   liftedColor: {r: 0, g: 0, b: 1, a: 1}
   hoverMat: {fileID: 0}
   liftedMat: {fileID: 0}
-  throwSpeed: 0
+  throwSpeed: 12
   rb: {fileID: 0}
   relativePos: {x: 0, y: 1.5, z: 0}
   cutoff_momentum: 10

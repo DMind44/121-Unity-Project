@@ -130,16 +130,19 @@ public class Interactable : NetworkBehaviour {
         Camera cam = playerT.gameObject.GetComponent<PlayerController>().GetCamera();
         ray = cam.ScreenPointToRay(Input.mousePosition);
 
-        // Before raycasting, disable the collider for this object. That way,
-        //   it will be ignored by the raycast
+        // Before raycasting, disable the collider for this object and the player.
+        //   That way, they will be ignored by the raycast.
         GetComponent<Collider>().enabled = false;
+        playerT.gameObject.GetComponent<Collider>().enabled = false;
 
         if (Physics.Raycast(ray, out hit) && 
-                CalculateThrowAngle(transform.position, hit.transform.position,
+                CalculateThrowAngle(transform.position, hit.point,
                 throwSpeed, out throwAngle)) {
-            Vector3 throwDirection = transform.position - hit.transform.position;
+            Debug.Log(hit.transform.name);
+            Vector3 throwDirection = hit.point - transform.position;
             throwDirection.y = 0;
             throwDirection = Vector3.RotateTowards(throwDirection, Vector3.up, throwAngle, throwAngle).normalized;
+            Debug.DrawRay(transform.position, throwDirection, Color.green, 5f);
             rb.velocity = throwDirection * throwSpeed;
         }
         else {
@@ -147,14 +150,12 @@ public class Interactable : NetworkBehaviour {
         }
 
         GetComponent<Collider>().enabled = true;
+        playerT.gameObject.GetComponent<Collider>().enabled = true;
     }
 
     // Calculates the necessary throw angle to hit a target
     //  Source: https://answers.unity.com/questions/49195/trajectory-of-a-projectile-formula-does-anyone-kno.html?_ga=2.240046149.757207726.1586110776-1944583397.1580664386
     bool CalculateThrowAngle(Vector3 from, Vector3 to, float speed, out float angle) {
-        Debug.Log(from);
-        Debug.Log(to);
-        Debug.Log(speed);
         float xx = to.x - from.x;
         float xz = to.z - from.z;
         float x = Mathf.Sqrt(xx * xx + xz * xz);
@@ -168,10 +169,12 @@ public class Interactable : NetworkBehaviour {
         // Not enough range
         if (sqrt < 0) {
             angle = 0.0f;
+            Debug.Log("Out of range");
             return false;
         }
         
-        angle = Mathf.Atan(((v*v) - Mathf.Sqrt(sqrt)) / (g*x));
+        angle = -Mathf.Atan(((v*v) - Mathf.Sqrt(sqrt)) / (g*x));
+        Debug.Log(angle);
         return true;
     }
 
