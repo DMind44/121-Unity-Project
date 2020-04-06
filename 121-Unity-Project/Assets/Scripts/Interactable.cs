@@ -16,6 +16,7 @@ public class Interactable : NetworkBehaviour {
     [SerializeField] private Material hoverMat;
     [SerializeField] private Material liftedMat;
 
+    public bool lifting { get; internal set; }  // true while being lifted
     public bool lifted { get; internal set; }
     public bool flying { get; internal set; }  // true after thrown, false after collision
     [SerializeField] private float throwSpeed = 0;
@@ -26,7 +27,6 @@ public class Interactable : NetworkBehaviour {
 
     [SerializeField] private Vector3 relativePos = Vector3.zero;
     public Transform playerT { get; internal set; }
-
     
     [SerializeField] private float cutoff_momentum = 10;
 
@@ -80,7 +80,7 @@ public class Interactable : NetworkBehaviour {
     // Called when a mouse is hovering and is close enough
     //    Only on client so that only client sees hovering
     [Client] public void BeginHover() {
-        if (!lifted) {
+        if (!lifted && !lifting) {
         //    if(meshRenderer != null)
         //        meshRenderer.material.color = hoverColor;
         for (int i = 0; i < rends.Length; i++) {
@@ -92,16 +92,16 @@ public class Interactable : NetworkBehaviour {
 
     // Server-side request to grab this object
     [Server] public void Grab(Transform playerTransform) {
-        if (!lifted) {
+        if (!lifted && !lifting) {
             RpcGrab(playerTransform);
         }
     }
 
     // Update all clients on new owner of this Interactable
     [ClientRpc] private void RpcGrab(Transform playerTransform) {
-        lifted = true;
+        lifting = true;
         playerT = playerTransform;
-        rb.MovePosition(playerT.position + relativePos);
+        // rb.MovePosition(playerT.position + relativePos);  // @TODO (Aely): Delete this when slow lifting works
         // iterates through all the children meshRenderers
         for (int i = 0; i < rends.Length; i++) {
             if(rends[i] != null)
@@ -114,43 +114,51 @@ public class Interactable : NetworkBehaviour {
         RpcThrow();
     }
 
+    // Throws the lifted object.
+    // This function first does things that always happen, but only physically
+    //    throws the object if it was fully lifted, not if still lifting
     [ClientRpc] private void RpcThrow() {
+        // Always reset colors and turn on gravity
         for (int i = 0; i < rends.Length; i++) {
             if(originalColors[i] != null)
                 rends[i].material.color = originalColors[i];
         }
-        lifted = false;
-        flying = true;
         GetComponent<Rigidbody>().useGravity = true;
+        lifting = false;
 
-        // Determine velocity based on what you're looking at
-        Ray ray;
-        RaycastHit hit;
-        float throwAngle;
-        Camera cam = playerT.gameObject.GetComponent<PlayerController>().GetCamera();
-        ray = cam.ScreenPointToRay(Input.mousePosition);
+        // If lifted, initiate throwing and flying sequence
+        if (lifted) {
+            flying = true;
+            lifted = false;
+            // Determine velocity based on what you're looking at
+            Ray ray;
+            RaycastHit hit;
+            float throwAngle;
+            Camera cam = playerT.gameObject.GetComponent<PlayerController>().GetCamera();
+            ray = cam.ScreenPointToRay(Input.mousePosition);
 
-        // Before raycasting, disable the collider for this object and the player.
-        //   That way, they will be ignored by the raycast.
-        GetComponent<Collider>().enabled = false;
-        playerT.gameObject.GetComponent<Collider>().enabled = false;
+            // Before raycasting, disable the collider for this object and the player.
+            //   That way, they will be ignored by the raycast.
+            GetComponent<Collider>().enabled = false;
+            playerT.gameObject.GetComponent<Collider>().enabled = false;
 
-        if (Physics.Raycast(ray, out hit) && 
-                CalculateThrowAngle(transform.position, hit.point,
-                throwSpeed, out throwAngle)) {
-            Debug.Log(hit.transform.name);
-            Vector3 throwDirection = hit.point - transform.position;
-            throwDirection.y = 0;
-            throwDirection = Vector3.RotateTowards(throwDirection, Vector3.up, throwAngle, throwAngle).normalized;
-            Debug.DrawRay(transform.position, throwDirection, Color.green, 5f);
-            rb.velocity = throwDirection * throwSpeed;
+            if (Physics.Raycast(ray, out hit) && 
+                    CalculateThrowAngle(transform.position, hit.point,
+                    throwSpeed, out throwAngle)) {
+                Debug.Log(hit.transform.name);
+                Vector3 throwDirection = hit.point - transform.position;
+                throwDirection.y = 0;
+                throwDirection = Vector3.RotateTowards(throwDirection, Vector3.up, throwAngle, throwAngle).normalized;
+                Debug.DrawRay(transform.position, throwDirection, Color.green, 5f);
+                rb.velocity = throwDirection * throwSpeed;
+            }
+            else {
+                rb.velocity = cam.transform.forward * throwSpeed;
+            }
+
+            GetComponent<Collider>().enabled = true;
+            playerT.gameObject.GetComponent<Collider>().enabled = true;
         }
-        else {
-            rb.velocity = cam.transform.forward * throwSpeed;
-        }
-
-        GetComponent<Collider>().enabled = true;
-        playerT.gameObject.GetComponent<Collider>().enabled = true;
     }
 
     // Calculates the necessary throw angle to hit a target
@@ -178,17 +186,35 @@ public class Interactable : NetworkBehaviour {
         return true;
     }
 
-    // On FixedUpdate, moves itself if it has been lifted
+    // On FixedUpdate, follow player if object is all the way lifted.
+    // Rise slowly if object is still lifting.
     void FixedUpdate() {
         if (lifted) {
             rb.MovePosition(playerT.position + relativePos);
             rb.MoveRotation(playerT.rotation);
         }
+        else if (lifting) {
+            float targetMagnitude = 1 / rb.mass;
+            Vector3 finalPos = playerT.position + relativePos;
+            Vector3 targetPos = (finalPos - transform.position).normalized;
+            targetPos *= targetMagnitude;
+            targetPos += transform.position;
+            // If the object is within two steps of the final position, the
+            //    lift is considered complete.
+            if ((targetPos - finalPos).magnitude <= 2 * targetMagnitude) {
+                lifting = false;
+                lifted  = true;
+                Debug.Log("Lift complete");
+            } else {
+                rb.MovePosition(targetPos);
+                rb.MoveRotation(playerT.rotation);
+            }
+        }
     }
 
     // Return to original color when mouse leaves
     void OnMouseExit() {
-        if (!lifted) {
+        if (!lifted && !lifting) {
             for (int i = 0; i < rends.Length; i++) {
                 if(originalColors[i] != null)
                     rends[i].material.color = originalColors[i];
