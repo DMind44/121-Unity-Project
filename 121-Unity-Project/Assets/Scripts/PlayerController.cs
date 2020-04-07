@@ -29,12 +29,13 @@ public class PlayerController : NetworkBehaviour {
     [SerializeField]
     private Camera cam = null;
 
+    public bool canMove = true;
+
     // @TODO: Unserialize this field once testing on it is done
     [SerializeField]
-    private float hp = 0;
+    public float hp = 0;
     [SerializeField]
-    private float max_hp = 0;
-    public HealthBar healthBar;
+    public float max_hp = 0;
 
     // Start is called before the first frame update
     void Start() {
@@ -42,7 +43,6 @@ public class PlayerController : NetworkBehaviour {
         myThrow = GetComponent<PlayerThrow>();
         rb.useGravity = false;  // We'll control gravity ourselves
         hp = max_hp;
-        healthBar.setMaxHealth(max_hp);
     }
 
     /*
@@ -72,7 +72,7 @@ public class PlayerController : NetworkBehaviour {
         // If we are currently lifting an object, ignore movement and jumping
         if (myThrow == null || myThrow.currentObject == null ||
                 myThrow.currentObject.GetComponent<Interactable>() == null ||
-                !myThrow.currentObject.GetComponent<Interactable>().lifting) {
+                !myThrow.currentObject.GetComponent<Interactable>().lifting || !canMove) {
             // Calculate how fast we should be moving
             Vector3 targetVelocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
             targetVelocity = transform.TransformDirection(targetVelocity);
@@ -109,7 +109,6 @@ public class PlayerController : NetworkBehaviour {
 
     [Client] public void DamageMe(float amount) {
         hp -= amount;
-        healthBar.setHealth(hp);
         Debug.Log("health:" + hp);
     }
 

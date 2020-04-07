@@ -1,6 +1,7 @@
 ﻿using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
@@ -25,18 +26,22 @@ public class PauseMenu : MonoBehaviour
     public void Resume() {
         pauseMenuUI.SetActive(false);
         GamePaused = false;
+        Cursor.lockState = CursorLockMode.Locked;
     }
-
+    // TODO: freeze local client player
     void Pause() {
         pauseMenuUI.SetActive(true);
         GamePaused = true;
+        Cursor.lockState = CursorLockMode.None;
     }
 
     public void LoadMenu() {
         Debug.Log("Loading Menu");
     }
 
+    // TODO: Terminate client-server connection
     public void QuitGame() {
         Debug.Log("Quitting Game");
+        SceneManager.LoadScene("Offline");
     }
 }
