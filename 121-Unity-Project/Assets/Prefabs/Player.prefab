@@ -324,6 +324,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
+  currentObject: {fileID: 0}
   interactableDistance: 20
 --- !u!114 &4996259567043142533
 MonoBehaviour:
@@ -377,4 +378,5 @@ MonoBehaviour:
   - {fileID: 9083228238792966111}
   - {fileID: 3832422875992407947}
   - {fileID: 1681883173861751047}
+  - {fileID: 8702530265534106799}
   sceneCamera: {fileID: 0}
