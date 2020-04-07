@@ -34,11 +34,15 @@ public class CameraController : MonoBehaviour
     //    Aely: "This should be set to around the height of the player"
     [SerializeField] private float minRelativeHeight = 0f;
 
+    // Default camera position (relative to Player) without lifted object
+    [SerializeField] private Vector3 defaultCamPos = Vector3.zero;
+
     void Start() {
         // lock cursor
         Cursor.lockState = CursorLockMode.Locked;
 
         // Begin at default position relative to the player
+        targetPos = defaultCamPos;
         transform.localPosition = transform.localPosition + targetPos;
     }
 
@@ -95,5 +99,16 @@ public class CameraController : MonoBehaviour
         if (newX > 180 && newX - 360 < minVerticalRotation || newX < 180 && newX > maxVerticalRotation) {
             transform.rotation = oldRot;
         }
+    }
+
+    // Moves the camera to the position where it needs to be when an object
+    //    is picked up.
+    public void MoveToPickUpPosition() {
+        targetPos.x = 0;
+    }
+
+    // Moves the camera to the default position (i.e. nothing lifted)
+    public void MoveToDefaultPosition() {
+        targetPos = defaultCamPos;
     }
 }

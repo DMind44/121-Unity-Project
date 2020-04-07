@@ -18,9 +18,13 @@ public class PlayerController : NetworkBehaviour {
     private float jumpSpeed = 0f;
     public float gravity = 0f;
 
+    [SerializeField]
+    private float maxVelocityChange = 0f;
+
     private bool isGrounded = false;
 
     private Rigidbody rb;
+    private PlayerThrow myThrow;
 
     [SerializeField]
     private Camera cam = null;
@@ -32,10 +36,11 @@ public class PlayerController : NetworkBehaviour {
     private float max_hp = 0;
     public HealthBar healthBar;
 
-
     // Start is called before the first frame update
     void Start() {
         rb = GetComponent<Rigidbody>();
+        myThrow = GetComponent<PlayerThrow>();
+        rb.useGravity = false;  // We'll control gravity ourselves
         hp = max_hp;
         healthBar.setMaxHealth(max_hp);
     }
@@ -60,32 +65,39 @@ public class PlayerController : NetworkBehaviour {
     //     }
     // }
 
-    // Run once per frame to move in response to user input
+    // Run once per frame to move in response to user input.
+    // Don't move if Player is actively lifting something.
     //   Source: http://wiki.unity3d.com/index.php/RigidbodyFPSWalker?_ga=2.269071159.757207726.1586110776-1944583397.1580664386
     void Update() {
-        // Calculate how fast we should be moving
-        Vector3 targetVelocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-        targetVelocity = transform.TransformDirection(targetVelocity);
-        targetVelocity *= movementSpeed;
+        // If we are currently lifting an object, ignore movement and jumping
+        if (myThrow == null || myThrow.currentObject == null ||
+                myThrow.currentObject.GetComponent<Interactable>() == null ||
+                !myThrow.currentObject.GetComponent<Interactable>().lifting) {
+            // Calculate how fast we should be moving
+            Vector3 targetVelocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+            targetVelocity = transform.TransformDirection(targetVelocity);
+            targetVelocity *= movementSpeed;
 
-        // Apply a force that attempts to reach our target velocity
-        Vector3 velocity = rb.velocity;
-        Vector3 velocityChange = (targetVelocity - velocity);
-        velocityChange.y = 0;
-        Debug.Log(velocityChange);
-        rb.AddForce(velocityChange, ForceMode.VelocityChange);
+            // Apply a force that attempts to reach our target velocity
+            Vector3 velocity = rb.velocity;
+            Vector3 velocityChange = targetVelocity - velocity;
+            velocityChange.x = Mathf.Clamp(velocityChange.x, -maxVelocityChange, maxVelocityChange);
+            velocityChange.z = Mathf.Clamp(velocityChange.z, -maxVelocityChange, maxVelocityChange);
+            velocityChange.y = 0;
+            rb.AddForce(velocityChange, ForceMode.VelocityChange);
 
-        // Jump
-        if (isGrounded && Input.GetButton("Jump")) {
-            rb.velocity = new Vector3(rb.velocity.x, jumpSpeed, rb.velocity.z);
+            // Jump only if the Player is grounded and is pressing Jump.
+            if (isGrounded && Input.GetButton("Jump")) {
+                rb.velocity = new Vector3(rb.velocity.x, jumpSpeed, rb.velocity.z);
+            }
+
+            // Rotate in response to mouse
+            Vector2 mouseInput = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+            transform.Rotate(Vector3.up, mouseInput.x * rotationSpeed);
         }
 
-        // Gravity
+        // Add force from gravity
         rb.AddForce(new Vector3 (0, -gravity * rb.mass, 0));
-
-        // Rotate in response to mouse
-        Vector2 mouseInput = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-        transform.Rotate(Vector3.up, mouseInput.x * rotationSpeed);
 
         isGrounded = false;
     }

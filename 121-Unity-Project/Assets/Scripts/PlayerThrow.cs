@@ -6,9 +6,7 @@ using Mirror;
 [RequireComponent(typeof(PlayerController))]
 public class PlayerThrow : NetworkBehaviour
 {
-    private Ray ray;
-    private RaycastHit hit;
-    private GameObject currentObject = null;
+    public GameObject currentObject = null;
 
     [SerializeField]
     private float interactableDistance = 0f;
@@ -25,6 +23,8 @@ public class PlayerThrow : NetworkBehaviour
 
     // Every frame, update what thing the player is grabbing/throwing
     void Update() {
+        Ray ray;
+        RaycastHit hit;
         // Check what the camera is pointing at
         ray = cam.ScreenPointToRay(Input.mousePosition);
         // If you are not holding an object and the Raycast hit something...
@@ -36,6 +36,7 @@ public class PlayerThrow : NetworkBehaviour
                 if (Input.GetMouseButtonDown(0) && !inter.lifted) {
                     CmdGrab(hit.collider.gameObject);
                     currentObject = hit.collider.gameObject;
+                    cam.GetComponent<CameraController>().MoveToPickUpPosition();
                 } else {
                     inter.BeginHover();
                 }
@@ -44,6 +45,7 @@ public class PlayerThrow : NetworkBehaviour
             // if you are currently holding an object, click to throw it
             CmdThrow(currentObject);
             currentObject = null;
+            cam.GetComponent<CameraController>().MoveToDefaultPosition();
         }
     }
 
