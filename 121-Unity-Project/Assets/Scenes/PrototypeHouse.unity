@@ -1057,7 +1057,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1371321577}
+      - m_Target: {fileID: 650614224}
         m_MethodName: LoadMenu
         m_Mode: 1
         m_Arguments:
@@ -1116,13 +1116,14 @@ GameObject:
   - component: {fileID: 650614222}
   - component: {fileID: 650614221}
   - component: {fileID: 650614220}
+  - component: {fileID: 650614224}
   m_Layer: 5
   m_Name: PauseCanvas
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!114 &650614220
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -1196,13 +1197,26 @@ RectTransform:
   m_Children:
   - {fileID: 1371321574}
   m_Father: {fileID: 0}
-  m_RootOrder: 5
+  m_RootOrder: 3
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 0, y: 0}
   m_SizeDelta: {x: 0, y: 0}
   m_Pivot: {x: 0, y: 0}
+--- !u!114 &650614224
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 650614219}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 2d492b9135411f544a96882792c9e186, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  pauseMenuUI: {fileID: 1371321573}
 --- !u!1 &673223431
 GameObject:
   m_ObjectHideFlags: 0
@@ -1377,7 +1391,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1371321577}
+      - m_Target: {fileID: 650614224}
         m_MethodName: Resume
         m_Mode: 1
         m_Arguments:
@@ -1968,7 +1982,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: 30ea37132d76e624eacbf2b75cb5f50a, type: 3}
       propertyPath: m_RootOrder
-      value: 4
+      value: 5
       objectReference: {fileID: 0}
     - target: {fileID: 400006, guid: 30ea37132d76e624eacbf2b75cb5f50a, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
@@ -2226,7 +2240,6 @@ GameObject:
   - component: {fileID: 1371321574}
   - component: {fileID: 1371321576}
   - component: {fileID: 1371321575}
-  - component: {fileID: 1371321577}
   m_Layer: 5
   m_Name: PauseMenu
   m_TagString: Untagged
@@ -2292,19 +2305,6 @@ CanvasRenderer:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 1371321573}
   m_CullTransparentMesh: 0
---- !u!114 &1371321577
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 1371321573}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2d492b9135411f544a96882792c9e186, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  pauseMenuUI: {fileID: 1371321573}
 --- !u!1 &1404582256
 GameObject:
   m_ObjectHideFlags: 0
@@ -2387,7 +2387,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1371321577}
+      - m_Target: {fileID: 650614224}
         m_MethodName: QuitGame
         m_Mode: 1
         m_Arguments:
@@ -2518,7 +2518,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 3942771a39e29d24c9d6ed16822a0104, type: 3}
       propertyPath: m_RootOrder
-      value: 3
+      value: 4
       objectReference: {fileID: 0}
     - target: {fileID: 400002, guid: 3942771a39e29d24c9d6ed16822a0104, type: 3}
       propertyPath: m_LocalEulerAnglesHint.x
