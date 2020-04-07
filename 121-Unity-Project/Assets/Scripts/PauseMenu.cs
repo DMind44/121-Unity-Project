@@ -7,9 +7,12 @@ public class PauseMenu : MonoBehaviour
 {
     public static bool GamePaused = false;
     public GameObject pauseMenuUI;
+    public GameObject settingsMenuUI;
+    public GameObject crosshairs;
 
     void Start() {
         pauseMenuUI.SetActive(false);
+        crosshairs.SetActive(false);
     }
     // Update is called once per frame
     void Update() {
@@ -25,6 +28,7 @@ public class PauseMenu : MonoBehaviour
 
     public void Resume() {
         pauseMenuUI.SetActive(false);
+        crosshairs.SetActive(true);
         GamePaused = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
@@ -35,8 +39,10 @@ public class PauseMenu : MonoBehaviour
         Cursor.lockState = CursorLockMode.None;
     }
 
-    public void LoadMenu() {
-        Debug.Log("Loading Menu");
+    public void LoadSettings() {
+        Debug.Log("Loading Settings");
+        pauseMenuUI.SetActive(false);
+        settingsMenuUI.SetActive(true);
     }
 
     // TODO: Terminate client-server connection

@@ -69,6 +69,10 @@ public class PlayerController : NetworkBehaviour {
     // Don't move if Player is actively lifting something.
     //   Source: http://wiki.unity3d.com/index.php/RigidbodyFPSWalker?_ga=2.269071159.757207726.1586110776-1944583397.1580664386
     void Update() {
+        // kill the player if their health drops below 0
+        if (hp <= 0) {
+            kill();
+        }
         // If we are currently lifting an object, ignore movement and jumping
         if (myThrow == null || myThrow.currentObject == null ||
                 myThrow.currentObject.GetComponent<Interactable>() == null ||
@@ -94,6 +98,11 @@ public class PlayerController : NetworkBehaviour {
             // Rotate in response to mouse
             Vector2 mouseInput = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
             transform.Rotate(Vector3.up, mouseInput.x * rotationSpeed);
+
+            // Press h to die - for debugging purposes
+            if (Input.GetButtonDown("Hurt")) {
+                DamageMe(1);
+            }
         }
 
         // Add force from gravity
@@ -110,6 +119,10 @@ public class PlayerController : NetworkBehaviour {
     [Client] public void DamageMe(float amount) {
         hp -= amount;
         Debug.Log("health:" + hp);
+    }
+
+    void kill() {
+        Debug.Log("You're dead!");
     }
 
     // Return a reference to this player's camera
