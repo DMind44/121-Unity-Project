@@ -18,6 +18,7 @@ public class PlayerSetup : NetworkBehaviour
             for (int i = 0; i < componentsToDisable.Length; i++) {
                 componentsToDisable[i].enabled = false;
             }
+            gameObject.layer = LayerMask.NameToLayer("RemotePlayer");
         } else {
             sceneCamera = Camera.main;
             if (sceneCamera != null) {
