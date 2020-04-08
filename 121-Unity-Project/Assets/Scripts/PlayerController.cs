@@ -29,6 +29,8 @@ public class PlayerController : NetworkBehaviour {
     [SerializeField]
     private Camera cam = null;
 
+    // private GameStateController gameState = null;
+
     public bool canMove = true;
 
     // @TODO: Unserialize this field once testing on it is done
@@ -43,6 +45,7 @@ public class PlayerController : NetworkBehaviour {
         myThrow = GetComponent<PlayerThrow>();
         rb.useGravity = false;  // We'll control gravity ourselves
         hp = max_hp;
+
     }
 
     /*
@@ -76,7 +79,7 @@ public class PlayerController : NetworkBehaviour {
             kill();
         }
     }
-    
+
     // Run once per frame to move in response to user input.
     // Don't move if Player is actively lifting something.
     //   Source: http://wiki.unity3d.com/index.php/RigidbodyFPSWalker?_ga=2.269071159.757207726.1586110776-1944583397.1580664386
@@ -86,9 +89,14 @@ public class PlayerController : NetworkBehaviour {
                 myThrow.currentObject.GetComponent<Interactable>() == null ||
                 !myThrow.currentObject.GetComponent<Interactable>().lifting || !canMove) {
             // Calculate how fast we should be moving
-            Vector3 targetVelocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
-            targetVelocity = transform.TransformDirection(targetVelocity);
-            targetVelocity *= movementSpeed;
+            Vector3 targetVelocity;
+            if (GameState.IsAcceptingMovement) {
+                targetVelocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
+                targetVelocity = transform.TransformDirection(targetVelocity);
+                targetVelocity *= movementSpeed;
+            } else {
+                targetVelocity = Vector3.zero;
+            }
 
             // Apply a force that attempts to reach our target velocity
             Vector3 velocity = rb.velocity;
@@ -99,13 +107,15 @@ public class PlayerController : NetworkBehaviour {
             rb.AddForce(velocityChange, ForceMode.VelocityChange);
 
             // Jump only if the Player is grounded and is pressing Jump.
-            if (isGrounded && Input.GetButton("Jump")) {
+            if (GameState.IsAcceptingMovement && isGrounded && Input.GetButton("Jump")) {
                 rb.velocity = new Vector3(rb.velocity.x, jumpSpeed, rb.velocity.z);
             }
 
             // Rotate in response to mouse
-            Vector2 mouseInput = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-            transform.Rotate(Vector3.up, mouseInput.x * rotationSpeed);
+            if (GameState.IsAcceptingMovement) {
+                Vector2 mouseInput = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
+                transform.Rotate(Vector3.up, mouseInput.x * rotationSpeed);
+            }
         }
 
         // Add force from gravity

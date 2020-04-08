@@ -306,6 +306,8 @@ MonoBehaviour:
   gravity: 30
   maxVelocityChange: 18
   cam: {fileID: 3832422875992407947}
+  gameState: {fileID: 2321959871365659206, guid: fb5b2c16074db41158c980e1880a11fb,
+    type: 3}
   canMove: 1
   hp: 25
   max_hp: 25
