@@ -45,6 +45,12 @@ public class CameraController : MonoBehaviour
 
     // Every frame as the last thing to do update the camera's position
     private void LateUpdate() {
+
+        // lock camera when game is paused
+        if (GameState.IsPaused) {
+            return;
+        }
+
         // First, react to inputs that change the camera's target position
         Vector3 nextTargetPos = targetPos;
 

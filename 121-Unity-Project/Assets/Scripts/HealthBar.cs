@@ -34,11 +34,11 @@ public class HealthBar : MonoBehaviour
         // bar is set up, so we keep checking until we find it)
         if (localPlayer == null) {
             discoverLocalPlayer();
+        } else {
+            // TODO make the bar only update itself when it's actually changed
+            // as opposed to on every frame... maybe using the event system?
+            setHealth(localPlayer.hp);
         }
-
-        // TODO make the bar only update itself when it's actually changed
-        // as opposed to on every frame... maybe using the event system?
-        setHealth(localPlayer.hp);
     }
 
     // sets the healthbar to full when player is at max health on startup
@@ -63,6 +63,5 @@ public class HealthBar : MonoBehaviour
                 break;
             }
         }
-        setMaxHealth(localPlayer.max_hp);
     }
 }

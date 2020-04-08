@@ -6,10 +6,10 @@ using System.Collections;
 public class GameState {
 
     public enum States {
-        Running, Died, Pause, Won
+        Playing, Paused, Dead, Won
     }
 
-    public static States state = States.Pause;
+    public static States state = States.Playing;
 
     public static void ChangeState(States newState) {
         state = newState;
@@ -19,17 +19,37 @@ public class GameState {
         return state == stateToCheck;
     }
 
-    public static bool IsAcceptingMovement {
+    public static void Play() {
+        ChangeState(States.Playing);
+    }
+
+    public static void Pause() {
+        ChangeState(States.Paused);
+    }
+
+    public static void Die() {
+        ChangeState(States.Dead);
+    }
+
+    public static bool IsPlaying {
         get {
-            return IsState(States.Running);
+            return IsState(States.Playing);
         }
     }
 
     public static bool IsPaused {
         get {
-            return IsState(States.Pause);
+            return IsState(States.Paused);
         }
     }
+
+    public static bool IsDead {
+        get {
+            return IsState(States.Dead);
+        }
+    }
+
+
 
     // // You can still do this but will need GameState.Running = true;
     // // ChangeState is more atomic...

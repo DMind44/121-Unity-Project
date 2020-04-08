@@ -5,40 +5,52 @@ using UnityEngine.SceneManagement;
 
 public class PauseMenu : MonoBehaviour
 {
-    public static bool GamePaused = false;
     public GameObject pauseMenuUI;
     public GameObject settingsMenuUI;
     public GameObject crosshair;
 
+    // on start, hide the menu but don't actually change the game state
+    // (we don't want the pause menu to be the item that technically makes the
+    // call to start up gameplay)
     void Start() {
-        Resume();
+        HidePauseMenu();
     }
 
     // Update is called once per frame
     void Update() {
         if (Input.GetButtonDown("Pause")) {
-            Debug.Log("Escape pressed!");
-            if (GamePaused) {
-                Resume();
-            } else {
+            if (GameState.IsPlaying) {
                 Pause();
+            } else if (GameState.IsPaused) {
+                Play();
             }
         }
     }
 
-    public void Resume() {
+    // helper: show the pause menu and lock the cursor (without changing gameplay state)
+    private void ShowPauseMenu() {
+        pauseMenuUI.SetActive(true);
+        crosshair.SetActive(false);
+        Cursor.lockState = CursorLockMode.None;
+    }
+
+    // helper: hide the pause menu and unlock the cursor (without changing gameplay state)
+    private void HidePauseMenu() {
         pauseMenuUI.SetActive(false);
-        GamePaused = false;
         crosshair.SetActive(true);
         Cursor.lockState = CursorLockMode.Locked;
     }
 
-    // TODO: freeze local client player
-    void Pause() {
-        pauseMenuUI.SetActive(true);
-        GamePaused = true;
-        crosshair.SetActive(false);
-        Cursor.lockState = CursorLockMode.None;
+    // pause the game
+    public void Pause() {
+        ShowPauseMenu();
+        GameState.Pause();
+    }
+
+    // resume the game
+    public void Play() {
+        HidePauseMenu();
+        GameState.Play();
     }
 
     public void LoadSettings() {

@@ -76,7 +76,7 @@ public class PlayerController : NetworkBehaviour {
 
         // kill the player if their health drops below 0
         if (hp <= 0) {
-            kill();
+            Kill();
         }
     }
 
@@ -90,7 +90,7 @@ public class PlayerController : NetworkBehaviour {
                 !myThrow.currentObject.GetComponent<Interactable>().lifting || !canMove) {
             // Calculate how fast we should be moving
             Vector3 targetVelocity;
-            if (GameState.IsAcceptingMovement) {
+            if (GameState.IsPlaying) {
                 targetVelocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
                 targetVelocity = transform.TransformDirection(targetVelocity);
                 targetVelocity *= movementSpeed;
@@ -107,12 +107,12 @@ public class PlayerController : NetworkBehaviour {
             rb.AddForce(velocityChange, ForceMode.VelocityChange);
 
             // Jump only if the Player is grounded and is pressing Jump.
-            if (GameState.IsAcceptingMovement && isGrounded && Input.GetButton("Jump")) {
+            if (GameState.IsPlaying && isGrounded && Input.GetButton("Jump")) {
                 rb.velocity = new Vector3(rb.velocity.x, jumpSpeed, rb.velocity.z);
             }
 
             // Rotate in response to mouse
-            if (GameState.IsAcceptingMovement) {
+            if (GameState.IsPlaying) {
                 Vector2 mouseInput = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
                 transform.Rotate(Vector3.up, mouseInput.x * rotationSpeed);
             }
@@ -134,8 +134,9 @@ public class PlayerController : NetworkBehaviour {
         Debug.Log("health:" + hp);
     }
 
-    void kill() {
+    void Kill() {
         Debug.Log("You're dead!");
+        GameState.Die();
     }
 
     // Return a reference to this player's camera
