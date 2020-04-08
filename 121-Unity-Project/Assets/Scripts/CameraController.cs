@@ -10,8 +10,8 @@ public class CameraController : MonoBehaviour
     [SerializeField] private Vector3 targetPos;
 
     // Changes the speed at which the camera moves to a new position
-    //   You can think of it as taking 1/posUpdateRatio seconds to reach
-    //   the new target position (i.e. with this = 4 it takes 0.25 seconds)
+    // You can think of it as taking 1/posUpdateRatio seconds to reach
+    // the new target position (i.e. with this = 4 it takes 0.25 seconds)
     [SerializeField] private float positionUpdateRatio = 0f;
 
     // Camera sensitivity to up and down motion
@@ -58,7 +58,7 @@ public class CameraController : MonoBehaviour
         if (nextTargetPos.magnitude < minDistanceToPlayer || nextTargetPos.magnitude > maxDistanceToPlayer) {
             nextTargetPos = targetPos;
         }
-        
+
         // Respond to "change shoulder"
         if (Input.GetButtonDown("SwitchShoulder")) {
             nextTargetPos.x = - nextTargetPos.x;
@@ -66,21 +66,23 @@ public class CameraController : MonoBehaviour
         targetPos = nextTargetPos;
 
         // Update position by moving towards targetPos.
-        //   Third paramater below makes it so that the movement is a percentage
-        //   of the total distance it needs to cover -> smooth camera movements
+        // Third paramater below makes it so that the movement is a percentage
+        // of the total distance it needs to cover -> smooth camera movements
         transform.localPosition = Vector3.MoveTowards(transform.localPosition, targetPos,
         (transform.localPosition - targetPos).magnitude * positionUpdateRatio * Time.deltaTime);
 
-        // Now, do a Raycast to ensure the camera can see the player
-        // From the player, Raycast towards the camera by no farther than the 
-        //   distance to the camera. If there is a hit, then something is in
-        //   the way of the camera and camera has to get moved closer
+        // Now, do a Raycast to ensure the camera can see the player.
+        // From the player, Raycast towards the camera by no farther than the
+        // distance to the camera. If there is a hit, then something is in
+        // the way of the camera and camera has to get moved closer
         RaycastHit hit;
         float distanceToPlayer = (player.transform.position - transform.position).magnitude;
+
         if (Physics.Raycast(player.transform.position,
               transform.position - player.transform.position,
               out hit, distanceToPlayer)) {
             if (!hit.collider.gameObject.CompareTag("Player")) {
+
                 Vector3 nextLocalPos = transform.localPosition;
                 nextLocalPos.y *= hit.distance / distanceToPlayer;
                 if (nextLocalPos.y < minRelativeHeight) {
@@ -102,7 +104,7 @@ public class CameraController : MonoBehaviour
     }
 
     // Moves the camera to the position where it needs to be when an object
-    //    is picked up.
+    // is picked up.
     public void MoveToPickUpPosition() {
         targetPos.x = 0;
     }

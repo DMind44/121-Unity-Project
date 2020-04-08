@@ -13,6 +13,7 @@ public class PauseMenu : MonoBehaviour
     void Start() {
         pauseMenuUI.SetActive(false);
     }
+
     // Update is called once per frame
     void Update() {
         if (Input.GetButtonDown("Pause")) {
@@ -31,6 +32,7 @@ public class PauseMenu : MonoBehaviour
         GamePaused = false;
         Cursor.lockState = CursorLockMode.Locked;
     }
+    
     // TODO: freeze local client player
     void Pause() {
         pauseMenuUI.SetActive(true);

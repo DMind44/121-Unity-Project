@@ -11,8 +11,7 @@ public class Crosshair : MonoBehaviour
       crosshair.SetActive(true);
     }
 
-    void Update()
-    {
+    void Update() {
         if (Input.GetMouseButton(0)) {
             crosshair.GetComponent< RectTransform >( ).SetSizeWithCurrentAnchors( RectTransform.Axis.Horizontal, 40);
             crosshair.GetComponent< RectTransform >( ).SetSizeWithCurrentAnchors( RectTransform.Axis.Vertical, 40);

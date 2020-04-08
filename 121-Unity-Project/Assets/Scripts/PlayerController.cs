@@ -73,6 +73,7 @@ public class PlayerController : NetworkBehaviour {
         if (hp <= 0) {
             kill();
         }
+
         // If we are currently lifting an object, ignore movement and jumping
         if (myThrow == null || myThrow.currentObject == null ||
                 myThrow.currentObject.GetComponent<Interactable>() == null ||

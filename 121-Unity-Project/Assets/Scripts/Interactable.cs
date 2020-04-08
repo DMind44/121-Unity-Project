@@ -27,24 +27,21 @@ public class Interactable : NetworkBehaviour {
 
     [SerializeField] private Vector3 relativePos = Vector3.zero;
     public Transform playerT { get; internal set; }
-    
+
     [SerializeField] private float cutoff_momentum = 10;
 
     private float dmgAmount = 0;
 
     // Start is called before the first frame update
-    void Start()
-    {
+    void Start() {
         meshRenderer = GetComponent<MeshRenderer>();
         rends = GetComponentsInChildren<MeshRenderer>();
         rb = GetComponent<Rigidbody>();
-        
+
         // initializes the array of originalColors of the child objects
         originalColors = new Color[rends.Length];
-        for (int i = 0; i < rends.Length; i++) 
-        {
-            if ((rends[i] != null) && (rends[i].material != null))
-            {
+        for (int i = 0; i < rends.Length; i++) {
+            if ((rends[i] != null) && (rends[i].material != null)) {
                 originalColors[i] = rends[i].material.color;
             }
         }
@@ -78,11 +75,9 @@ public class Interactable : NetworkBehaviour {
     }
 
     // Called when a mouse is hovering and is close enough
-    //    Only on client so that only client sees hovering
+    // Only on client so that only client sees hovering
     [Client] public void BeginHover() {
         if (!lifted && !lifting) {
-        //    if(meshRenderer != null)
-        //        meshRenderer.material.color = hoverColor;
         for (int i = 0; i < rends.Length; i++) {
             if(rends[i] != null)
                 rends[i].material.color = hoverColor;
@@ -101,10 +96,10 @@ public class Interactable : NetworkBehaviour {
     [ClientRpc] private void RpcGrab(Transform playerTransform) {
         lifting = true;
         playerT = playerTransform;
-        // rb.MovePosition(playerT.position + relativePos);  // @TODO (Aely): Delete this when slow lifting works
-        // iterates through all the children meshRenderers
+
+        // iterate through all the children meshRenderers
         for (int i = 0; i < rends.Length; i++) {
-            if(rends[i] != null)
+            if (rends[i] != null)
                 rends[i].material.color = liftedColor;
             }
         GetComponent<Rigidbody>().useGravity = false;
@@ -116,12 +111,13 @@ public class Interactable : NetworkBehaviour {
 
     // Throws the lifted object.
     // This function first does things that always happen, but only physically
-    //    throws the object if it was fully lifted, not if still lifting
+    // throws the object if it was fully lifted, not if still lifting
     [ClientRpc] private void RpcThrow() {
         // Always reset colors and turn on gravity
         for (int i = 0; i < rends.Length; i++) {
-            if(originalColors[i] != null)
+            if (originalColors[i] != null) {
                 rends[i].material.color = originalColors[i];
+            }
         }
         GetComponent<Rigidbody>().useGravity = true;
         lifting = false;
@@ -130,6 +126,7 @@ public class Interactable : NetworkBehaviour {
         if (lifted) {
             flying = true;
             lifted = false;
+
             // Determine velocity based on what you're looking at
             Ray ray;
             RaycastHit hit;
@@ -138,11 +135,11 @@ public class Interactable : NetworkBehaviour {
             ray = cam.ScreenPointToRay(Input.mousePosition);
 
             // Before raycasting, disable the collider for this object and the player.
-            //   That way, they will be ignored by the raycast.
+            // That way, they will be ignored by the raycast.
             GetComponent<Collider>().enabled = false;
             playerT.gameObject.GetComponent<Collider>().enabled = false;
 
-            if (Physics.Raycast(ray, out hit) && 
+            if (Physics.Raycast(ray, out hit) &&
                     CalculateThrowAngle(transform.position, hit.point,
                     throwSpeed, out throwAngle)) {
                 Debug.Log(hit.transform.name);
@@ -151,8 +148,7 @@ public class Interactable : NetworkBehaviour {
                 throwDirection = Vector3.RotateTowards(throwDirection, Vector3.up, throwAngle, throwAngle).normalized;
                 Debug.DrawRay(transform.position, throwDirection, Color.green, 5f);
                 rb.velocity = throwDirection * throwSpeed;
-            }
-            else {
+            } else {
                 rb.velocity = cam.transform.forward * throwSpeed;
             }
 
@@ -168,19 +164,19 @@ public class Interactable : NetworkBehaviour {
         float xz = to.z - from.z;
         float x = Mathf.Sqrt(xx * xx + xz * xz);
         float y = from.y - to.y;
-        
+
         float v = speed;
         float g = Physics.gravity.y;
-        
+
         float sqrt = (v*v*v*v) - (g * (g * (x*x) + 2 * y * (v*v)));
-        
+
         // Not enough range
         if (sqrt < 0) {
             angle = 0.0f;
             Debug.Log("Out of range");
             return false;
         }
-        
+
         angle = -Mathf.Atan(((v*v) - Mathf.Sqrt(sqrt)) / (g*x));
         Debug.Log(angle);
         return true;
@@ -192,15 +188,15 @@ public class Interactable : NetworkBehaviour {
         if (lifted) {
             rb.MovePosition(playerT.position + relativePos);
             rb.MoveRotation(playerT.rotation);
-        }
-        else if (lifting) {
+        } else if (lifting) {
             float targetMagnitude = 1 / rb.mass;
             Vector3 finalPos = playerT.position + relativePos;
             Vector3 targetPos = (finalPos - transform.position).normalized;
             targetPos *= targetMagnitude;
             targetPos += transform.position;
+
             // If the object is within two steps of the final position, the
-            //    lift is considered complete.
+            // lift is considered complete.
             if ((targetPos - finalPos).magnitude <= 2 * targetMagnitude) {
                 lifting = false;
                 lifted  = true;
@@ -216,8 +212,9 @@ public class Interactable : NetworkBehaviour {
     void OnMouseExit() {
         if (!lifted && !lifting) {
             for (int i = 0; i < rends.Length; i++) {
-                if(originalColors[i] != null)
+                if (originalColors[i] != null) {
                     rends[i].material.color = originalColors[i];
+                }
             }
         }
     }
