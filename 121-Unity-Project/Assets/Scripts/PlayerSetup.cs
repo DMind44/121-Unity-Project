@@ -25,7 +25,7 @@ public class PlayerSetup : NetworkBehaviour
             if (sceneCamera != null) {
                 sceneCamera.gameObject.SetActive(false);
             }
-            
+
             gameObject.tag = "Player";
         }
     }

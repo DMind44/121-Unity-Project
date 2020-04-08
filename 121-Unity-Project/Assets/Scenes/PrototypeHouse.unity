@@ -1636,7 +1636,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   pauseMenuUI: {fileID: 1371321573}
   settingsMenuUI: {fileID: 2083504816}
-  crosshairs: {fileID: 282662917}
+  crosshair: {fileID: 282662917}
 --- !u!1 &662176369
 GameObject:
   m_ObjectHideFlags: 0
