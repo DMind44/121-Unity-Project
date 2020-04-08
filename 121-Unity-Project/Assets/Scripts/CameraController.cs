@@ -38,9 +38,6 @@ public class CameraController : MonoBehaviour
     [SerializeField] private Vector3 defaultCamPos = Vector3.zero;
 
     void Start() {
-        // lock cursor
-        Cursor.lockState = CursorLockMode.Locked;
-
         // Begin at default position relative to the player
         targetPos = defaultCamPos;
         transform.localPosition = transform.localPosition + targetPos;

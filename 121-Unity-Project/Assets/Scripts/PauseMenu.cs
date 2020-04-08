@@ -11,7 +11,7 @@ public class PauseMenu : MonoBehaviour
     public GameObject crosshair;
 
     void Start() {
-        pauseMenuUI.SetActive(false);
+        Resume();
     }
 
     // Update is called once per frame
@@ -28,15 +28,16 @@ public class PauseMenu : MonoBehaviour
 
     public void Resume() {
         pauseMenuUI.SetActive(false);
-        crosshair.SetActive(true);
         GamePaused = false;
+        crosshair.SetActive(true);
         Cursor.lockState = CursorLockMode.Locked;
     }
-    
+
     // TODO: freeze local client player
     void Pause() {
         pauseMenuUI.SetActive(true);
         GamePaused = true;
+        crosshair.SetActive(false);
         Cursor.lockState = CursorLockMode.None;
     }
 
