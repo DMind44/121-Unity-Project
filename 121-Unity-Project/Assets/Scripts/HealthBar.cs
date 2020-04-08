@@ -9,23 +9,23 @@ public class HealthBar : MonoBehaviour
     public Gradient gradient;
     public Image fill;
     public PlayerController localPlayer;
-    
+
     void Start() {
-        // find the local player and assign them 
+        // find the local player and assign them
         GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
-        foreach(GameObject player in players) {
+        foreach (GameObject player in players) {
             Debug.Log("fuck you");
-            if(player.GetComponent<PlayerController>().isLocalPlayer) {
+            if (player.GetComponent<PlayerController>().isLocalPlayer) {
                 localPlayer = player.GetComponent<PlayerController>();
                 Debug.Log("found local player");
                 break;
             }
         }
-        setMaxHealth(localPlayer.max_hp);
+        // setMaxHealth(localPlayer.max_hp);
     }
 
     /*    void Start() {
-        // find the local player and assign them 
+        // find the local player and assign them
         //GameObject[] players = GameObject.FindGameObjectsWithTag("Player");
         NetworkManager networkManager = NetworkManager.singleton;
         List<PlayerController> players = NetworkManager.client.connection.playerControllers;
@@ -43,7 +43,8 @@ public class HealthBar : MonoBehaviour
     }*/
 
     void Update() {
-        setHealth(localPlayer.hp);
+        // setHealth(localPlayer.hp);
+        // print(GameObject.FindGameObjectsWithTag("Player"));
     }
 
     // sets the healthbar to full when player is at max health on startup

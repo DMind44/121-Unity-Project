@@ -53,13 +53,13 @@ public class PlayerController : NetworkBehaviour {
     //     // Translate player based on direction key input
     //     float horizontalMovementInput = Input.GetAxis("Horizontal");
     //     float verticalMovementInput = Input.GetAxis("Vertical");
-
+    //
     //     Vector3 movement = new Vector3(horizontalMovementInput, 0, verticalMovementInput);
     //     rb.AddRelativeForce(movement * movementSpeed);
-
+    //
     //     // Rotate player based on mouse
     //     transform.rotation *= Quaternion.AngleAxis(Input.GetAxis("Mouse X") * rotationSpeed, Vector3.up);
-
+    //
     //     if (Input.GetKeyDown(KeyCode.Space)) {
     //         DamageMe(1);
     //     }
@@ -68,7 +68,7 @@ public class PlayerController : NetworkBehaviour {
     // Run once per frame to move in response to user input.
     // Don't move if Player is actively lifting something.
     //   Source: http://wiki.unity3d.com/index.php/RigidbodyFPSWalker?_ga=2.269071159.757207726.1586110776-1944583397.1580664386
-    void Update() {
+    void FixedUpdate() {
         // kill the player if their health drops below 0
         if (hp <= 0) {
             kill();

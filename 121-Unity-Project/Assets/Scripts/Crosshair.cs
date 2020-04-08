@@ -6,6 +6,11 @@ public class Crosshair : MonoBehaviour
 {
     public GameObject crosshair;
     // Update is called once per frame
+
+    void Start() {
+      crosshair.SetActive(true);
+    }
+
     void Update()
     {
         if (Input.GetMouseButton(0)) {
