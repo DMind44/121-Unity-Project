@@ -22,30 +22,34 @@ public class PlayerThrow : NetworkBehaviour
 
     // Every frame, update what thing the player is grabbing/throwing
     void Update() {
-        Ray ray;
-        RaycastHit hit;
-        // Check what the camera is pointing at
-        ray = cam.ScreenPointToRay(Input.mousePosition);
-        // If you are not holding an object and the Raycast hit something...
-        if (!currentObject && Physics.Raycast(ray, out hit)) {
-            // If we're close enough to the object and it is interactable...
-            Interactable inter = hit.collider.gameObject.GetComponent<Interactable>();
-            if (hit.distance <= interactableDistance && inter != null) {
-                // On mouse click, grab this object. Otherwise, start hovering
-                if (Input.GetMouseButtonDown(0) && !inter.lifted) {
-                    CmdGrab(hit.collider.gameObject);
-                    currentObject = hit.collider.gameObject;
-                    cam.GetComponent<CameraController>().MoveToPickUpPosition();
-                } else {
-                    inter.BeginHover();
+        if (GameState.IsPlaying) {
+            Ray ray;
+            RaycastHit hit;
+            // Check what the camera is pointing at
+            ray = cam.ScreenPointToRay(Input.mousePosition);
+            // If you are not holding an object and the Raycast hit something...
+            if (!currentObject && Physics.Raycast(ray, out hit)) {
+                // If we're close enough to the object and it is interactable...
+                Interactable inter = hit.collider.gameObject.GetComponent<Interactable>();
+                if (hit.distance <= interactableDistance && inter != null) {
+                    // On mouse click, grab this object. Otherwise, start hovering
+                    if (Input.GetMouseButtonDown(0) && !inter.lifted) {
+                        CmdGrab(hit.collider.gameObject);
+                        currentObject = hit.collider.gameObject;
+                        cam.GetComponent<CameraController>().MoveToPickUpPosition();
+                    } else {
+                        inter.BeginHover();
+                    }
                 }
+            } else if (currentObject != null && Input.GetMouseButtonDown(0)) {
+                // if you are currently holding an object, click to throw it
+                CmdThrow(currentObject);
+                currentObject = null;
+                cam.GetComponent<CameraController>().MoveToDefaultPosition();
             }
-        } else if (currentObject != null && Input.GetMouseButtonDown(0)) {
-            // if you are currently holding an object, click to throw it
-            CmdThrow(currentObject);
-            currentObject = null;
-            cam.GetComponent<CameraController>().MoveToDefaultPosition();
         }
+        
+        // TODO drop object when dead
     }
 
     // Issue a command to the server to have this object get picked up
