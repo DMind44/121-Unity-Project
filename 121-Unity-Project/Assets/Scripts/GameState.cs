@@ -7,7 +7,7 @@ public class GameState {
 
     // modes of gameplay: either still playing, lost, or won
     public enum States {
-        Playing, Dead, Won
+        Playing, Lost, Won
     }
 
     private static States state = States.Playing;
@@ -40,8 +40,8 @@ public class GameState {
         isPaused = false;
     }
 
-    public static void Die() {
-        ChangeState(States.Dead);
+    public static void Lose() {
+        ChangeState(States.Lost);
     }
 
     // return whether or not local player is currently in the match (hasn't lost or won)
@@ -58,10 +58,10 @@ public class GameState {
         }
     }
 
-    // return whether or not local player is dead
-    public static bool IsDead {
+    // return whether or not local player has lost
+    public static bool HasLost {
         get {
-            return IsState(States.Dead);
+            return IsState(States.Lost);
         }
     }
 

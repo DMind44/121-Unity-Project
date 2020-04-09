@@ -74,9 +74,9 @@ public class PlayerController : NetworkBehaviour {
             DamageMe(1);
         }
 
-        // kill the player if their health drops below 0
+        // Player loses when they lose all health
         if (hp <= 0) {
-            Kill();
+            Lose();
         }
     }
 
@@ -134,9 +134,9 @@ public class PlayerController : NetworkBehaviour {
         Debug.Log("health:" + hp);
     }
 
-    void Kill() {
-        Debug.Log("You're dead!");
-        GameState.Die();
+    void Lose() {
+        Debug.Log("You lost!");
+        GameState.Lose();
     }
 
     // Return a reference to this player's camera

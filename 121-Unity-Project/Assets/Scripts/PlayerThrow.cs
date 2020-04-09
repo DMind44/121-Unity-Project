@@ -49,7 +49,7 @@ public class PlayerThrow : NetworkBehaviour
             }
         }
 
-        // TODO drop object when dead
+        // TODO drop object if lose game
     }
 
     // Issue a command to the server to have this object get picked up
