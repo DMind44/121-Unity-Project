@@ -22,7 +22,7 @@ public class PlayerThrow : NetworkBehaviour
 
     // Every frame, update what thing the player is grabbing/throwing
     void Update() {
-        if (GameState.IsPlaying) {
+        if (GameState.PlayerControlsActive) {
             Ray ray;
             RaycastHit hit;
             // Check what the camera is pointing at
@@ -48,7 +48,7 @@ public class PlayerThrow : NetworkBehaviour
                 cam.GetComponent<CameraController>().MoveToDefaultPosition();
             }
         }
-        
+
         // TODO drop object when dead
     }
 

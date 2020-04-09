@@ -13,44 +13,34 @@ public class PauseMenu : MonoBehaviour
     // (we don't want the pause menu to be the item that technically makes the
     // call to start up gameplay)
     void Start() {
-        HidePauseMenu();
+        Unpause();
     }
 
     // Update is called once per frame
     void Update() {
         if (Input.GetButtonDown("Pause")) {
-            if (GameState.IsPlaying) {
+            if (GameState.IsPaused) {
+                Unpause();
+            } else {
                 Pause();
-            } else if (GameState.IsPaused) {
-                Play();
             }
         }
     }
 
-    // helper: show the pause menu and lock the cursor (without changing gameplay state)
-    private void ShowPauseMenu() {
+    // show the pause menu and update game state accordingly
+    public void Pause() {
         pauseMenuUI.SetActive(true);
         crosshair.SetActive(false);
         Cursor.lockState = CursorLockMode.None;
-    }
-
-    // helper: hide the pause menu and unlock the cursor (without changing gameplay state)
-    private void HidePauseMenu() {
-        pauseMenuUI.SetActive(false);
-        crosshair.SetActive(true);
-        Cursor.lockState = CursorLockMode.Locked;
-    }
-
-    // pause the game
-    public void Pause() {
-        ShowPauseMenu();
         GameState.Pause();
     }
 
-    // resume the game
-    public void Play() {
-        HidePauseMenu();
-        GameState.Play();
+    // hide the pause menu and update game state accordingly
+    public void Unpause() {
+        pauseMenuUI.SetActive(false);
+        crosshair.SetActive(true);
+        Cursor.lockState = CursorLockMode.Locked;
+        GameState.Unpause();
     }
 
     public void LoadSettings() {

@@ -46,8 +46,8 @@ public class CameraController : MonoBehaviour
     // Every frame as the last thing to do update the camera's position
     private void LateUpdate() {
 
-        // lock camera when game is paused
-        if (GameState.IsPaused) {
+        // lock camera when mouse controls aren't enabled (for instance, when player is using the UI)
+        if (!GameState.CameraControlsActive) {
             return;
         }
 

@@ -90,7 +90,7 @@ public class PlayerController : NetworkBehaviour {
                 !myThrow.currentObject.GetComponent<Interactable>().lifting || !canMove) {
             // Calculate how fast we should be moving
             Vector3 targetVelocity;
-            if (GameState.IsPlaying) {
+            if (!GameState.UIIsOpen) {
                 targetVelocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
                 targetVelocity = transform.TransformDirection(targetVelocity);
                 targetVelocity *= movementSpeed;
@@ -107,12 +107,12 @@ public class PlayerController : NetworkBehaviour {
             rb.AddForce(velocityChange, ForceMode.VelocityChange);
 
             // Jump only if the Player is grounded and is pressing Jump.
-            if (GameState.IsPlaying && isGrounded && Input.GetButton("Jump")) {
+            if (GameState.PlayerControlsActive && isGrounded && Input.GetButton("Jump")) {
                 rb.velocity = new Vector3(rb.velocity.x, jumpSpeed, rb.velocity.z);
             }
 
-            // Rotate in response to mouse
-            if (GameState.IsPlaying) {
+            // Rotate in response to mouse (i.e., to camera movement)
+            if (GameState.PlayerControlsActive && GameState.CameraControlsActive) {
                 Vector2 mouseInput = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
                 transform.Rotate(Vector3.up, mouseInput.x * rotationSpeed);
             }

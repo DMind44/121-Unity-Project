@@ -33,7 +33,7 @@ public class HealthBar : MonoBehaviour
         // (the local player may not have been labeled by the time the health
         // bar is set up, so we keep checking until we find it)
         if (localPlayer == null) {
-            discoverLocalPlayer();
+            configureLocalPlayer();
         } else {
             // TODO make the bar only update itself when it's actually changed
             // as opposed to on every frame... maybe using the event system?
@@ -41,25 +41,18 @@ public class HealthBar : MonoBehaviour
         }
     }
 
-    // sets the healthbar to full when player is at max health on startup
-    public void setMaxHealth(float health) {
-        slider.maxValue = health;
-        slider.value = health;
-
-        fill.color = gradient.Evaluate(1f);
-    }
-
-    // update the healthbar when player's health changes
+    // update the healthbar to a specified value
     public void setHealth(float health) {
         slider.value = health;
         fill.color = gradient.Evaluate(slider.normalizedValue);
     }
 
     // look for the PlayerController of the local player and store it if found
-    private void discoverLocalPlayer() {
+    private void configureLocalPlayer() {
         foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player")) {
             if (player.GetComponent<PlayerController>().isLocalPlayer) {
                 localPlayer = player.GetComponent<PlayerController>();
+                slider.maxValue = localPlayer.max_hp;
                 break;
             }
         }
