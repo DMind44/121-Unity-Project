@@ -10,42 +10,44 @@ using Mirror;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : NetworkBehaviour {
 
-    [SerializeField]
-    private float movementSpeed = 0f;
-    [SerializeField]
-    private float rotationSpeed = 0f;
-    [SerializeField]
-    private float jumpSpeed = 0f;
+    [SerializeField] private float movementSpeed = 0f;
+    [SerializeField] private float rotationSpeed = 0f;
+    [SerializeField] private float jumpSpeed = 0f;
     public float gravity = 0f;
 
-    [SerializeField]
-    private float maxVelocityChange = 0f;
+    [SerializeField] private float maxVelocityChange = 0f;
+
+    // color the player changes to when they lose
+    [SerializeField] private Color lostColor = Color.red;
 
     private bool isGrounded = false;
 
     private Rigidbody rb;
     private PlayerThrow myThrow;
+    private MeshRenderer[] rends;
 
-    [SerializeField]
-    private Camera cam = null;
+    [SerializeField] private Camera cam = null;
 
     // private GameStateController gameState = null;
 
     public bool canMove = true;
 
     // @TODO: Unserialize this field once testing on it is done
-    [SerializeField]
-    public float hp = 0;
-    [SerializeField]
-    public float max_hp = 0;
+    [SerializeField] public float hp = 0;
+    [SerializeField] public float max_hp = 0;
 
     // Start is called before the first frame update
     void Start() {
         rb = GetComponent<Rigidbody>();
         myThrow = GetComponent<PlayerThrow>();
+        rends = GetComponentsInChildren<MeshRenderer>();
+
+
         rb.useGravity = false;  // We'll control gravity ourselves
         hp = max_hp;
 
+        // MeshRenderer[] rends = GetComponentsInChildren<MeshRenderer>();
+        // Debug.Log(rends.Length);
     }
 
     /*
@@ -134,9 +136,20 @@ public class PlayerController : NetworkBehaviour {
         Debug.Log("health:" + hp);
     }
 
-    void Lose() {
+    // upon losing all health, change game state to Lose and recolor the player
+    private void Lose() {
         Debug.Log("You lost!");
         GameState.Lose();
+        RpcRecolorOnLose();
+    }
+
+    // recolor the player in all game instances when they die
+    [ClientRpc] private void RpcRecolorOnLose() {
+        for (int i = 0; i < rends.Length; i++) {
+            if (rends[i] != null) {
+                rends[i].material.color = lostColor;
+            }
+        }
     }
 
     // Return a reference to this player's camera

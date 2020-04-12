@@ -78,9 +78,10 @@ public class Interactable : NetworkBehaviour {
     // Only on client so that only client sees hovering
     [Client] public void BeginHover() {
         if (!lifted && !lifting) {
-        for (int i = 0; i < rends.Length; i++) {
-            if(rends[i] != null)
-                rends[i].material.color = hoverColor;
+            for (int i = 0; i < rends.Length; i++) {
+                if (rends[i] != null) {
+                    rends[i].material.color = hoverColor;
+                }
             }
         }
     }
@@ -99,9 +100,10 @@ public class Interactable : NetworkBehaviour {
 
         // iterate through all the children meshRenderers
         for (int i = 0; i < rends.Length; i++) {
-            if (rends[i] != null)
+            if (rends[i] != null) {
                 rends[i].material.color = liftedColor;
             }
+        }
         GetComponent<Rigidbody>().useGravity = false;
     }
 
