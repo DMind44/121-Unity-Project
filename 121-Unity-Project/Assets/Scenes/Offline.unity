@@ -160,7 +160,7 @@ MonoBehaviour:
   serverTickRate: 30
   showDebugMessages: 0
   offlineScene: Offline
-  onlineScene: Room
+  onlineScene: CoolHouse
   transport: {fileID: 311152881}
   networkAddress: localhost
   maxConnections: 4
@@ -174,7 +174,7 @@ MonoBehaviour:
   minPlayers: 1
   roomPlayerPrefab: {fileID: -8331316725610063241, guid: 63a21ee56ee9e4c13afd1390a4a27bbe,
     type: 3}
-  RoomScene: Room
+  RoomScene: 
   GameplayScene: PrototypeHouse
   roomSlots: []
   allPlayersReady: 0
