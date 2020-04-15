@@ -41,8 +41,6 @@ public class PlayerController : NetworkBehaviour {
         rb = GetComponent<Rigidbody>();
         myThrow = GetComponent<PlayerThrow>();
         rends = GetComponentsInChildren<MeshRenderer>();
-
-
         rb.useGravity = false;  // We'll control gravity ourselves
         hp = max_hp;
 
