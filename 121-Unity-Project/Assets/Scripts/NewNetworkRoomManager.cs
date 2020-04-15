@@ -78,6 +78,7 @@ public class NewNetworkRoomManager : NetworkRoomManager
     {
         // assign the player a random username
         gamePlayer.GetComponent<PlayerProperties>().username = Random.Range(1, 500).ToString();
+
         return base.OnRoomServerSceneLoadedForPlayer(roomPlayer, gamePlayer);
     }
 
