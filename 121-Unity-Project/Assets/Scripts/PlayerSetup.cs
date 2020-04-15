@@ -1,5 +1,6 @@
 ﻿using UnityEngine;
 using Mirror;
+using TMPro;
 
 public class PlayerSetup : NetworkBehaviour
 {
@@ -14,6 +15,10 @@ public class PlayerSetup : NetworkBehaviour
     // it's going to disable its controller.
     // If this is the local player, it disables main camera to use its own
     void Start() {
+        // Debug.Log("username:");
+        // Debug.Log(GetComponent<PlayerProperties>().username);
+        GetComponentsInChildren<TextMeshPro>()[0].text = GetComponent<PlayerProperties>().username;
+
         if (!isLocalPlayer) {
             for (int i = 0; i < componentsToDisable.Length; i++) {
                 componentsToDisable[i].enabled = false;

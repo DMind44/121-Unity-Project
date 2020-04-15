@@ -131,10 +131,10 @@ GameObject:
   m_Component:
   - component: {fileID: 311152883}
   - component: {fileID: 311152881}
-  - component: {fileID: 311152880}
   - component: {fileID: 311152882}
   - component: {fileID: 311152886}
   - component: {fileID: 311152885}
+  - component: {fileID: 311152884}
   m_Layer: 0
   m_Name: NetworkManager
   m_TagString: Untagged
@@ -142,42 +142,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &311152880
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 311152879}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 615e6c6589cf9e54cad646b5a11e0529, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  dontDestroyOnLoad: 1
-  runInBackground: 1
-  startOnHeadless: 1
-  serverTickRate: 30
-  showDebugMessages: 0
-  offlineScene: Offline
-  onlineScene: CoolHouse
-  transport: {fileID: 311152881}
-  networkAddress: localhost
-  maxConnections: 4
-  authenticator: {fileID: 0}
-  playerPrefab: {fileID: 9083228238792966085, guid: 40a8c2b512a2fcd4f9641e96f6d6611e,
-    type: 3}
-  autoCreatePlayer: 1
-  playerSpawnMethod: 0
-  spawnPrefabs: []
-  showRoomGUI: 1
-  minPlayers: 1
-  roomPlayerPrefab: {fileID: -8331316725610063241, guid: 63a21ee56ee9e4c13afd1390a4a27bbe,
-    type: 3}
-  RoomScene: 
-  GameplayScene: PrototypeHouse
-  roomSlots: []
-  allPlayersReady: 0
 --- !u!114 &311152881
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -240,13 +204,49 @@ Transform:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 311152879}
-  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
+  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
+  m_LocalPosition: {x: 0, y: -0, z: 0}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 0
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &311152884
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 311152879}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 6203a383141664f0485f96c76340f347, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  dontDestroyOnLoad: 1
+  runInBackground: 1
+  startOnHeadless: 1
+  serverTickRate: 30
+  showDebugMessages: 0
+  offlineScene: Offline
+  onlineScene: Offline
+  transport: {fileID: 311152881}
+  networkAddress: localhost
+  maxConnections: 4
+  authenticator: {fileID: 0}
+  playerPrefab: {fileID: 9083228238792966085, guid: 40a8c2b512a2fcd4f9641e96f6d6611e,
+    type: 3}
+  autoCreatePlayer: 1
+  playerSpawnMethod: 0
+  spawnPrefabs: []
+  showRoomGUI: 1
+  minPlayers: 1
+  roomPlayerPrefab: {fileID: -2107545375186830603, guid: ee7f7ad1a349340f79baa9b6a2e6eff4,
+    type: 3}
+  RoomScene: Offline
+  GameplayScene: PrototypeHouse
+  roomSlots: []
+  allPlayersReady: 0
 --- !u!114 &311152885
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -289,7 +289,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9f387affc9804ee788e176f8f949b67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  networkManager: {fileID: 311152880}
+  networkManager: {fileID: 311152884}
   networkDiscovery: {fileID: 311152885}
 --- !u!1 &446043528
 GameObject:
@@ -372,7 +372,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children: []
   m_Father: {fileID: 0}
-  m_RootOrder: 1
+  m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1 &464081186
 GameObject:
@@ -516,7 +516,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9f387affc9804ee788e176f8f949b67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  networkManager: {fileID: 311152880}
+  networkManager: {fileID: 311152884}
   networkDiscovery: {fileID: 311152885}
 --- !u!1 &697811165
 GameObject:
@@ -895,7 +895,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9f387affc9804ee788e176f8f949b67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  networkManager: {fileID: 311152880}
+  networkManager: {fileID: 311152884}
   networkDiscovery: {fileID: 311152885}
 --- !u!1 &948057510
 GameObject:
@@ -1412,7 +1412,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a9f387affc9804ee788e176f8f949b67, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  networkManager: {fileID: 311152880}
+  networkManager: {fileID: 311152884}
   networkDiscovery: {fileID: 311152885}
 --- !u!114 &1486266921
 MonoBehaviour:

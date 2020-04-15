@@ -69,7 +69,6 @@ public class NewNetworkDiscovery : NetworkDiscoveryBase<DiscoveryRequest, Discov
     /// <param name="endpoint">Address of the client that sent the request</param>
     protected override void ProcessClientRequest(DiscoveryRequest request, IPEndPoint endpoint)
     {
-        Debug.Log("ProcessClientRequest");
         base.ProcessClientRequest(request, endpoint);
     }
 
@@ -85,7 +84,6 @@ public class NewNetworkDiscovery : NetworkDiscoveryBase<DiscoveryRequest, Discov
     /// <returns>A message containing information about this server</returns>
     protected override DiscoveryResponse ProcessRequest(DiscoveryRequest request, IPEndPoint endpoint)
     {
-        Debug.Log("ProcessRequest");
         // return an example reply message if the transport is configured
         try
         {
@@ -114,7 +112,6 @@ public class NewNetworkDiscovery : NetworkDiscoveryBase<DiscoveryRequest, Discov
     /// <returns>An instance of ServerRequest with data to be broadcasted</returns>
     protected override DiscoveryRequest GetRequest()
     {
-        Debug.Log("client re-trying to connect");
         return new DiscoveryRequest();
     }
 
@@ -128,7 +125,6 @@ public class NewNetworkDiscovery : NetworkDiscoveryBase<DiscoveryRequest, Discov
     /// <param name="response">Response that came from the server</param>
     /// <param name="endpoint">Address of the server that replied</param>
     protected override void ProcessResponse(DiscoveryResponse response, IPEndPoint endpoint) {
-        Debug.Log("got server message!");
         // we received a message from the remote endpoint
         response.EndPoint = endpoint;
 
@@ -142,7 +138,6 @@ public class NewNetworkDiscovery : NetworkDiscoveryBase<DiscoveryRequest, Discov
         };
         response.uri = realUri.Uri;
 
-        Debug.Log(response);
         OnServerFound.Invoke(response);
     }
     #endregion

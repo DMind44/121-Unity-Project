@@ -21,10 +21,7 @@ public class NewNetworkRoomPlayer : NetworkRoomPlayer
     /// This is a hook that is invoked on all player objects when entering the room.
     /// <para>Note: isLocalPlayer is not guaranteed to be set until OnStartLocalPlayer is called.</para>
     /// </summary>
-    public override void OnClientEnterRoom() {
-        playerName = "bruh";
-        Debug.Log(playerName);
-    }
+    public override void OnClientEnterRoom() { }
 
     /// <summary>
     /// This is a hook that is invoked on all player objects when exiting the room.

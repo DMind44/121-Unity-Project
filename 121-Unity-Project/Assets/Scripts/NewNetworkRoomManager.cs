@@ -40,7 +40,20 @@ public class NewNetworkRoomManager : NetworkRoomManager
     /// <returns>A new GamePlayer object.</returns>
     public override GameObject OnRoomServerCreateGamePlayer(NetworkConnection conn, GameObject roomPlayer)
     {
-        return base.OnRoomServerCreateGamePlayer(conn, roomPlayer);
+
+        // adapted from original NetworkRoomManager.cs file
+
+        // create the player object
+        // Transform startPos = GetStartPosition();
+        // GameObject gamePlayer = startPos != null
+        //     ? Instantiate(playerPrefab, startPos.position, startPos.rotation)
+        //     : Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
+        // gamePlayer.name = playerPrefab.name;
+
+        // set the player object's username
+        // gamePlayer.GetComponent<PlayerProperties>().username = Random.Range(1, 500).ToString();
+        // return gamePlayer;
+        return null;
     }
 
     /// <summary>
