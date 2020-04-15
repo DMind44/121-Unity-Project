@@ -1,5 +1,7 @@
 ﻿using UnityEngine;
 using Mirror;
+using UnityEngine.SceneManagement;
+using TMPro;
 
 /*
 	Documentation: https://mirror-networking.com/docs/Components/NetworkRoomPlayer.html
@@ -14,14 +16,62 @@ using Mirror;
 /// </summary>
 public class NewNetworkRoomPlayer : NetworkRoomPlayer
 {
+
+    private GameObject parentPanel;
+
+    public GameObject usernameInputFieldPrefab;
+    public GameObject usernameTextPrefab;
+
+    public GameObject readyButtonPrefab;
+
+    [SyncVar] string username;
+
     #region Room Client Callbacks
 
-    string playerName;
     /// <summary>
     /// This is a hook that is invoked on all player objects when entering the room.
     /// <para>Note: isLocalPlayer is not guaranteed to be set until OnStartLocalPlayer is called.</para>
     /// </summary>
-    public override void OnClientEnterRoom() { }
+    public override void OnClientEnterRoom() {
+        // adapted from https://forum.unity.com/threads/how-to-create-ui-button-dynamically.393160/#post-2566312
+        parentPanel = GameObject.Find("Panel");
+
+        // set default username
+        username = "Player " + (index + 1).ToString();
+
+        // create spot for username and ready button
+        if (isLocalPlayer) {
+            GameObject usernameInputField = Instantiate(usernameInputFieldPrefab);
+            // TODO modify coordinates where text is placed
+            usernameInputField.transform.position = new Vector3(0, -100 * (index + 1), 0);
+            usernameInputField.transform.SetParent(parentPanel.transform, false);
+            usernameInputField.GetComponent<TMP_InputField>().text = username;
+
+            // TODO modify coordinates where ready button is placed
+            GameObject readyButton = Instantiate(readyButtonPrefab);
+            readyButton.transform.position = new Vector3(index * 100, 0, 0);
+            readyButton.transform.SetParent(parentPanel.transform, false);
+        } else {
+            GameObject usernameText = Instantiate(usernameTextPrefab);
+            // TODO modify coordinates where text is placed
+            usernameText.transform.position = new Vector3(20, 100 * (index + 1), 0);
+            usernameText.transform.SetParent(parentPanel.transform, false);
+
+            usernameText.GetComponent<TextMeshProUGUI>().text = username;
+        }
+        //
+        // // create ready button
+        // if (isLocalPlayer) {
+        //     GameObject readyButton = Instantiate(readyButtonPrefab);
+        //     readyButton.transform.position = new Vector3(index * 100, 0, 0);
+        //     readyButton.transform.SetParent(parentPanel.transform, false);
+        // }
+
+
+
+
+        // Debug.Log(readyButton.transform.position);
+    }
 
     /// <summary>
     /// This is a hook that is invoked on all player objects when exiting the room.
@@ -39,10 +89,51 @@ public class NewNetworkRoomPlayer : NetworkRoomPlayer
 
     #region Optional UI
 
-    public override void OnGUI()
-    {
-        base.OnGUI();
-    }
+    // public override void OnGUI()
+    // {
+    //     NetworkRoomManager room = NetworkManager.singleton as NetworkRoomManager;
+    //     if (room) {
+    //
+    //         if (SceneManager.GetActiveScene().name != room.RoomScene) {
+    //             return;
+    //         }
+    //
+    //         GUILayout.BeginArea(new Rect(20f + (index * 100), 200f, 90f, 130f));
+    //
+    //         GUILayout.Label($"Player [{index + 1}]");
+    //
+    //         if (readyToBegin) {
+    //             GUILayout.Label("Ready");
+    //         } else {
+    //             GUILayout.Label("Not Ready");
+    //         }
+    //
+    //         if (((isServer && index > 0) || isServerOnly) && GUILayout.Button("REMOVE")) {
+    //             // This button only shows on the Host for all players other than the Host
+    //             // Host and Players can't remove themselves (stop the client instead)
+    //             // Host can kick a Player this way.
+    //             GetComponent<NetworkIdentity>().connectionToClient.Disconnect();
+    //         }
+    //
+    //         GUILayout.EndArea();
+    //
+    //         if (NetworkClient.active && isLocalPlayer) {
+    //             GUILayout.BeginArea(new Rect(20f, 300f, 120f, 20f));
+    //
+    //             if (readyToBegin) {
+    //                 if (GUILayout.Button("Cancel")) {
+    //                     CmdChangeReadyState(false);
+    //                 }
+    //             } else {
+    //                 if (GUILayout.Button("Ready")) {
+    //                     CmdChangeReadyState(true);
+    //                 }
+    //             }
+    //
+    //             GUILayout.EndArea();
+    //         }
+    //     }
+    // }
 
     #endregion
 }

@@ -64,3 +64,10 @@ MonoBehaviour:
   showRoomGUI: 1
   readyToBegin: 0
   index: 0
+  parentPanel: {fileID: 0}
+  usernameInputFieldPrefab: {fileID: 3507878372585548995, guid: 5e3709f95abbc40a5b7cd370093adb8a,
+    type: 3}
+  usernameTextPrefab: {fileID: 3070621713382745789, guid: df63d5c736466490781567d6d80fbe35,
+    type: 3}
+  readyButtonPrefab: {fileID: 4680905170308088431, guid: e5a28e78291e04c33a78c090cecbe086,
+    type: 3}

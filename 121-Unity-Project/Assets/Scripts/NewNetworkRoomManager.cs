@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.SceneManagement;
 using Mirror;
 
 /*
@@ -40,19 +41,6 @@ public class NewNetworkRoomManager : NetworkRoomManager
     /// <returns>A new GamePlayer object.</returns>
     public override GameObject OnRoomServerCreateGamePlayer(NetworkConnection conn, GameObject roomPlayer)
     {
-
-        // adapted from original NetworkRoomManager.cs file
-
-        // create the player object
-        // Transform startPos = GetStartPosition();
-        // GameObject gamePlayer = startPos != null
-        //     ? Instantiate(playerPrefab, startPos.position, startPos.rotation)
-        //     : Instantiate(playerPrefab, Vector3.zero, Quaternion.identity);
-        // gamePlayer.name = playerPrefab.name;
-
-        // set the player object's username
-        // gamePlayer.GetComponent<PlayerProperties>().username = Random.Range(1, 500).ToString();
-        // return gamePlayer;
         return null;
     }
 
@@ -141,13 +129,22 @@ public class NewNetworkRoomManager : NetworkRoomManager
 //     public override void OnRoomClientAddPlayerFailed() { }
 //
     #endregion
-//
-//     #region Optional UI
-//
-//     public override void OnGUI()
-//     {
-//         base.OnGUI();
-//     }
-//
-//     #endregion
+
+    #region Optional UI
+
+    public override void OnGUI() {
+        // if (NetworkServer.active && SceneManager.GetActiveScene().name == GameplayScene) {
+        //     GUILayout.BeginArea(new Rect(Screen.width - 150f, 10f, 140f, 30f));
+        //     if (GUILayout.Button("Return to Room")) {
+        //         ServerChangeScene(RoomScene);
+        //     }
+        //     GUILayout.EndArea();
+        // }
+
+        // if (SceneManager.GetActiveScene().name == RoomScene) {
+        //     GUI.Box(new Rect(10f, 180f, 520f, 150f), "PLAYERS");
+        // }
+    }
+
+    #endregion
 }
