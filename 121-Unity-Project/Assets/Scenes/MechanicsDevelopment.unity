@@ -418,7 +418,9 @@ MonoBehaviour:
   syncInterval: 0.1
   hoverColor: {r: 0, g: 1, b: 0, a: 1}
   liftedColor: {r: 0, g: 0, b: 1, a: 1}
-  speed: 10
+  hoverMat: {fileID: 0}
+  liftedMat: {fileID: 0}
+  throwSpeed: 0
   rb: {fileID: 804548652}
   relativePos: {x: 0, y: 2, z: 0}
   cutoff_momentum: 10
