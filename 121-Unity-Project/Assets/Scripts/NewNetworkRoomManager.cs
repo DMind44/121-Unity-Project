@@ -21,16 +21,16 @@ public class NewNetworkRoomManager : NetworkRoomManager
 {
     #region Server Callbacks
 
-    // /// <summary>
-    // /// This allows customization of the creation of the room-player object on the server.
-    // /// <para>By default the roomPlayerPrefab is used to create the room-player, but this function allows that behaviour to be customized.</para>
-    // /// </summary>
-    // /// <param name="conn">The connection the player object is for.</param>
-    // /// <returns>The new room-player object.</returns>
-    // public override GameObject OnRoomServerCreateRoomPlayer(NetworkConnection conn)
-    // {
-    //     return base.OnRoomServerCreateRoomPlayer(conn);
-    // }
+    /// <summary>
+    /// This allows customization of the creation of the room-player object on the server.
+    /// <para>By default the roomPlayerPrefab is used to create the room-player, but this function allows that behaviour to be customized.</para>
+    /// </summary>
+    /// <param name="conn">The connection the player object is for.</param>
+    /// <returns>The new room-player object.</returns>
+    public override GameObject OnRoomServerCreateRoomPlayer(NetworkConnection conn)
+    {
+        return base.OnRoomServerCreateRoomPlayer(conn);
+    }
 
     /// <summary>
     /// This allows customization of the creation of the GamePlayer object on the server.
@@ -64,9 +64,8 @@ public class NewNetworkRoomManager : NetworkRoomManager
     /// <returns>False to not allow this player to replace the room player.</returns>
     public override bool OnRoomServerSceneLoadedForPlayer(GameObject roomPlayer, GameObject gamePlayer)
     {
-        // assign the player a random username
-        gamePlayer.GetComponent<PlayerProperties>().username = Random.Range(1, 500).ToString();
-
+        // assign the player a username
+        gamePlayer.GetComponent<PlayerProperties>().username = roomPlayer.GetComponent<NewNetworkRoomPlayer>().username;
         return base.OnRoomServerSceneLoadedForPlayer(roomPlayer, gamePlayer);
     }
 
