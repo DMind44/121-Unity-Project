@@ -1,4 +1,5 @@
 ﻿using UnityEngine;
+using UnityEngine.UI;
 using Mirror;
 using UnityEngine.SceneManagement;
 using TMPro;
@@ -19,12 +20,38 @@ public class NewNetworkRoomPlayer : NetworkRoomPlayer
 
     private GameObject parentPanel;
 
+    // input field where username is inputted
     public GameObject usernameInputFieldPrefab;
+    private GameObject usernameInputField = null;
+
+    // text box where username is displayed
     public GameObject usernameTextPrefab;
+    private GameObject usernameText = null;
 
+    // button user clicks to toggle whether or not they are ready
     public GameObject readyButtonPrefab;
+    private GameObject readyButton = null;
 
-    [SyncVar] string username;
+    // text indicating whether or not the user is ready
+    public GameObject readyTextPrefab;
+    private GameObject readyText = null;
+
+    [SyncVar(hook="UpdateUsernameDisplay")] public string username;
+
+    #region SyncVar Hooks
+
+    // once the username has changed, update the username displays accordingly
+    void UpdateUsernameDisplay(string oldUsername, string newUsername) {
+        if (usernameText != null) {
+            usernameText.GetComponent<TextMeshProUGUI>().text = username;
+        }
+        if (usernameInputField != null) {
+            usernameInputField.GetComponent<TMP_InputField>().text = username;
+        }
+    }
+
+    #endregion
+
 
     #region Room Client Callbacks
 
@@ -37,53 +64,92 @@ public class NewNetworkRoomPlayer : NetworkRoomPlayer
         parentPanel = GameObject.Find("Panel");
 
         // set default username
-        username = "Player " + (index + 1).ToString();
-
-        // create spot for username and ready button
-        if (isLocalPlayer) {
-            GameObject usernameInputField = Instantiate(usernameInputFieldPrefab);
-            // TODO modify coordinates where text is placed
-            usernameInputField.transform.position = new Vector3(0, -100 * (index + 1), 0);
-            usernameInputField.transform.SetParent(parentPanel.transform, false);
-            usernameInputField.GetComponent<TMP_InputField>().text = username;
-
-            // TODO modify coordinates where ready button is placed
-            GameObject readyButton = Instantiate(readyButtonPrefab);
-            readyButton.transform.position = new Vector3(index * 100, 0, 0);
-            readyButton.transform.SetParent(parentPanel.transform, false);
-        } else {
-            GameObject usernameText = Instantiate(usernameTextPrefab);
-            // TODO modify coordinates where text is placed
-            usernameText.transform.position = new Vector3(20, 100 * (index + 1), 0);
-            usernameText.transform.SetParent(parentPanel.transform, false);
-
-            usernameText.GetComponent<TextMeshProUGUI>().text = username;
+        if (string.IsNullOrEmpty(username)) {
+            CmdUpdateUsername("Player " + (index + 1).ToString());
         }
-        //
-        // // create ready button
-        // if (isLocalPlayer) {
-        //     GameObject readyButton = Instantiate(readyButtonPrefab);
-        //     readyButton.transform.position = new Vector3(index * 100, 0, 0);
-        //     readyButton.transform.SetParent(parentPanel.transform, false);
-        // }
 
+        // where the username input box/text and ready button/text are displayed
+        // TODO change
+        Vector3 usernameCoordinates = new Vector3(20, -100 * (index + 1), 0);
+        Vector3 readyCoordinates = new Vector3(225, -100 * (index + 1), 0);
 
+        // username text
+        usernameText = Instantiate(usernameTextPrefab);
+        usernameText.transform.position = usernameCoordinates;
+        usernameText.transform.SetParent(parentPanel.transform, false);
 
+        if (isLocalPlayer) {
+            // the local player should have a place to enter a username and
+            // a ready button
+            usernameInputField = Instantiate(usernameInputFieldPrefab);
+            usernameInputField.transform.position = usernameCoordinates;
+            usernameInputField.transform.SetParent(parentPanel.transform, false);
 
-        // Debug.Log(readyButton.transform.position);
+            readyButton = Instantiate(readyButtonPrefab);
+            readyButton.transform.position = readyCoordinates;
+            readyButton.transform.SetParent(parentPanel.transform, false);
+            readyButton.GetComponent<Button>().onClick.AddListener(() => ToggleReadyState());
+        } else {
+            // non-local players should have text showing their ready state
+            readyText = Instantiate(readyTextPrefab);
+            readyText.transform.position = readyCoordinates;
+            readyText.transform.SetParent(parentPanel.transform, false);
+        }
+
+        UpdateUsernameDisplay(null, username);
+        SetPlayerElements(false);
     }
+
 
     /// <summary>
     /// This is a hook that is invoked on all player objects when exiting the room.
     /// </summary>
-    public override void OnClientExitRoom() { }
+    public override void OnClientExitRoom() {
+    }
 
     /// <summary>
     /// This is a hook that is invoked on clients when a RoomPlayer switches between ready or not ready.
     /// <para>This function is called when the a client player calls SendReadyToBeginMessage() or SendNotReadyToBeginMessage().</para>
     /// </summary>
     /// <param name="readyState">Whether the player is ready or not.</param>
-    public override void OnClientReady(bool readyState) { }
+    public override void OnClientReady(bool readyState) {
+        // update the UI to reflect the new ready state
+        SetPlayerElements(readyState);
+    }
+    
+    #endregion
+
+    #region Commands
+    // update the username to the specified value
+    [Command] void CmdUpdateUsername(string newUsername) {
+        username = newUsername;
+    }
+
+    #endregion
+
+    #region Helper Functions
+
+    // when the ready button is pressed,
+    // update the player's username and then mark the player as ready
+    void ToggleReadyState() {
+        // if we're making the player ready (they're not currently ready),
+        // update the player's username
+        if (isLocalPlayer) {
+            CmdUpdateUsername(usernameInputField.GetComponent<TMP_InputField>().text);
+            CmdChangeReadyState(!readyToBegin);
+        }
+    }
+
+    // adjust username and ready buttons based on current ready state
+    void SetPlayerElements(bool readyState) {
+        if (isLocalPlayer) {
+            usernameText.SetActive(readyState);
+            usernameInputField.SetActive(!readyState);
+            readyButton.GetComponentInChildren<TextMeshProUGUI>().text = readyState ? "Cancel" : "Ready";
+        } else {
+            readyText.GetComponent<TextMeshProUGUI>().text = readyState ? "Ready" : "Not Ready";
+        }
+    }
 
     #endregion
 
