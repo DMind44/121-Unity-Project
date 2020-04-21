@@ -22,6 +22,7 @@ public class PlayerController : NetworkBehaviour {
 
     private bool isGrounded = false;
     public ParticleSystem dust;
+    public bool deathSoundPlayed = false;
 
     private Rigidbody rb;
     private PlayerThrow myThrow;
@@ -72,11 +73,15 @@ public class PlayerController : NetworkBehaviour {
     void Update() {
         // Press h to die - for debugging purposes
         if (Input.GetButtonDown("Hurt")) {
-            DamageMe(1);
+            DamageMe(5);
         }
 
         // Player loses when they lose all health
         if (hp <= 0) {
+            if (!deathSoundPlayed) {
+                FindObjectOfType<AudioManager>().Play("PlayerDeath");
+                deathSoundPlayed = true;
+            } 
             Lose();
         }
     }
@@ -134,6 +139,7 @@ public class PlayerController : NetworkBehaviour {
     [Client] public void DamageMe(float amount) {
         hp -= amount;
         Debug.Log("health:" + hp);
+        FindObjectOfType<AudioManager>().Play("PlayerHurt");
     }
 
     // upon losing all health, change game state to Lose and recolor the player
@@ -143,8 +149,10 @@ public class PlayerController : NetworkBehaviour {
         RpcRecolorOnLose();
     }
 
+    // TODO: This should happen only once per death
     // recolor the player in all game instances when they die
     [ClientRpc] private void RpcRecolorOnLose() {
+        // FindObjectOfType<AudioManager>().Play("PlayerDeath");
         for (int i = 0; i < rends.Length; i++) {
             if (rends[i] != null) {
                 rends[i].material.color = lostColor;
