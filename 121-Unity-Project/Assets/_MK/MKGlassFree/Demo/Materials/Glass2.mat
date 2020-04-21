@@ -115,9 +115,9 @@ Material:
     - _UseTranslucent: 0
     - _ZWrite: 1
     m_Colors:
-    - _Color: {r: 1, g: 0.9950486, b: 0.5235849, a: 1}
+    - _Color: {r: 1, g: 0.9957893, b: 0.9481132, a: 1}
     - _DetailColor: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissionColor: {r: 0.8773585, g: 0.6028377, b: 0.21933962, a: 1}
+    - _EmissionColor: {r: 0.9622642, g: 0.91120064, b: 0.83971167, a: 1}
     - _ReflectColor: {r: 1, g: 1, b: 1, a: 0.5}
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}
     - _SpecColor: {r: 1, g: 1, b: 1, a: 0.5}
