@@ -141,6 +141,9 @@ public class Interactable : NetworkBehaviour {
             GetComponent<Collider>().enabled = false;
             playerT.gameObject.GetComponent<Collider>().enabled = false;
 
+            // Fetch the strength multiplier
+            float mult = playerT.gameObject.GetComponent<PlayerController>().strengthMult;
+
             if (Physics.Raycast(ray, out hit) &&
                     CalculateThrowAngle(transform.position, hit.point,
                     throwSpeed, out throwAngle)) {
@@ -149,7 +152,7 @@ public class Interactable : NetworkBehaviour {
                 throwDirection.y = 0;
                 throwDirection = Vector3.RotateTowards(throwDirection, Vector3.up, throwAngle, throwAngle).normalized;
                 Debug.DrawRay(transform.position, throwDirection, Color.green, 5f);
-                rb.velocity = throwDirection * throwSpeed;
+                rb.velocity = throwDirection * throwSpeed * mult;
             } else {
                 rb.velocity = cam.transform.forward * throwSpeed;
             }

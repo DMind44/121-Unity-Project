@@ -35,8 +35,12 @@ public class PlayerController : NetworkBehaviour {
     public bool canMove = true;
 
     // @TODO: Unserialize this field once testing on it is done
-    [SerializeField] public float hp = 0;
-    [SerializeField] public float max_hp = 0;
+    // Player stats 
+    [SerializeField] public float hp = 0f;
+    [SerializeField] public float max_hp = 0f;
+
+    [SerializeField] public float strengthMult = 1f;
+    [SerializeField] public float speedMult = 1f;
 
     // Start is called before the first frame update
     void Start() {
@@ -90,6 +94,29 @@ public class PlayerController : NetworkBehaviour {
     // Don't move if Player is actively lifting something.
     //   Source: http://wiki.unity3d.com/index.php/RigidbodyFPSWalker?_ga=2.269071159.757207726.1586110776-1944583397.1580664386
     void FixedUpdate() {
+        // Check if the player is out of bounds
+        Vector3 pos = rb.position;
+        //Debug.Log(pos);
+        if (pos.x > 30) {
+            //fix
+            Debug.Log("Out of Bounds X!");
+            pos.x = 28;
+        } else if (pos.x < -30) {
+            Debug.Log("Out of Boundsx!");
+            pos.x = -28;
+        } if (pos.z > 30) {
+            Debug.Log("Out of BoundsZ!");
+            pos.z = 28;
+        } else if (pos.z < -30) {
+            Debug.Log("Out of Boundsz!");
+            pos.z = -28;
+        } if (pos.y < 0) {
+            Debug.Log("Out of Bounds y !");
+            pos.y = 5;
+        }
+        rb.MovePosition(pos);
+
+
         // If we are currently lifting an object, ignore movement and jumping
         if (myThrow == null || myThrow.currentObject == null ||
                 myThrow.currentObject.GetComponent<Interactable>() == null ||
@@ -100,6 +127,7 @@ public class PlayerController : NetworkBehaviour {
                 targetVelocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
                 targetVelocity = transform.TransformDirection(targetVelocity);
                 targetVelocity *= movementSpeed;
+                targetVelocity *= speedMult;
             } else {
                 targetVelocity = Vector3.zero;
             }
