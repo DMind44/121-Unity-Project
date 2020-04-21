@@ -21,6 +21,7 @@ public class PlayerController : NetworkBehaviour {
     [SerializeField] private Color lostColor = Color.red;
 
     private bool isGrounded = false;
+    public ParticleSystem dust;
 
     private Rigidbody rb;
     private PlayerThrow myThrow;
@@ -109,6 +110,7 @@ public class PlayerController : NetworkBehaviour {
             // Jump only if the Player is grounded and is pressing Jump.
             if (GameState.PlayerControlsActive && isGrounded && Input.GetButton("Jump")) {
                 rb.velocity = new Vector3(rb.velocity.x, jumpSpeed, rb.velocity.z);
+                createDust();
             }
 
             // Rotate in response to mouse (i.e., to camera movement)
@@ -153,5 +155,9 @@ public class PlayerController : NetworkBehaviour {
     // Return a reference to this player's camera
     public Camera GetCamera() {
         return cam;
+    }
+
+    public void createDust() {
+        dust.Play();
     }
 }
