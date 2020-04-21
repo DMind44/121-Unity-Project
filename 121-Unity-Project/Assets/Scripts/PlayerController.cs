@@ -9,6 +9,7 @@ using Mirror;
 // This script moves the player and camera, focusing on keyboard and mouse input
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : NetworkBehaviour {
+    Animator anim;
 
     [SerializeField] private float movementSpeed = 0f;
     [SerializeField] private float rotationSpeed = 0f;
@@ -45,7 +46,7 @@ public class PlayerController : NetworkBehaviour {
         rends = GetComponentsInChildren<MeshRenderer>();
         rb.useGravity = false;  // We'll control gravity ourselves
         hp = max_hp;
-
+        anim = GameObject.Find("Player Model").GetComponent<Animator>();
         // MeshRenderer[] rends = GetComponentsInChildren<MeshRenderer>();
         // Debug.Log(rends.Length);
     }
@@ -117,7 +118,12 @@ public class PlayerController : NetworkBehaviour {
                 rb.velocity = new Vector3(rb.velocity.x, jumpSpeed, rb.velocity.z);
                 createDust();
             }
-
+            // animate the player!
+            if (Input.GetAxis("Horizontal") > 0 || Input.GetAxis("Vertical") > 0) {
+                anim.SetInteger("Speed", 2);
+            } else {
+                anim.SetInteger("Speed", 0);
+            }
             // Rotate in response to mouse (i.e., to camera movement)
             if (GameState.PlayerControlsActive && GameState.CameraControlsActive) {
                 Vector2 mouseInput = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
