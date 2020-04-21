@@ -163,11 +163,11 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   syncMode: 0
   syncInterval: 0.1
-  hoverColor: {r: 0, g: 1, b: 0, a: 1}
-  liftedColor: {r: 0, g: 0, b: 1, a: 1}
+  hoverColor: {r: 1, g: 0.7467409, b: 0, a: 1}
+  liftedColor: {r: 0.9056604, g: 0.5470609, b: 0.012815925, a: 1}
   hoverMat: {fileID: 0}
   liftedMat: {fileID: 0}
-  throwSpeed: 7
+  throwSpeed: 8
   rb: {fileID: 1240721000917569683}
   relativePos: {x: 0, y: 1.2, z: 0}
   cutoff_momentum: 10
