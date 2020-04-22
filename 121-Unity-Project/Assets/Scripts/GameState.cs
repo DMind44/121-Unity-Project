@@ -41,6 +41,7 @@ public class GameState {
     }
 
     public static void Lose() {
+        Debug.Log("lost");
         ChangeState(States.Lost);
     }
 

@@ -33,8 +33,10 @@ public class PlayerController : NetworkBehaviour {
     private NewNetworkRoomManager roomManager;
 
     public bool canMove = true;
+    private bool hasLost = false;
 
-    [SyncVar(hook="EnterLoseGameState")] public int place; // which place you came in
+    [SyncVar(hook="EnterLoseGameState")] public int playerRank;  // which place you came in
+    [SyncVar] public int totalPlayerCount;  // total number of players (must keep track of clientside)
 
     // @TODO: Unserialize this field once testing on it is done
     // Player stats
@@ -58,25 +60,6 @@ public class PlayerController : NetworkBehaviour {
         // Debug.Log(rends.Length);
     }
 
-    /*
-     * Physics-based movement
-     */
-    // // Perform physics updates at regular time intervals
-    // void FixedUpdate() {
-    //     // Translate player based on direction key input
-    //     float horizontalMovementInput = Input.GetAxis("Horizontal");
-    //     float verticalMovementInput = Input.GetAxis("Vertical");
-    //
-    //     Vector3 movement = new Vector3(horizontalMovementInput, 0, verticalMovementInput);
-    //     rb.AddRelativeForce(movement * movementSpeed);
-    //
-    //     // Rotate player based on mouse
-    //     transform.rotation *= Quaternion.AngleAxis(Input.GetAxis("Mouse X") * rotationSpeed, Vector3.up);
-    //
-    //     if (Input.GetKeyDown(KeyCode.Space)) {
-    //         DamageMe(1);
-    //     }
-    // }
 
     void Update() {
         // Press h to die - for debugging purposes
@@ -85,7 +68,8 @@ public class PlayerController : NetworkBehaviour {
         }
 
         // Player loses when they lose all health
-        if (hp <= 0 && !GameState.HasLost) {
+        if (hp <= 0 && !hasLost) {
+            hasLost = true;
             Lose();
         }
     }
@@ -180,25 +164,25 @@ public class PlayerController : NetworkBehaviour {
         Debug.Log("You lost!");
         FindObjectOfType<AudioManager>().Play("PlayerDeath");
         CmdPlayerLose();
-        GameState.Lose();
         RpcRecolorOnLose();
     }
 
-    // when you lose, tell the server and assign your place
+    // when you lose, tell the server and assign your rank
     [Command] public void CmdPlayerLose() {
         // TODO consider race conditions
+        totalPlayerCount = roomManager.numPlayers;
         ++roomManager.numDeaths;
-        Debug.Log(roomManager.numDeaths);
-        place = roomManager.numPlayers - roomManager.numDeaths + 1;
-        Debug.Log("the number of deaths so far is:");
-        Debug.Log(roomManager.numDeaths);
-        Debug.Log("and you ended up in place:");
-        Debug.Log(place);
+        playerRank = totalPlayerCount - roomManager.numDeaths + 1;
     }
 
-    // wrapper function: once your place is known, enter the lose game state
+    // wrapper function: once your rank is known, enter the lose game state
     public void EnterLoseGameState(int oldValue, int newValue) {
-        GameState.Lose();
+        // I believe since this is hooked to a SyncVar, if player 1 loses then
+        // this script is called on player 1 on every single machine. However
+        // we only want to trigger the lose condition on player 1's machine
+        if (isLocalPlayer) {
+            GameState.Lose();
+        }
     }
 
     // TODO: This should happen only once per death
