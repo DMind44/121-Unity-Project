@@ -35,7 +35,7 @@ public class PlayerController : NetworkBehaviour {
     public bool canMove = true;
     private bool hasLost = false;
 
-    [SyncVar(hook="EnterLoseGameState")] public int rank = 1;  // which place you came in
+    [SyncVar(hook = nameof(EnterLoseGameState))] public int rank = 1;  // which place you came in
 
     // @TODO: Unserialize this field once testing on it is done
     // Player stats
@@ -213,6 +213,7 @@ public class PlayerController : NetworkBehaviour {
     // when a player loses, decrease the number of remaining players
     // and update their rank from 1st place
     [Command] private void CmdUpdateRankAndNumPlayersRemaining() {
+        print("CmdUpdateRankAndNumPlayersRemaining");
         rank = GameState.Instance.NumPlayersRemaining--;
     }
 

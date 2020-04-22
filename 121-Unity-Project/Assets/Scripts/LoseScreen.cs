@@ -18,10 +18,10 @@ public class LoseScreen : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update() {        
+    void Update() {
         if (localPlayer == null) {
             configureLocalPlayer();
-        } else if ((GameState.Instance.GameHasEnded || GameState.Instance.HasLost) && !loseScreenHasAppeared) {
+        } else if (GameState.Instance.HasLost && !GameState.Instance.GameHasEnded && !loseScreenHasAppeared) {
             ShowLoseScreen();
             loseScreenHasAppeared = true;
         }
