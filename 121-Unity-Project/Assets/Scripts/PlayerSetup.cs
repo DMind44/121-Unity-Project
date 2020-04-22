@@ -36,7 +36,7 @@ public class PlayerSetup : NetworkBehaviour
             gameObject.tag = "Player";
 
             // once the local player is set up, we can play
-            GameState.Play();
+            GameState.Instance.Play();
         }
     }
 

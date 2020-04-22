@@ -18,17 +18,17 @@ public class LoseScreen : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update() {
+    void Update() {        
         if (localPlayer == null) {
             configureLocalPlayer();
-        } else if (GameState.HasLost && !loseScreenHasAppeared) {
+        } else if ((GameState.Instance.GameHasEnded || GameState.Instance.HasLost) && !loseScreenHasAppeared) {
             ShowLoseScreen();
             loseScreenHasAppeared = true;
         }
     }
 
     private void ShowLoseScreen() {
-        placeText.text = "Ranked " + localPlayer.playerRank.ToString() + "/" + localPlayer.totalPlayerCount.ToString();
+        placeText.text = "Ranked " + localPlayer.rank.ToString() + "/" + GameState.Instance.TotalNumPlayers.ToString();
         loseScreenUI.SetActive(true);
     }
 

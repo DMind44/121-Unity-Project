@@ -19,7 +19,7 @@ public class PauseMenu : MonoBehaviour
     // Update is called once per frame
     void Update() {
         if (Input.GetButtonDown("Pause")) {
-            if (GameState.IsPaused) {
+            if (GameState.Instance.IsPaused) {
                 Unpause();
             } else {
                 Pause();
@@ -32,7 +32,7 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUI.SetActive(true);
         crosshair.SetActive(false);
         Cursor.lockState = CursorLockMode.None;
-        GameState.Pause();
+        GameState.Instance.Pause();
     }
 
     // hide the pause menu and update game state accordingly
@@ -40,7 +40,7 @@ public class PauseMenu : MonoBehaviour
         pauseMenuUI.SetActive(false);
         crosshair.SetActive(true);
         Cursor.lockState = CursorLockMode.Locked;
-        GameState.Unpause();
+        GameState.Instance.Unpause();
     }
 
     public void LoadSettings() {

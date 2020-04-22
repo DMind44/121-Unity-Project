@@ -47,7 +47,7 @@ public class CameraController : MonoBehaviour
     private void LateUpdate() {
 
         // lock camera when mouse controls aren't enabled (for instance, when player is using the UI)
-        if (!GameState.CameraControlsActive) {
+        if (!GameState.Instance.CameraControlsActive) {
             return;
         }
 

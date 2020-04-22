@@ -35,8 +35,7 @@ public class PlayerController : NetworkBehaviour {
     public bool canMove = true;
     private bool hasLost = false;
 
-    [SyncVar(hook="EnterLoseGameState")] public int playerRank;  // which place you came in
-    [SyncVar] public int totalPlayerCount;  // total number of players (must keep track of clientside)
+    [SyncVar(hook="EnterLoseGameState")] public int rank = 1;  // which place you came in
 
     // @TODO: Unserialize this field once testing on it is done
     // Player stats
@@ -53,13 +52,14 @@ public class PlayerController : NetworkBehaviour {
         rends = GetComponentsInChildren<MeshRenderer>();
         roomManager = GameObject.Find("NetworkManager").GetComponent<NewNetworkRoomManager>();
 
+        if (GameState.Instance.TotalNumPlayers < 0) {
+            CmdInitializeNumPlayers();
+        }
+
         rb.useGravity = false;  // We'll control gravity ourselves
         hp = max_hp;
         anim = GameObject.Find("Player Model").GetComponent<Animator>();
-        // MeshRenderer[] rends = GetComponentsInChildren<MeshRenderer>();
-        // Debug.Log(rends.Length);
     }
-
 
     void Update() {
         // Press h to die - for debugging purposes
@@ -107,7 +107,7 @@ public class PlayerController : NetworkBehaviour {
                 !myThrow.currentObject.GetComponent<Interactable>().lifting || !canMove) {
             // Calculate how fast we should be moving
             Vector3 targetVelocity;
-            if (!GameState.UIIsOpen) {
+            if (!GameState.Instance.UIIsOpen) {
                 targetVelocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
                 targetVelocity = transform.TransformDirection(targetVelocity);
                 targetVelocity *= movementSpeed;
@@ -125,7 +125,7 @@ public class PlayerController : NetworkBehaviour {
             rb.AddForce(velocityChange, ForceMode.VelocityChange);
 
             // Jump only if the Player is grounded and is pressing Jump.
-            if (GameState.PlayerControlsActive && isGrounded && Input.GetButton("Jump")) {
+            if (GameState.Instance.PlayerControlsActive && isGrounded && Input.GetButton("Jump")) {
                 rb.velocity = new Vector3(rb.velocity.x, jumpSpeed, rb.velocity.z);
                 createDust();
             }
@@ -136,7 +136,7 @@ public class PlayerController : NetworkBehaviour {
                 anim.SetInteger("Speed", 0);
             }
             // Rotate in response to mouse (i.e., to camera movement)
-            if (GameState.PlayerControlsActive && GameState.CameraControlsActive) {
+            if (GameState.Instance.PlayerControlsActive && GameState.Instance.CameraControlsActive) {
                 Vector2 mouseInput = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
                 transform.Rotate(Vector3.up, mouseInput.x * rotationSpeed);
             }
@@ -163,31 +163,29 @@ public class PlayerController : NetworkBehaviour {
     private void Lose() {
         Debug.Log("You lost!");
         FindObjectOfType<AudioManager>().Play("PlayerDeath");
-        CmdPlayerLose();
+        CmdUpdateRankAndNumPlayersRemaining();
         RpcRecolorOnLose();
     }
 
-    // when you lose, tell the server and assign your rank
-    [Command] public void CmdPlayerLose() {
-        // TODO consider race conditions
-        totalPlayerCount = roomManager.numPlayers;
-        ++roomManager.numDeaths;
-        playerRank = totalPlayerCount - roomManager.numDeaths + 1;
-    }
-
-    // wrapper function: once your rank is known, enter the lose game state
+    // wrapper function: once your rank is set, enter the lose game state
     public void EnterLoseGameState(int oldValue, int newValue) {
+        Debug.Log("EnterLoseGameState");
         // I believe since this is hooked to a SyncVar, if player 1 loses then
         // this script is called on player 1 on every single machine. However
         // we only want to trigger the lose condition on player 1's machine
         if (isLocalPlayer) {
-            GameState.Lose();
+            GameState.Instance.Lose();
+
+            if (GameState.Instance.NumPlayersRemaining <= 1) {
+                Debug.Log("ENDING THE GAME");
+                CmdEndGame();
+            }
         }
     }
 
     // TODO: This should happen only once per death
     // recolor the player in all game instances when they die
-    [ClientRpc] private void RpcRecolorOnLose() {
+    private void RpcRecolorOnLose() {
         // FindObjectOfType<AudioManager>().Play("PlayerDeath");
         for (int i = 0; i < rends.Length; i++) {
             if (rends[i] != null) {
@@ -203,5 +201,22 @@ public class PlayerController : NetworkBehaviour {
 
     public void createDust() {
         dust.Play();
+    }
+
+    // when the first player loads, update the amount of players on each machine
+    [Command] private void CmdInitializeNumPlayers() {
+        // NOTE could have race condition here
+        GameState.Instance.TotalNumPlayers = roomManager.numPlayers;
+        GameState.Instance.NumPlayersRemaining = roomManager.numPlayers;
+    }
+
+    // when a player loses, decrease the number of remaining players
+    // and update their rank from 1st place
+    [Command] private void CmdUpdateRankAndNumPlayersRemaining() {
+        rank = GameState.Instance.NumPlayersRemaining--;
+    }
+
+    [Command] private void CmdEndGame() {
+        GameState.Instance.EndGame();
     }
 }

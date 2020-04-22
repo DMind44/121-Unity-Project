@@ -20,8 +20,6 @@ using Mirror;
 public class NewNetworkRoomManager : NetworkRoomManager
 {
 
-    public int numDeaths = 0;
-
     #region Server Callbacks
 
     /// <summary>
