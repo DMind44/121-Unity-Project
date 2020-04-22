@@ -34,7 +34,7 @@ public class PlayerController : NetworkBehaviour {
 
     public bool canMove = true;
 
-    [SyncVar] public int place; // which place you came in
+    [SyncVar(hook="EnterLoseGameState")] public int place; // which place you came in
 
     // @TODO: Unserialize this field once testing on it is done
     // Player stats
@@ -179,8 +179,8 @@ public class PlayerController : NetworkBehaviour {
     private void Lose() {
         Debug.Log("You lost!");
         FindObjectOfType<AudioManager>().Play("PlayerDeath");
-        GameState.Lose();
         CmdPlayerLose();
+        GameState.Lose();
         RpcRecolorOnLose();
     }
 
@@ -194,6 +194,11 @@ public class PlayerController : NetworkBehaviour {
         Debug.Log(roomManager.numDeaths);
         Debug.Log("and you ended up in place:");
         Debug.Log(place);
+    }
+
+    // wrapper function: once your place is known, enter the lose game state
+    public void EnterLoseGameState(int oldValue, int newValue) {
+        GameState.Lose();
     }
 
     // TODO: This should happen only once per death
