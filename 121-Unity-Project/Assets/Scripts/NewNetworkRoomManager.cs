@@ -19,6 +19,9 @@ using Mirror;
 /// </summary>
 public class NewNetworkRoomManager : NetworkRoomManager
 {
+
+    public int numDeaths = 0;
+
     #region Server Callbacks
 
     /// <summary>
@@ -69,14 +72,14 @@ public class NewNetworkRoomManager : NetworkRoomManager
         return base.OnRoomServerSceneLoadedForPlayer(roomPlayer, gamePlayer);
     }
 
-    // /// <summary>
-    // /// This is called on the server when all the players in the room are ready.
-    // /// <para>The default implementation of this function uses ServerChangeScene() to switch to the game player scene. By implementing this callback you can customize what happens when all the players in the room are ready, such as adding a countdown or a confirmation for a group leader.</para>
-    // /// </summary>
-    // public override void OnRoomServerPlayersReady()
-    // {
-    //     base.OnRoomServerPlayersReady();
-    // }
+    /// <summary>
+    /// This is called on the server when all the players in the room are ready.
+    /// <para>The default implementation of this function uses ServerChangeScene() to switch to the game player scene. By implementing this callback you can customize what happens when all the players in the room are ready, such as adding a countdown or a confirmation for a group leader.</para>
+    /// </summary>
+    public override void OnRoomServerPlayersReady()
+    {
+        base.OnRoomServerPlayersReady();
+    }
 
     #endregion
 

@@ -23,7 +23,6 @@ public class PlayerController : NetworkBehaviour {
 
     private bool isGrounded = false;
     public ParticleSystem dust;
-    public bool deathSoundPlayed = false;
 
     private Rigidbody rb;
     private PlayerThrow myThrow;
@@ -31,12 +30,14 @@ public class PlayerController : NetworkBehaviour {
 
     [SerializeField] private Camera cam = null;
 
-    // private GameStateController gameState = null;
+    private NewNetworkRoomManager roomManager;
 
     public bool canMove = true;
 
+    [SyncVar] public int place; // which place you came in
+
     // @TODO: Unserialize this field once testing on it is done
-    // Player stats 
+    // Player stats
     [SerializeField] public float hp = 0f;
     [SerializeField] public float max_hp = 0f;
 
@@ -48,6 +49,8 @@ public class PlayerController : NetworkBehaviour {
         rb = GetComponent<Rigidbody>();
         myThrow = GetComponent<PlayerThrow>();
         rends = GetComponentsInChildren<MeshRenderer>();
+        roomManager = GameObject.Find("NetworkManager").GetComponent<NewNetworkRoomManager>();
+
         rb.useGravity = false;  // We'll control gravity ourselves
         hp = max_hp;
         anim = GameObject.Find("Player Model").GetComponent<Animator>();
@@ -82,11 +85,7 @@ public class PlayerController : NetworkBehaviour {
         }
 
         // Player loses when they lose all health
-        if (hp <= 0) {
-            if (!deathSoundPlayed) {
-                FindObjectOfType<AudioManager>().Play("PlayerDeath");
-                deathSoundPlayed = true;
-            } 
+        if (hp <= 0 && !GameState.HasLost) {
             Lose();
         }
     }
@@ -179,8 +178,22 @@ public class PlayerController : NetworkBehaviour {
     // upon losing all health, change game state to Lose and recolor the player
     private void Lose() {
         Debug.Log("You lost!");
+        FindObjectOfType<AudioManager>().Play("PlayerDeath");
         GameState.Lose();
+        CmdPlayerLose();
         RpcRecolorOnLose();
+    }
+
+    // when you lose, tell the server and assign your place
+    [Command] public void CmdPlayerLose() {
+        // TODO consider race conditions
+        ++roomManager.numDeaths;
+        Debug.Log(roomManager.numDeaths);
+        place = roomManager.numPlayers - roomManager.numDeaths + 1;
+        Debug.Log("the number of deaths so far is:");
+        Debug.Log(roomManager.numDeaths);
+        Debug.Log("and you ended up in place:");
+        Debug.Log(place);
     }
 
     // TODO: This should happen only once per death
