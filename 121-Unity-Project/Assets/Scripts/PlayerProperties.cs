@@ -16,20 +16,4 @@ public class PlayerProperties : NetworkBehaviour
     public float jumpSpeed;
     public float maxVelocityChange;
     public float gravity;
-
-
-    private TextMeshPro usernameTextMesh;
-
-    // on load...
-    void Start() {
-        // display username above the player
-        usernameTextMesh = GetComponentsInChildren<TextMeshPro>()[0];
-        usernameTextMesh.text = username;
-    }
-
-    void Update() {
-        // rotate username to face toward camera
-        usernameTextMesh.transform.LookAt(Camera.main.transform.position);
-    }
-
 }
