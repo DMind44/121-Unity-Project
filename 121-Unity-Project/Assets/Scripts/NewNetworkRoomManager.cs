@@ -65,8 +65,9 @@ public class NewNetworkRoomManager : NetworkRoomManager
     /// <returns>False to not allow this player to replace the room player.</returns>
     public override bool OnRoomServerSceneLoadedForPlayer(GameObject roomPlayer, GameObject gamePlayer)
     {
-        // assign the player a username
+        // assign the player a username and hp
         gamePlayer.GetComponent<PlayerProperties>().username = roomPlayer.GetComponent<NewNetworkRoomPlayer>().username;
+        gamePlayer.GetComponent<PlayerProperties>().hp = gamePlayer.GetComponent<PlayerProperties>().max_hp;
         return base.OnRoomServerSceneLoadedForPlayer(roomPlayer, gamePlayer);
     }
 

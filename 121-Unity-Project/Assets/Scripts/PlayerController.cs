@@ -27,6 +27,7 @@ public class PlayerController : NetworkBehaviour {
     private Rigidbody rb;
     private PlayerThrow myThrow;
     private MeshRenderer[] rends;
+    private PlayerProperties properties;
 
     [SerializeField] private Camera cam = null;
 
@@ -37,11 +38,7 @@ public class PlayerController : NetworkBehaviour {
 
     [SyncVar(hook = nameof(EnterLoseGameState))] public int rank = 1;  // which place you came in
 
-    // @TODO: Unserialize this field once testing on it is done
     // Player stats
-    [SerializeField] public float hp = 0f;
-    [SerializeField] public float max_hp = 0f;
-
     [SerializeField] public float strengthMult = 1f;
     [SerializeField] public float speedMult = 1f;
 
@@ -51,13 +48,14 @@ public class PlayerController : NetworkBehaviour {
         myThrow = GetComponent<PlayerThrow>();
         rends = GetComponentsInChildren<MeshRenderer>();
         roomManager = GameObject.Find("NetworkManager").GetComponent<NewNetworkRoomManager>();
+        properties = GetComponent<PlayerProperties>();
 
         if (GameState.Instance.TotalNumPlayers < 0) {
             CmdInitializeNumPlayers();
         }
 
         rb.useGravity = false;  // We'll control gravity ourselves
-        hp = max_hp;
+
         anim = GameObject.Find("Player Model").GetComponent<Animator>();
     }
 
@@ -68,7 +66,7 @@ public class PlayerController : NetworkBehaviour {
         }
 
         // Player loses when they lose all health
-        if (hp <= 0 && !hasLost) {
+        if (properties.hp <= 0 && !hasLost) {
             hasLost = true;
             Lose();
         }
@@ -154,9 +152,13 @@ public class PlayerController : NetworkBehaviour {
     }
 
     [Client] public void DamageMe(float amount) {
-        hp -= amount;
-        Debug.Log("health:" + hp);
+        CmdDamageMe(amount);
+        Debug.Log("health:" + properties.hp);
         FindObjectOfType<AudioManager>().Play("PlayerHurt");
+    }
+
+    [Command] public void CmdDamageMe(float amount) {
+        properties.hp -= amount;
     }
 
     // upon losing all health, change game state to Lose and recolor the player

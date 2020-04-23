@@ -8,7 +8,7 @@ public class HealthBar : MonoBehaviour
     public Slider slider;
     public Gradient gradient;
     public Image fill;
-    public PlayerController localPlayer;
+    public PlayerProperties localPlayer;
 
     /*    void Start() {
         // find the local player and assign them
@@ -51,7 +51,7 @@ public class HealthBar : MonoBehaviour
     private void configureLocalPlayer() {
         foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player")) {
             if (player.GetComponent<PlayerController>().isLocalPlayer) {
-                localPlayer = player.GetComponent<PlayerController>();
+                localPlayer = player.GetComponent<PlayerProperties>();
                 slider.maxValue = localPlayer.max_hp;
                 break;
             }

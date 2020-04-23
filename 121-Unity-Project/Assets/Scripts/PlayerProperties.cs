@@ -7,6 +7,10 @@ using TMPro;
 public class PlayerProperties : NetworkBehaviour
 {
     [SyncVar] public string username;
+
+    [SerializeField] public int max_hp = 25;
+    [SyncVar] public float hp;
+
     private TextMeshPro usernameTextMesh;
 
     // on load...
