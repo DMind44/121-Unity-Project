@@ -10,13 +10,13 @@ using Mirror;
 [RequireComponent(typeof(Rigidbody))]
 public class PlayerController : NetworkBehaviour {
     Animator anim;
-
-    [SerializeField] private float movementSpeed = 0f;
-    [SerializeField] private float rotationSpeed = 0f;
-    [SerializeField] private float jumpSpeed = 0f;
-    public float gravity = 0f;
-
-    [SerializeField] private float maxVelocityChange = 0f;
+    //
+    // [SerializeField] private float movementSpeed = 0f;
+    // [SerializeField] private float rotationSpeed = 0f;
+    // [SerializeField] private float jumpSpeed = 0f;
+    // public float gravity = 0f;
+    //
+    // [SerializeField] private float maxVelocityChange = 0f;
 
     // color the player changes to when they lose
     [SerializeField] private Color lostColor = Color.red;
@@ -108,7 +108,7 @@ public class PlayerController : NetworkBehaviour {
             if (!GameState.Instance.UIIsOpen) {
                 targetVelocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
                 targetVelocity = transform.TransformDirection(targetVelocity);
-                targetVelocity *= movementSpeed;
+                targetVelocity *= properties.movementSpeed;
                 targetVelocity *= speedMult;
             } else {
                 targetVelocity = Vector3.zero;
@@ -117,14 +117,14 @@ public class PlayerController : NetworkBehaviour {
             // Apply a force that attempts to reach our target velocity
             Vector3 velocity = rb.velocity;
             Vector3 velocityChange = targetVelocity - velocity;
-            velocityChange.x = Mathf.Clamp(velocityChange.x, -maxVelocityChange, maxVelocityChange);
-            velocityChange.z = Mathf.Clamp(velocityChange.z, -maxVelocityChange, maxVelocityChange);
+            velocityChange.x = Mathf.Clamp(velocityChange.x, -properties.maxVelocityChange, properties.maxVelocityChange);
+            velocityChange.z = Mathf.Clamp(velocityChange.z, -properties.maxVelocityChange, properties.maxVelocityChange);
             velocityChange.y = 0;
             rb.AddForce(velocityChange, ForceMode.VelocityChange);
 
             // Jump only if the Player is grounded and is pressing Jump.
             if (GameState.Instance.PlayerControlsActive && isGrounded && Input.GetButton("Jump")) {
-                rb.velocity = new Vector3(rb.velocity.x, jumpSpeed, rb.velocity.z);
+                rb.velocity = new Vector3(rb.velocity.x, properties.jumpSpeed, rb.velocity.z);
                 createDust();
             }
             // animate the player!
@@ -136,12 +136,12 @@ public class PlayerController : NetworkBehaviour {
             // Rotate in response to mouse (i.e., to camera movement)
             if (GameState.Instance.PlayerControlsActive && GameState.Instance.CameraControlsActive) {
                 Vector2 mouseInput = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
-                transform.Rotate(Vector3.up, mouseInput.x * rotationSpeed);
+                transform.Rotate(Vector3.up, mouseInput.x * properties.rotationSpeed);
             }
         }
 
         // Add force from gravity
-        rb.AddForce(new Vector3 (0, -gravity * rb.mass, 0));
+        rb.AddForce(new Vector3 (0, -properties.gravity * rb.mass, 0));
 
         isGrounded = false;
     }

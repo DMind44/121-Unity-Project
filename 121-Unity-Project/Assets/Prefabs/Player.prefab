@@ -5210,11 +5210,9 @@ MonoBehaviour:
   maxVelocityChange: 18
   lostColor: {r: 1, g: 0, b: 0, a: 1}
   dust: {fileID: 5262627658605690970}
-  deathSoundPlayed: 0
   cam: {fileID: 3832422875992407947}
   canMove: 1
-  hp: 25
-  max_hp: 25
+  rank: 1
   strengthMult: 1
   speedMult: 1
 --- !u!114 &8702530265534106799
@@ -5341,6 +5339,13 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   username: username
+  max_hp: 25
+  hp: 0
+  movementSpeed: 18
+  rotationSpeed: 10
+  jumpSpeed: 18
+  maxVelocityChange: 19
+  gravity: 30
 --- !u!33 &7428201586278721291
 MeshFilter:
   m_ObjectHideFlags: 0
@@ -5434,15 +5439,15 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 3e700741ef6e18c428496ae23e1d4967, type: 3}
---- !u!1 &6704240591389113934 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 100034, guid: 3e700741ef6e18c428496ae23e1d4967,
-    type: 3}
-  m_PrefabInstance: {fileID: 6704240591389145228}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &6704240591389532718 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 400034, guid: 3e700741ef6e18c428496ae23e1d4967,
+    type: 3}
+  m_PrefabInstance: {fileID: 6704240591389145228}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &6704240591389113934 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 100034, guid: 3e700741ef6e18c428496ae23e1d4967,
     type: 3}
   m_PrefabInstance: {fileID: 6704240591389145228}
   m_PrefabAsset: {fileID: 0}
