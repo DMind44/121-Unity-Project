@@ -22,7 +22,8 @@ public class GameOverScreen : MonoBehaviour
     void Update() {
         if (localPlayer == null) {
             configureLocalPlayer();
-        } else if (GameState.Instance.GameHasEnded && !gameOverScreenHasAppeared) {
+        } else if (GameState.Instance.GameHasEnded && !gameOverScreenHasAppeared &&
+                    (GameState.Instance.HasDismissedLoseScreen || !GameState.Instance.HasLost)) {
             ShowGameOverScreen();
             gameOverScreenHasAppeared = true;
         }

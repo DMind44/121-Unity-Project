@@ -31,6 +31,9 @@ public class GameState : NetworkBehaviour {
     [SyncVar] public int TotalNumPlayers = -1;
     [SyncVar] public int NumPlayersRemaining = -1;
 
+    // whether or not the local player has hidden the lose screen
+    public bool HasDismissedLoseScreen { get; set; } = false;
+
     // pause is handled independently of game state so you can pause regardless
     // of the current game state
     private bool isPaused = false;

@@ -21,14 +21,20 @@ public class LoseScreen : MonoBehaviour
     void Update() {
         if (localPlayer == null) {
             configureLocalPlayer();
-        } else if (GameState.Instance.HasLost && !GameState.Instance.GameHasEnded && !loseScreenHasAppeared) {
+        } else if (GameState.Instance.HasLost && !loseScreenHasAppeared) {
             ShowLoseScreen();
             loseScreenHasAppeared = true;
+            Debug.Log("displayed lose screen");
+        }
+
+        if (loseScreenHasAppeared && Input.GetMouseButtonDown(0)) {
+            HideLoseScreen();
+            GameState.Instance.HasDismissedLoseScreen = true;
         }
     }
 
     private void ShowLoseScreen() {
-        placeText.text = "Ranked " + localPlayer.rank.ToString() + "/" + GameState.Instance.TotalNumPlayers.ToString();
+        placeText.text = "you finished in rank " + localPlayer.rank.ToString() + "/" + GameState.Instance.TotalNumPlayers.ToString();
         loseScreenUI.SetActive(true);
     }
 
