@@ -6,8 +6,7 @@ using TMPro;
 public class GameOverScreen : MonoBehaviour
 {
     public GameObject gameOverScreenUI;
-    public TextMeshProUGUI winnerText;  // text box displaying winner
-    public TextMeshProUGUI rankText;  // text box displaying user's rank
+    public TextMeshProUGUI endGameRankTextPrefab;
 
     private PlayerController localPlayer;
 
@@ -31,14 +30,30 @@ public class GameOverScreen : MonoBehaviour
 
     private void ShowGameOverScreen() {
         // display the winner
+        int rank;
+        string username;
         foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player")) {
-            if (player.GetComponent<PlayerController>().rank == 1) {
-                winnerText.text = "Winner: " + player.GetComponent<PlayerProperties>().username;
-                break;
+            rank = player.GetComponent<PlayerController>().rank;
+            username = player.GetComponent<PlayerProperties>().username;
+
+            TextMeshProUGUI rankText = Instantiate(endGameRankTextPrefab);
+
+            if (rank == 1) {
+                rankText.color = Color.yellow;
             }
+
+            if (player.GetComponent<PlayerController>().isLocalPlayer) {
+                rankText.text = rank.ToString() + ": " + username + " (YOU!)";
+            } else {
+                rankText.text = rank.ToString() + ": " + username;
+            }
+
+            // TODO change position
+            rankText.transform.position = new Vector3(20, -30 * (rank + 1), 0);
+            rankText.transform.SetParent(gameOverScreenUI.transform, false);
         }
 
-        rankText.text = "You ranked " + localPlayer.rank.ToString() + "/" + GameState.Instance.TotalNumPlayers.ToString();
+        // rankText.text = "You ranked " + localPlayer.rank.ToString() + "/" + GameState.Instance.TotalNumPlayers.ToString();
         gameOverScreenUI.SetActive(true);
     }
 

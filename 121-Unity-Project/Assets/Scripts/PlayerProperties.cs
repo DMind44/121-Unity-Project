@@ -11,6 +11,8 @@ public class PlayerProperties : NetworkBehaviour
     [SerializeField] public int max_hp = 25;
     [SyncVar] public float hp;
 
+    [SyncVar] public int rank;  // which rank (place) you're in; in 1st until you lose
+
     public float movementSpeed;
     public float rotationSpeed;
     public float jumpSpeed;
