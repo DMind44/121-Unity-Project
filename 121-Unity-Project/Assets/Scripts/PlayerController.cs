@@ -152,6 +152,11 @@ public class PlayerController : NetworkBehaviour {
             } else {
                 anim.SetInteger("Speed", 0);
             }
+            if (!isGrounded) {
+                anim.SetBool("Jumping", true);
+            } else if (isGrounded) {
+                anim.SetBool("Jumping", false);
+            }
             // Rotate in response to mouse (i.e., to camera movement)
             if (GameState.PlayerControlsActive && GameState.CameraControlsActive) {
                 Vector2 mouseInput = new Vector2(Input.GetAxis("Mouse X"), Input.GetAxis("Mouse Y"));
