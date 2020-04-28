@@ -1894,7 +1894,7 @@ Light:
   m_Shape: 0
   m_Color: {r: 1, g: 0.9804004, b: 0.4481132, a: 0.6156863}
   m_Intensity: 1
-  m_Range: 3
+  m_Range: 5
   m_SpotAngle: 30
   m_InnerSpotAngle: 21.80208
   m_CookieSize: 10
@@ -4023,7 +4023,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 450560604}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: -10, y: 2, z: -11}
+  m_LocalPosition: {x: 0, y: 2, z: -11}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 139897643}
@@ -4043,8 +4043,11 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 1a52d81b5afdaa44a90512b391cb6d79, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  pickupEffect: {fileID: 100000, guid: c2204c8be58cfc341a8cc5f6d3d0897e, type: 3}
   strengthMod: 0
   speedMod: 0
+  healthMod: 0
+  duration: 4
 --- !u!111 &450560607
 Animation:
   m_ObjectHideFlags: 0
@@ -4052,7 +4055,7 @@ Animation:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 450560604}
-  m_Enabled: 1
+  m_Enabled: 0
   serializedVersion: 3
   m_Animation: {fileID: 7400000, guid: c421ba5794830644fa93d3e4b549bd9e, type: 2}
   m_Animations:
