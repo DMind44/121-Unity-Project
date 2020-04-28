@@ -68,7 +68,7 @@ public class ParticlePlexus : MonoBehaviour
         }
 
         for(int i = lrIndex; i < lineRendererCount; i++) {
-            lineRenderers[i].enabled = false;
+            lineRenderers[i].enabled = true;
         }
 
     }
