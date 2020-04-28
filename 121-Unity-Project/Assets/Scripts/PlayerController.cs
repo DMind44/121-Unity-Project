@@ -27,7 +27,7 @@ public class PlayerController : NetworkBehaviour {
     private Rigidbody rb;
     private PlayerThrow myThrow;
     private MeshRenderer[] rends;
-    private PlayerProperties properties;
+    public PlayerProperties properties;
 
     [SerializeField] private Camera cam = null;
 
@@ -38,9 +38,7 @@ public class PlayerController : NetworkBehaviour {
 
     [SyncVar(hook = nameof(EnterLoseGameState))] public int rank = 1;  // which place you came in
 
-    // Player stats
-    [SerializeField] public float strengthMult = 1f;
-    [SerializeField] public float speedMult = 1f;
+    
 
     // Start is called before the first frame update
     void Start() {
@@ -49,7 +47,6 @@ public class PlayerController : NetworkBehaviour {
         rends = GetComponentsInChildren<MeshRenderer>();
         roomManager = GameObject.Find("NetworkManager").GetComponent<NewNetworkRoomManager>();
         properties = GetComponent<PlayerProperties>();
-
         if (GameState.Instance.TotalNumPlayers < 0) {
             CmdInitializeNumPlayers();
         }
@@ -109,7 +106,7 @@ public class PlayerController : NetworkBehaviour {
                 targetVelocity = new Vector3(Input.GetAxis("Horizontal"), 0, Input.GetAxis("Vertical"));
                 targetVelocity = transform.TransformDirection(targetVelocity);
                 targetVelocity *= properties.movementSpeed;
-                targetVelocity *= speedMult;
+                targetVelocity *= properties.speedMult;
             } else {
                 targetVelocity = Vector3.zero;
             }

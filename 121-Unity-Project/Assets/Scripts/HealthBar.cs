@@ -16,7 +16,6 @@ public class HealthBar : MonoBehaviour
         NetworkManager networkManager = NetworkManager.singleton;
         List<PlayerController> players = NetworkManager.client.connection.playerControllers;
         foreach(GameObject player in players) {
-            Debug.Log("fuck you");
             GameObject obj = player.gameObject;
             NetworkBehavior netBev = obj.GetComponent<NetworkBehavior>();
             if (player.IsValid && netBev != null && netBev.isLocalPlayer) {

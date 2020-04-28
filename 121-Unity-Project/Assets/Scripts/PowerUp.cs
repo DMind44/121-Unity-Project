@@ -5,15 +5,26 @@ using UnityEngine;
 public class PowerUp : MonoBehaviour
 {
     public GameObject pickupEffect;
-    public int strengthMod;
-    public int speedMod;
-    public int healthMod;
+    public float strengthMod = 1f;
+    public float speedMod = 1f;
+    public float healthMod = 0f;
     public float duration = 4f;
+
+    public PlayerProperties localPlayer;
 
     void OnTriggerEnter (Collider other) {
         Debug.Log("Collision detecc");
         if (other.CompareTag("Player")) {
             StartCoroutine(Pickup(other));
+        }
+    }
+
+    void Update() {
+        // find the local player if we haven't already
+        // (the local player may not have been labeled by the time the health
+        // bar is set up, so we keep checking until we find it)
+        if (localPlayer == null) {
+            //configureLocalPlayer();
         }
     }
 
@@ -27,13 +38,32 @@ public class PowerUp : MonoBehaviour
         }
         GetComponent<Collider>().enabled = false;
 
-        // player.speedMod = speedMod;
-        // player.strengthMod = strengthMod;
-        // player.health += healthMod;
+        PlayerController playerCont = GetComponent<PlayerController>();
+        //playerCont.speedMult = speedMod;
+        //playerCont.strengthMult = strengthMod;
+        //playerCont.properties.hp += healthMod;
+
+        //wait some time
         yield return new WaitForSeconds(duration);
-        // reverse effects of power up
+        
+        //reverse effects of power up
+        Debug.Log("wait over");
+        //localPlayer.speedMult = 1f;
+        //localPlayer.strengthMult = 1f;
+        // player.hp += healthMod;
+
         Debug.Log("Done");
 
         Destroy(gameObject);
+    }
+
+    // look for the PlayerController of the local player and store it if found
+    private void configureLocalPlayer() {
+        foreach (GameObject player in GameObject.FindGameObjectsWithTag("Player")) {
+            if (player.GetComponent<PlayerController>().isLocalPlayer) {
+                localPlayer = player.GetComponent<PlayerProperties>();
+                break;
+            }
+        }
     }
 }

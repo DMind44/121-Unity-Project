@@ -4023,7 +4023,7 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 450560604}
   m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
-  m_LocalPosition: {x: 0, y: 2, z: -11}
+  m_LocalPosition: {x: 9, y: 2, z: 9}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 139897643}
@@ -4048,6 +4048,7 @@ MonoBehaviour:
   speedMod: 0
   healthMod: 0
   duration: 4
+  localPlayer: {fileID: 0}
 --- !u!111 &450560607
 Animation:
   m_ObjectHideFlags: 0
