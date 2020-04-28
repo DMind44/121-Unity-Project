@@ -90,7 +90,7 @@ Material:
     - _MKEditorShowRimBehavior: 1
     - _MKEditorShowSpecularBehavior: 0
     - _MKEditorShowTranslucentBehavior: 0
-    - _MainTint: 0.74
+    - _MainTint: 0
     - _Metallic: 0
     - _Mode: 0
     - _OcclusionStrength: 1
@@ -117,7 +117,7 @@ Material:
     m_Colors:
     - _Color: {r: 1, g: 0.9957893, b: 0.9481132, a: 1}
     - _DetailColor: {r: 1, g: 1, b: 1, a: 1}
-    - _EmissionColor: {r: 0.9622642, g: 0.91120064, b: 0.83971167, a: 1}
+    - _EmissionColor: {r: 0.2574358, g: 0.24377593, b: 0.22486229, a: 1}
     - _ReflectColor: {r: 1, g: 1, b: 1, a: 0.5}
     - _RimColor: {r: 1, g: 1, b: 1, a: 1}
     - _SpecColor: {r: 1, g: 1, b: 1, a: 0.5}

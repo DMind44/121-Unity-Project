@@ -75,7 +75,7 @@ LineRenderer:
   - {x: 0, y: 0, z: 1}
   m_Parameters:
     serializedVersion: 3
-    widthMultiplier: 1
+    widthMultiplier: 0.2
     widthCurve:
       serializedVersion: 2
       m_Curve:
@@ -94,7 +94,7 @@ LineRenderer:
     colorGradient:
       serializedVersion: 2
       key0: {r: 0.3254717, g: 1, b: 0.87725985, a: 0.06666667}
-      key1: {r: 0.3254717, g: 1, b: 0.87725985, a: 0.07058824}
+      key1: {r: 0.1462264, g: 1, b: 0.8461222, a: 0.24313726}
       key2: {r: 0.9433962, g: 0.63982385, b: 0.004449993, a: 0}
       key3: {r: 0.9433962, g: 0.63982385, b: 0.004449993, a: 0}
       key4: {r: 0, g: 0, b: 0, a: 0}
@@ -110,7 +110,7 @@ LineRenderer:
       ctime6: 0
       ctime7: 0
       atime0: 0
-      atime1: 64957
+      atime1: 64764
       atime2: 0
       atime3: 0
       atime4: 0
@@ -125,6 +125,6 @@ LineRenderer:
     alignment: 0
     textureMode: 0
     shadowBias: 0.5
-    generateLightingData: 0
+    generateLightingData: 1
   m_UseWorldSpace: 0
   m_Loop: 1

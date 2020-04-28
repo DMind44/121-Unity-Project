@@ -5206,11 +5206,10 @@ MonoBehaviour:
   syncInterval: 0.1
   lostColor: {r: 1, g: 0, b: 0, a: 1}
   dust: {fileID: 5262627658605690970}
+  properties: {fileID: 0}
   cam: {fileID: 3832422875992407947}
   canMove: 1
   rank: 1
-  strengthMult: 1
-  speedMult: 1
 --- !u!114 &8702530265534106799
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5335,8 +5334,11 @@ MonoBehaviour:
   syncMode: 0
   syncInterval: 0.1
   username: username
-  max_hp: 25
+  max_hp: 50
   hp: 0
+  rank: 0
+  strengthMult: 1
+  speedMult: 1
   movementSpeed: 18
   rotationSpeed: 10
   jumpSpeed: 18

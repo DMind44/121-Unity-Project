@@ -14,8 +14,8 @@ public class PlayerProperties : NetworkBehaviour
     [SyncVar] public int rank;  // which rank (place) you're in; in 1st until you lose
 
     // Player stats
-    [SerializeField] public float strengthMult = 1f;
-    [SerializeField] public float speedMult = 1f;
+    [SyncVar] public float strengthMult = 1f;
+    [SyncVar] public float speedMult = 1f;
     
     public float movementSpeed;
     public float rotationSpeed;
