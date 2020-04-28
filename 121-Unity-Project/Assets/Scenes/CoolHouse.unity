@@ -12500,18 +12500,41 @@ MonoBehaviour:
     pitch: 0.88
     loop: 0
     source: {fileID: 0}
+    isMusic: 0
   - name: PlayerHurt
     clip: {fileID: 8300000, guid: 01e39309f251ed44fa21e31750437e2a, type: 3}
     volume: 1
     pitch: 0.88
     loop: 0
     source: {fileID: 0}
+    isMusic: 0
   - name: Theme1
     clip: {fileID: 8300000, guid: fcfafe8223425b243b61256bbde164d7, type: 3}
     volume: 0.178
     pitch: 1
+    loop: 0
+    source: {fileID: 0}
+    isMusic: 1
+  - name: Theme2
+    clip: {fileID: 8300000, guid: 6b41a7c8682233741b06d4757dd5806b, type: 3}
+    volume: 0.178
+    pitch: 1
     loop: 1
     source: {fileID: 0}
+    isMusic: 1
+  - name: Theme3
+    clip: {fileID: 8300000, guid: aaa64fcd35515ba45be82dcf40a67e06, type: 3}
+    volume: 0.178
+    pitch: 1
+    loop: 1
+    source: {fileID: 0}
+    isMusic: 1
+  songName:
+  - Theme1
+  - Theme2
+  - Theme3
+  justPlayed: 
+  playingMusic: 0
 --- !u!4 &1499064477
 Transform:
   m_ObjectHideFlags: 0
