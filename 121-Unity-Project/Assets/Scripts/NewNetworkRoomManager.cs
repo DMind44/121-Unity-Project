@@ -19,6 +19,7 @@ using Mirror;
 /// </summary>
 public class NewNetworkRoomManager : NetworkRoomManager
 {
+
     #region Server Callbacks
 
     /// <summary>
@@ -64,19 +65,20 @@ public class NewNetworkRoomManager : NetworkRoomManager
     /// <returns>False to not allow this player to replace the room player.</returns>
     public override bool OnRoomServerSceneLoadedForPlayer(GameObject roomPlayer, GameObject gamePlayer)
     {
-        // assign the player a username
+        // assign the player a username and hp
         gamePlayer.GetComponent<PlayerProperties>().username = roomPlayer.GetComponent<NewNetworkRoomPlayer>().username;
+        gamePlayer.GetComponent<PlayerProperties>().hp = gamePlayer.GetComponent<PlayerProperties>().max_hp;
         return base.OnRoomServerSceneLoadedForPlayer(roomPlayer, gamePlayer);
     }
 
-    // /// <summary>
-    // /// This is called on the server when all the players in the room are ready.
-    // /// <para>The default implementation of this function uses ServerChangeScene() to switch to the game player scene. By implementing this callback you can customize what happens when all the players in the room are ready, such as adding a countdown or a confirmation for a group leader.</para>
-    // /// </summary>
-    // public override void OnRoomServerPlayersReady()
-    // {
-    //     base.OnRoomServerPlayersReady();
-    // }
+    /// <summary>
+    /// This is called on the server when all the players in the room are ready.
+    /// <para>The default implementation of this function uses ServerChangeScene() to switch to the game player scene. By implementing this callback you can customize what happens when all the players in the room are ready, such as adding a countdown or a confirmation for a group leader.</para>
+    /// </summary>
+    public override void OnRoomServerPlayersReady()
+    {
+        base.OnRoomServerPlayersReady();
+    }
 
     #endregion
 

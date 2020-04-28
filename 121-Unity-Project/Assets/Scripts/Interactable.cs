@@ -142,7 +142,7 @@ public class Interactable : NetworkBehaviour {
             playerT.gameObject.GetComponent<Collider>().enabled = false;
 
             // Fetch the strength multiplier
-            float mult = playerT.gameObject.GetComponent<PlayerController>().strengthMult;
+            float mult = playerT.gameObject.GetComponent<PlayerProperties>().strengthMult;
 
             if (Physics.Raycast(ray, out hit) &&
                     CalculateThrowAngle(transform.position, hit.point,

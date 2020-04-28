@@ -116,7 +116,7 @@ public class NewNetworkRoomPlayer : NetworkRoomPlayer
         // update the UI to reflect the new ready state
         SetPlayerElements(readyState);
     }
-    
+
     #endregion
 
     #region Commands
@@ -143,11 +143,17 @@ public class NewNetworkRoomPlayer : NetworkRoomPlayer
     // adjust username and ready buttons based on current ready state
     void SetPlayerElements(bool readyState) {
         if (isLocalPlayer) {
-            usernameText.SetActive(readyState);
-            usernameInputField.SetActive(!readyState);
-            readyButton.GetComponentInChildren<TextMeshProUGUI>().text = readyState ? "Cancel" : "Ready";
+            // not sure why this ever comes up null, but it causes errors when it does!
+            if (usernameText != null && usernameInputField != null && readyButton != null) {
+                usernameText.SetActive(readyState);
+                usernameInputField.SetActive(!readyState);
+                readyButton.GetComponentInChildren<TextMeshProUGUI>().text = readyState ? "Cancel" : "Ready";
+            }
         } else {
-            readyText.GetComponent<TextMeshProUGUI>().text = readyState ? "Ready" : "Not Ready";
+            // not sure why this ever comes up null, but it causes errors when it does!
+            if (readyText != null) {
+                readyText.GetComponent<TextMeshProUGUI>().text = readyState ? "Ready" : "Not Ready";
+            }
         }
     }
 
